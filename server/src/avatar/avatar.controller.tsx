@@ -4,7 +4,7 @@ import React from "react";
 import ReactDOMServer from "react-dom/server";
 import { AvatarService } from "./avatar.service";
 
-@Controller("avatar")
+@Controller("/api/avatar")
 export class AvatarController {
 	constructor(private readonly avatarService: AvatarService) {}
 

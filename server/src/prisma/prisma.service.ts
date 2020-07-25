@@ -3,7 +3,7 @@ import { ConfigService } from "@nestjs/config";
 import { PrismaClient } from "@prisma/client";
 
 @Injectable()
-export class AppService extends PrismaClient
+export class PrismaService extends PrismaClient
 	implements OnModuleInit, OnModuleDestroy {
 	constructor(configService: ConfigService) {
 		super({
