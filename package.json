@@ -1,0 +1,15 @@
+{
+	"name": "hacknotes",
+	"version": "1.0.0",
+	"description": "A notetaking app",
+	"main": "index.js",
+	"repository": "https://github.com/gyash24x7/hacknotes.git",
+	"author": "gyash24x7 <gyash24x7@gmail.com>",
+	"license": "MIT",
+	"private": true,
+	"workspaces": [
+		"./server",
+		"./client",
+		"./app"
+	]
+}

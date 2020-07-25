@@ -1,0 +1,51 @@
+{
+	"name": "server",
+	"version": "0.0.1",
+	"description": "",
+	"author": "",
+	"private": true,
+	"license": "UNLICENSED",
+	"scripts": {
+		"prebuild": "rimraf dist",
+		"build": "nest build",
+		"start": "nest start",
+		"start:dev": "nest start --watch",
+		"start:prod": "node dist/main"
+	},
+	"dependencies": {
+		"@nestjs/common": "^7.3.2",
+		"@nestjs/config": "^0.5.0",
+		"@nestjs/core": "^7.3.2",
+		"@nestjs/jwt": "^7.1.0",
+		"@nestjs/passport": "^7.1.0",
+		"@nestjs/platform-fastify": "^7.3.2",
+		"@prisma/client": "^2.3.0",
+		"@types/helmet": "^0.0.47",
+		"avataaars": "^1.2.1",
+		"bcryptjs": "^2.4.3",
+		"class-transformer": "^0.2.3",
+		"class-validator": "^0.12.2",
+		"helmet": "^3.23.3",
+		"passport": "^0.4.1",
+		"passport-jwt": "^4.0.0",
+		"react": "^16.13.1",
+		"react-dom": "^16.13.1",
+		"reflect-metadata": "^0.1.13",
+		"rimraf": "^3.0.2",
+		"rxjs": "^6.6.0"
+	},
+	"devDependencies": {
+		"@nestjs/cli": "^7.4.1",
+		"@nestjs/schematics": "^7.0.1",
+		"@prisma/cli": "^2.3.0",
+		"@types/bcryptjs": "^2.4.2",
+		"@types/node": "^14.0.26",
+		"@types/passport-jwt": "^3.0.3",
+		"@types/react": "^16.9.43",
+		"@types/react-dom": "^16.9.8",
+		"ts-loader": "^8.0.1",
+		"ts-node": "^8.10.2",
+		"tsconfig-paths": "^3.9.0",
+		"typescript": "^3.9.7"
+	}
+}
