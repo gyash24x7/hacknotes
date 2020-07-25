@@ -10,7 +10,13 @@
 		"build": "nest build",
 		"start": "nest start",
 		"start:dev": "nest start --watch",
-		"start:prod": "node dist/main"
+		"start:prod": "node dist/main",
+		"migrate:save": "prisma migrate save --experimental",
+		"migrate:up": "prisma migrate up --experimental",
+		"gen:prisma": "prisma generate",
+		"migrate": "yarn migrate:save",
+		"postmigrate:save": "yarn migrate:up",
+		"postmigrate": "yarn gen:prisma"
 	},
 	"dependencies": {
 		"@nestjs/common": "^7.3.2",
