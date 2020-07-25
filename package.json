@@ -9,7 +9,13 @@
 	"private": true,
 	"workspaces": [
 		"./server",
-		"./client",
+		"./web",
 		"./app"
-	]
+	],
+	"scripts": {
+		"dev:web": "yarn workspace web start",
+		"dev:server": "yarn workspace server start:dev",
+		"build:web": "yarn workspace web build",
+		"build:server": "yarn workspace server build"
+	}
 }
