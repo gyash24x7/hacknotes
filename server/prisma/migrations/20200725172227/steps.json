@@ -1,0 +1,52 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "tag": "CreateEnum",
+      "enum": "NoteColor",
+      "values": [
+        "TRANSPARENT",
+        "VIOLET",
+        "INDIGO",
+        "BLUE",
+        "GREEN",
+        "YELLOW",
+        "ORANGE",
+        "RED",
+        "PINK"
+      ]
+    },
+    {
+      "tag": "CreateField",
+      "model": "Note",
+      "field": "color",
+      "type": "NoteColor",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Note",
+          "field": "color"
+        },
+        "directive": "default"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Note",
+          "field": "color"
+        },
+        "directive": "default"
+      },
+      "argument": "",
+      "value": "TRANSPARENT"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 generator client {
@@ -19,23 +19,10 @@ model User {
 }
 
 model Note {
-  id       String    @default(cuid()) @id
+  id       String  @default(cuid()) @id
   title    String
   content  String
-  archived Boolean   @default(false)
-  color    NoteColor @default(TRANSPARENT)
-  author   User      @relation("UserNotes", fields: [authorId], references: [id])
+  archived Boolean @default(false)
+  author   User    @relation("UserNotes", fields: [authorId], references: [id])
   authorId String
-}
-
-enum NoteColor {
-  TRANSPARENT
-  VIOLET
-  INDIGO
-  BLUE
-  GREEN
-  YELLOW
-  ORANGE
-  RED
-  PINK
 }
