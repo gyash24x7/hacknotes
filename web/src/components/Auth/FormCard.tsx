@@ -5,7 +5,7 @@ export const FormCard = styled.div`
 	min-width: 400px;
 	height: calc(100vh - 50px);
 	max-width: 500px;
-	padding: 25px;
+	padding: 30px;
 	border-left: 1px solid ${colors.N50};
 	display: flex;
 	flex-direction: column;

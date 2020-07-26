@@ -1,9 +1,9 @@
 import "@atlaskit/css-reset/dist/bundle.css";
 import React from "react";
-import { SignupPage } from "./pages/Signup";
+import { HomePage } from "./pages/Home";
 
 function App() {
-	return <SignupPage />;
+	return <HomePage />;
 }
 
 export default App;
