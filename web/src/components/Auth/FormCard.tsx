@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 export const FormCard = styled.div`
 	min-width: 400px;
-	height: calc(100vh - 50px);
+	height: calc(100vh - 60px);
 	max-width: 500px;
 	padding: 30px;
 	border-left: 1px solid ${colors.N50};
