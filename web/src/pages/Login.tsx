@@ -8,9 +8,14 @@ import { AppButton } from "../components/common/AppButton";
 import { IntegratedLogoContainer } from "../components/common/IntegratedLogo";
 import { PageWrapper } from "../components/common/PageWrapper";
 import { VerticalSpacer } from "../components/common/VerticalSpacer";
-import { FormField } from "../utils/interface";
 
 const usernameRegex = /^[a-zA-Z0-9]+$/;
+export interface FormField {
+	type: "text" | "email" | "password";
+	label: string;
+	validate: (val?: string) => string | undefined;
+	helperMessage?: string;
+}
 
 export const loginFields: FormField[] = [
 	{

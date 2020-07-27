@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const VerticalSpacer = styled.div`
+export const VerticalSpacer = styled.div<{ size?: number }>`
 	width: 100%;
-	margin: 15px 0px;
+	margin: ${(props) => props.size || 15}px 0px;
 `;

@@ -1,7 +1,7 @@
 import { colors } from "@atlaskit/theme";
 import React from "react";
 import styled from "styled-components";
-import { INote } from "../../utils/interface";
+import { INote } from "../../store/noteSlice";
 import { VerticalSpacer } from "../common/VerticalSpacer";
 
 export const NoteCard = styled.div`
