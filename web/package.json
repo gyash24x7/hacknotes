@@ -21,6 +21,7 @@
 		"@atlaskit/textfield": "^4.0.0",
 		"@atlaskit/theme": "^10.0.1",
 		"@reduxjs/toolkit": "^1.4.0",
+		"draft-js": "^0.11.6",
 		"is_js": "^0.9.0",
 		"lorem-ipsum": "^2.0.3",
 		"react": "^16.13.1",
@@ -36,6 +37,7 @@
 		"superagent": "^5.3.1"
 	},
 	"devDependencies": {
+		"@types/draft-js": "^0.10.43",
 		"@types/is": "^0.0.21",
 		"@types/node": "^14.0.26",
 		"@types/react": "^16.9.43",

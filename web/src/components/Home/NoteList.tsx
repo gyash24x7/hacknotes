@@ -7,13 +7,8 @@ import styled from "styled-components";
 import { AppStore } from "../../store";
 import { fetchNotes, INote, NotesStatus } from "../../store/noteSlice";
 import { AppError } from "../common/AppError";
+import { AppLoader } from "../common/AppLoader";
 import { Note } from "./Note";
-
-export const NoteListWrapper = styled.div`
-	padding-top: 56px;
-	width: 100vw;
-	align-self: flex-start;
-`;
 
 const listStyles = {
 	padding: 20,
@@ -68,15 +63,13 @@ export const NoteList = () => {
 
 	if (is.inArray(notesStatus, [NotesStatus.IDLE, NotesStatus.SUCCEEDED])) {
 		return (
-			<NoteListWrapper>
-				<div style={listStyles} ref={gridRef}>
-					{Object.keys(notes).map((id) => (
-						<ListItem key={id}>
-							<Note note={notes[id]} />
-						</ListItem>
-					))}
-				</div>
-			</NoteListWrapper>
+			<div style={listStyles} ref={gridRef}>
+				{Object.keys(notes).map((id) => (
+					<ListItem key={id}>
+						<Note note={notes[id]} />
+					</ListItem>
+				))}
+			</div>
 		);
 	}
 
@@ -84,5 +77,9 @@ export const NoteList = () => {
 		return <AppError>SOME ERROR OCCURRED!</AppError>;
 	}
 
-	return <Spinner />;
+	return (
+		<AppLoader>
+			<Spinner />
+		</AppLoader>
+	);
 };

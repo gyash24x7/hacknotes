@@ -24,7 +24,7 @@ export class NoteController {
 		return new Promise<Note[]>((resolve) => {
 			setTimeout(async () => {
 				resolve(notes);
-			}, 1000);
+			}, 3000);
 		});
 	}
 
