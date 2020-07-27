@@ -1,5 +1,7 @@
 import React, { useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
+import { AppStore, INote } from "../../utils/interface";
 import { Note } from "./Note";
 
 export const NoteListWrapper = styled.div`
@@ -24,6 +26,9 @@ export const ListItem = styled.div`
 
 export const NoteList = () => {
 	const gridRef = useRef<HTMLDivElement>(null);
+	const notes = useSelector<AppStore, Record<string, INote>>(
+		(store) => store.notes
+	);
 
 	const resizeMasonryItem = (item: HTMLDivElement) => {
 		let grid = gridRef.current!;
@@ -54,9 +59,9 @@ export const NoteList = () => {
 	return (
 		<NoteListWrapper>
 			<div style={listStyles} ref={gridRef}>
-				{[...Array(20)].map((_, i) => (
-					<ListItem key={i}>
-						<Note />
+				{Object.keys(notes).map((id) => (
+					<ListItem key={id}>
+						<Note note={notes[id]} />
 					</ListItem>
 				))}
 			</div>

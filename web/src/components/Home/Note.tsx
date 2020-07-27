@@ -1,7 +1,7 @@
 import { colors } from "@atlaskit/theme";
 import React from "react";
 import styled from "styled-components";
-import lorem from "../../utils/lorem";
+import { INote } from "../../utils/interface";
 import { VerticalSpacer } from "../common/VerticalSpacer";
 
 export const NoteCard = styled.div`
@@ -17,14 +17,16 @@ export const NoteTitle = styled.h3`
 
 export const NoteBody = styled.p``;
 
-export const Note = () => {
+interface NoteProps {
+	note: INote;
+}
+
+export const Note = ({ note }: NoteProps) => {
 	return (
 		<NoteCard className="note-card">
-			<NoteTitle>{lorem.generateWords(3)}</NoteTitle>
+			<NoteTitle>{note.title}</NoteTitle>
 			<VerticalSpacer />
-			<NoteBody>
-				{lorem.generateParagraphs(Math.ceil(3 * Math.random()))}
-			</NoteBody>
+			<NoteBody>{note.content}</NoteBody>
 		</NoteCard>
 	);
 };

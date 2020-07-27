@@ -1,9 +1,15 @@
 import "@atlaskit/css-reset/dist/bundle.css";
 import React from "react";
-import { HomePage } from "./pages/Home";
+import { Provider } from "react-redux";
+import { AppRoutes } from "./routes";
+import store from "./store";
 
 function App() {
-	return <HomePage />;
+	return (
+		<Provider store={store}>
+			<AppRoutes />
+		</Provider>
+	);
 }
 
 export default App;
