@@ -25,9 +25,9 @@ interface NoteProps {
 export const Note = ({ note }: NoteProps) => {
 	return (
 		<AppCard className="note-card">
-			<NoteTitle>{note.title}</NoteTitle>
-			<VerticalSpacer />
-			<NoteBody>{note.content}</NoteBody>
+			{note.title && <NoteTitle>{note.title}</NoteTitle>}
+			{note.title && note.content && <VerticalSpacer />}
+			{note.content && <NoteBody>{note.content}</NoteBody>}
 			{/* <VerticalSpacer />
 			<AppCardFooter>
 				<BellIconStyled label="reminder" />

@@ -1,13 +1,21 @@
 import Form, { ErrorMessage, Field, HelperMessage } from "@atlaskit/form";
 import TextField from "@atlaskit/textfield";
+import is from "is_js";
 import React, { Fragment } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import LogoIcon from "../assets/icon.svg";
 import IntegratedLogo from "../assets/integrated-logo.svg";
+import { BottomLink } from "../components/Auth/BottomLink";
 import { FormCard } from "../components/Auth/FormCard";
-import { MainGraphic } from "../components/Auth/MainGraphic";
+import { MainGraphic, MainGraphicIcon } from "../components/Auth/MainGraphic";
 import { AppButton } from "../components/common/AppButton";
 import { IntegratedLogoContainer } from "../components/common/IntegratedLogo";
 import { PageWrapper } from "../components/common/PageWrapper";
 import { VerticalSpacer } from "../components/common/VerticalSpacer";
+import { AppStore } from "../store";
+import { NotesStatus } from "../store/noteSlice";
+import { login } from "../store/userSlice";
 
 const usernameRegex = /^[a-zA-Z0-9]+$/;
 export interface FormField {
@@ -43,15 +51,26 @@ export const loginFields: FormField[] = [
 ];
 
 export const LoginPage = () => {
+	const dispatch = useDispatch();
+	const loginStatus = useSelector<AppStore, NotesStatus>(
+		(store) => store.user.status["user/login"]
+	);
+
+	const handleSubmit = ({ username, password }: any) => {
+		dispatch(login({ username, password }));
+	};
+
 	return (
 		<PageWrapper>
-			<MainGraphic />
+			<MainGraphic>
+				<MainGraphicIcon src={LogoIcon} />
+			</MainGraphic>
 			<FormCard>
 				<IntegratedLogoContainer>
 					<img src={IntegratedLogo} alt="Hacknotes" />
 				</IntegratedLogoContainer>
 				<h1>Login</h1>
-				<Form onSubmit={(val) => console.log(val)}>
+				<Form onSubmit={handleSubmit}>
 					{({ formProps }) => (
 						<form {...formProps} noValidate>
 							{loginFields.map((field) => (
@@ -79,9 +98,19 @@ export const LoginPage = () => {
 								</Field>
 							))}
 							<VerticalSpacer />
-							<AppButton appearance="primary" type="submit" shouldFitContainer>
+							<AppButton
+								appearance="primary"
+								type="submit"
+								shouldFitContainer
+								isLoading={is.equal(loginStatus, NotesStatus.LOADING)}
+							>
 								Submit
 							</AppButton>
+							<VerticalSpacer />
+							<BottomLink>
+								<div>Don't have an account?</div>
+								<Link to="/signup">Sign Up</Link>
+							</BottomLink>
 						</form>
 					)}
 				</Form>

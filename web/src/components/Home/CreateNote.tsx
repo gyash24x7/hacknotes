@@ -1,3 +1,4 @@
+import { ButtonGroup } from "@atlaskit/button";
 import { Editor, EditorState } from "draft-js";
 import "draft-js/dist/Draft.css";
 import is from "is_js";
@@ -123,24 +124,37 @@ export const CreateNote = () => {
 							<Fragment>
 								<VerticalSpacer />
 								<AppCardFooter>
-									<AppButton
-										spacing="compact"
-										appearance="primary"
-										onClick={saveNote}
-										isLoading={is.equal(createNoteStatus, NotesStatus.LOADING)}
-										isDisabled={is.equal(createNoteStatus, NotesStatus.LOADING)}
-									>
-										Save
-									</AppButton>
-									<AppButton
-										spacing="compact"
-										onClick={reset}
-										isLoading={is.equal(createNoteStatus, NotesStatus.LOADING)}
-										isDisabled={is.equal(createNoteStatus, NotesStatus.LOADING)}
-									>
-										Cancel
-									</AppButton>
-
+									<ButtonGroup>
+										<AppButton
+											spacing="compact"
+											appearance="primary"
+											onClick={saveNote}
+											isLoading={is.equal(
+												createNoteStatus,
+												NotesStatus.LOADING
+											)}
+											isDisabled={is.equal(
+												createNoteStatus,
+												NotesStatus.LOADING
+											)}
+										>
+											Save
+										</AppButton>
+										<AppButton
+											spacing="compact"
+											onClick={reset}
+											isLoading={is.equal(
+												createNoteStatus,
+												NotesStatus.LOADING
+											)}
+											isDisabled={is.equal(
+												createNoteStatus,
+												NotesStatus.LOADING
+											)}
+										>
+											Cancel
+										</AppButton>
+									</ButtonGroup>
 									{errorMsg && <AppError>{errorMsg}</AppError>}
 								</AppCardFooter>
 							</Fragment>

@@ -65,11 +65,7 @@ const noteSlice = createSlice({
 		error: null
 	} as NoteSliceState,
 
-	reducers: {
-		archiveNote({ notes }, action) {
-			notes[action.payload.id].archived = true;
-		}
-	},
+	reducers: {},
 
 	extraReducers(builder) {
 		builder.addCase(fetchNotes.pending, (state, { type }) => {
@@ -105,5 +101,3 @@ const noteSlice = createSlice({
 });
 
 export const noteReducer = noteSlice.reducer;
-
-export const { archiveNote } = noteSlice.actions;
