@@ -13,10 +13,13 @@ export const AppErrorContainer = styled.div`
 	align-items: center;
 `;
 
-export const AppError = (props: { children: ReactNode }) => (
+export const AppError = (props: {
+	children: ReactNode;
+	withIcon?: boolean;
+}) => (
 	<AppErrorContainer>
-		<ErrorIcon label="Error" size="xlarge" />
-		<VerticalSpacer size={5} />
+		{props.withIcon && <ErrorIcon label="Error" size="xlarge" />}
+		{props.withIcon && <VerticalSpacer size={5} />}
 		{props.children}
 	</AppErrorContainer>
 );

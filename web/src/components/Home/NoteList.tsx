@@ -32,7 +32,7 @@ export const NoteList = () => {
 	const { width } = useWindowSize();
 	const dispatch = useDispatch();
 	const notesStatus = useSelector<AppStore, NotesStatus>(
-		(store) => store.notes.status
+		(store) => store.notes.status["notes/all"]
 	);
 
 	const resizeMasonryItem = (item: HTMLDivElement) => {

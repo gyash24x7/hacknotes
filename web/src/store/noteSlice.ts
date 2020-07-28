@@ -1,9 +1,4 @@
-import {
-	createAsyncThunk,
-	createSlice,
-	nanoid,
-	PayloadAction
-} from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import client from "superagent";
 
 export interface INote {
@@ -15,6 +10,11 @@ export interface INote {
 	authorId: string;
 }
 
+export interface CreateNoteInput {
+	title: string;
+	content: string;
+}
+
 export enum NotesStatus {
 	IDLE = "idle",
 	LOADING = "loading",
@@ -24,7 +24,7 @@ export enum NotesStatus {
 
 export type NoteSliceState = {
 	notes: Record<string, INote>;
-	status: NotesStatus;
+	status: Record<string, NotesStatus>;
 	error: string | null;
 };
 
@@ -39,63 +39,71 @@ export const normalizeNotes = (notes: INote[]) => {
 	return normalizedNotes;
 };
 
-export const fetchNotes = createAsyncThunk("notes/getNotes", async () => {
+export const fetchNotes = createAsyncThunk("notes/all", async () => {
 	const response = await client
-		.get("http://192.168.43.59:8000/api/note/all")
+		.get("http://192.168.43.59:8000/api/notes/all")
 		.set("Authorization" as any, `Bearer ${process.env.REACT_APP_TOKEN}`);
 	return response.body as INote[];
 });
+
+export const addNewNote = createAsyncThunk(
+	"notes/create",
+	async (data: CreateNoteInput) => {
+		const response = await client
+			.post("http://192.168.43.59:8000/api/notes/create")
+			.set("Authorization" as any, `Bearer ${process.env.REACT_APP_TOKEN}`)
+			.send(data);
+		return response.body as INote;
+	}
+);
 
 const noteSlice = createSlice({
 	name: "notes",
 	initialState: {
 		notes: initialNotes,
-		status: "idle",
+		status: { "notes/all": NotesStatus.IDLE, "notes/create": NotesStatus.IDLE },
 		error: null
 	} as NoteSliceState,
 
 	reducers: {
-		addNote: {
-			reducer({ notes }, action: PayloadAction<INote>) {
-				notes[action.payload.id] = action.payload as INote;
-			},
-
-			prepare(title: string, content: string, authorId: string) {
-				return {
-					payload: {
-						id: nanoid(),
-						title,
-						content,
-						archived: false,
-						authorId,
-						color: "TRANSPARENT"
-					}
-				};
-			}
-		},
-
 		archiveNote({ notes }, action) {
 			notes[action.payload.id].archived = true;
 		}
 	},
 
 	extraReducers(builder) {
-		builder.addCase(fetchNotes.pending, (state) => {
-			state.status = NotesStatus.LOADING;
+		builder.addCase(fetchNotes.pending, (state, { type }) => {
+			state.status[type.slice(0, type.lastIndexOf("/"))] = NotesStatus.LOADING;
 		});
 
-		builder.addCase(fetchNotes.rejected, (state, action) => {
-			state.status = NotesStatus.FAILED;
-			state.error = action.error.message || null;
+		builder.addCase(fetchNotes.rejected, (state, { type, error }) => {
+			state.status[type.slice(0, type.lastIndexOf("/"))] = NotesStatus.FAILED;
+			state.error = error.message || null;
 		});
 
-		builder.addCase(fetchNotes.fulfilled, (state, { payload }) => {
-			state.status = NotesStatus.SUCCEEDED;
+		builder.addCase(fetchNotes.fulfilled, (state, { payload, type }) => {
+			state.status[type.slice(0, type.lastIndexOf("/"))] =
+				NotesStatus.SUCCEEDED;
 			state.notes = normalizeNotes(payload);
+		});
+
+		builder.addCase(addNewNote.pending, (state, { type }) => {
+			state.status[type.slice(0, type.lastIndexOf("/"))] = NotesStatus.LOADING;
+		});
+
+		builder.addCase(addNewNote.rejected, (state, { type, error }) => {
+			state.status[type.slice(0, type.lastIndexOf("/"))] = NotesStatus.FAILED;
+			state.error = error.message || null;
+		});
+
+		builder.addCase(addNewNote.fulfilled, (state, { payload, type }) => {
+			state.status[type.slice(0, type.lastIndexOf("/"))] =
+				NotesStatus.SUCCEEDED;
+			state.notes[payload.id] = payload;
 		});
 	}
 });
 
 export const noteReducer = noteSlice.reducer;
 
-export const { addNote, archiveNote } = noteSlice.actions;
+export const { archiveNote } = noteSlice.actions;

@@ -8,24 +8,19 @@ import {
 	ValidationPipe
 } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
-import { Note, User } from "@prisma/client";
+import { User } from "@prisma/client";
 import { AuthUser } from "../user/auth-user.decorator";
 import { CreateNoteInput, UpdateNoteColorInput } from "./note.inputs";
 import { NoteService } from "./note.service";
 
-@Controller("/api/note")
+@Controller("/api/notes")
 export class NoteController {
 	constructor(private readonly noteService: NoteService) {}
 
 	@UseGuards(AuthGuard("jwt"))
 	@Get("/all")
 	async getAllNotes(@AuthUser() { id }: User) {
-		const notes = await this.noteService.getNotes(id);
-		return new Promise<Note[]>((resolve) => {
-			setTimeout(async () => {
-				resolve(notes);
-			}, 3000);
-		});
+		return this.noteService.getNotes(id);
 	}
 
 	@UseGuards(AuthGuard("jwt"))

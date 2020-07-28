@@ -68,7 +68,7 @@ export const SignupPage = () => {
 								</Field>
 							))}
 							<VerticalSpacer />
-							<AppButton appearance="primary" type="submit">
+							<AppButton appearance="primary" type="submit" shouldFitContainer>
 								Submit
 							</AppButton>
 						</form>
