@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { noteReducer } from "./noteSlice";
-import { userReducer } from "./userSlice";
+import { noteReducer } from "./note";
+import { userReducer } from "./user";
 
 export const store = configureStore({
 	reducer: { notes: noteReducer, user: userReducer }

@@ -14,8 +14,8 @@ import { IntegratedLogoContainer } from "../components/common/IntegratedLogo";
 import { PageWrapper } from "../components/common/PageWrapper";
 import { VerticalSpacer } from "../components/common/VerticalSpacer";
 import { AppStore } from "../store";
-import { NotesStatus } from "../store/noteSlice";
-import { login } from "../store/userSlice";
+import { login } from "../store/user/thunks";
+import { AsyncActionStatus, UserActions } from "../utils/types";
 
 const usernameRegex = /^[a-zA-Z0-9]+$/;
 export interface FormField {
@@ -52,8 +52,8 @@ export const loginFields: FormField[] = [
 
 export const LoginPage = () => {
 	const dispatch = useDispatch();
-	const loginStatus = useSelector<AppStore, NotesStatus>(
-		(store) => store.user.status["user/login"]
+	const loginStatus = useSelector<AppStore, AsyncActionStatus>(
+		(store) => store.user.status[UserActions.LOGIN]
 	);
 
 	const handleSubmit = ({ username, password }: any) => {
@@ -102,7 +102,7 @@ export const LoginPage = () => {
 								appearance="primary"
 								type="submit"
 								shouldFitContainer
-								isLoading={is.equal(loginStatus, NotesStatus.LOADING)}
+								isLoading={is.equal(loginStatus, AsyncActionStatus.LOADING)}
 							>
 								Submit
 							</AppButton>

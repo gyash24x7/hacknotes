@@ -5,10 +5,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { useMount, useUpdateEffect, useWindowSize } from "react-use";
 import styled from "styled-components";
 import { AppStore } from "../../store";
-import { fetchNotes, INote, NotesStatus } from "../../store/noteSlice";
+import { fetchNotes } from "../../store/note/thunks";
+import { AsyncActionStatus, Note, NoteActions } from "../../utils/types";
 import { AppError } from "../common/AppError";
 import { AppLoader } from "../common/AppLoader";
-import { Note } from "./Note";
+import { NoteCard } from "./NoteCard";
 
 const listStyles = {
 	padding: 20,
@@ -26,13 +27,13 @@ export const ListItem = styled.div`
 
 export const NoteList = () => {
 	const gridRef = useRef<HTMLDivElement>(null);
-	const notes = useSelector<AppStore, Record<string, INote>>(
+	const notes = useSelector<AppStore, Record<string, Note>>(
 		(store) => store.notes.notes
 	);
 	const { width } = useWindowSize();
 	const dispatch = useDispatch();
-	const notesStatus = useSelector<AppStore, NotesStatus>(
-		(store) => store.notes.status["notes/all"]
+	const notesStatus = useSelector<AppStore, AsyncActionStatus>(
+		(store) => store.notes.status[NoteActions.ALL_NOTES]
 	);
 
 	const resizeMasonryItem = (item: HTMLDivElement) => {
@@ -61,19 +62,24 @@ export const NoteList = () => {
 	useMount(() => dispatch(fetchNotes()));
 	useUpdateEffect(resizeAllMasonryItems, [width, notes]);
 
-	if (is.inArray(notesStatus, [NotesStatus.IDLE, NotesStatus.SUCCEEDED])) {
+	if (
+		is.inArray(notesStatus, [
+			AsyncActionStatus.IDLE,
+			AsyncActionStatus.SUCCEEDED
+		])
+	) {
 		return (
 			<div style={listStyles} ref={gridRef}>
 				{Object.keys(notes).map((id) => (
 					<ListItem key={id}>
-						<Note note={notes[id]} />
+						<NoteCard note={notes[id]} />
 					</ListItem>
 				))}
 			</div>
 		);
 	}
 
-	if (is.equal(notesStatus, NotesStatus.FAILED)) {
+	if (is.equal(notesStatus, AsyncActionStatus.FAILED)) {
 		return <AppError>SOME ERROR OCCURRED!</AppError>;
 	}
 

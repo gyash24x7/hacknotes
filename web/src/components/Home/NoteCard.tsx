@@ -1,7 +1,7 @@
 import BellIcon from "@atlaskit/icon/glyph/notification";
 import React from "react";
 import styled from "styled-components";
-import { INote } from "../../store/noteSlice";
+import { Note } from "../../utils/types";
 import { AppCard } from "../common/AppCard";
 import { VerticalSpacer } from "../common/VerticalSpacer";
 
@@ -19,10 +19,10 @@ export const BellIconStyled = styled(BellIcon)`
 `;
 
 interface NoteProps {
-	note: INote;
+	note: Note;
 }
 
-export const Note = ({ note }: NoteProps) => {
+export const NoteCard = ({ note }: NoteProps) => {
 	return (
 		<AppCard className="note-card">
 			{note.title && <NoteTitle>{note.title}</NoteTitle>}

@@ -14,8 +14,8 @@ import { IntegratedLogoContainer } from "../components/common/IntegratedLogo";
 import { PageWrapper } from "../components/common/PageWrapper";
 import { VerticalSpacer } from "../components/common/VerticalSpacer";
 import { AppStore } from "../store";
-import { NotesStatus } from "../store/noteSlice";
-import { signup } from "../store/userSlice";
+import { signup } from "../store/user/thunks";
+import { AsyncActionStatus, UserActions } from "../utils/types";
 import { FormField, loginFields } from "./Login";
 
 const emailRegex = /^([a-zA-Z0-9_\-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
@@ -41,8 +41,8 @@ export const signupFields: FormField[] = [
 
 export const SignupPage = () => {
 	const dispatch = useDispatch();
-	const signupStatus = useSelector<AppStore, NotesStatus>(
-		(store) => store.user.status["user/signup"]
+	const signupStatus = useSelector<AppStore, AsyncActionStatus>(
+		(store) => store.user.status[UserActions.SIGNUP]
 	);
 
 	const handleSubmit = ({ username, password, name, email }: any) => {
@@ -91,7 +91,7 @@ export const SignupPage = () => {
 								appearance="primary"
 								type="submit"
 								shouldFitContainer
-								isLoading={is.equal(signupStatus, NotesStatus.LOADING)}
+								isLoading={is.equal(signupStatus, AsyncActionStatus.LOADING)}
 							>
 								Submit
 							</AppButton>

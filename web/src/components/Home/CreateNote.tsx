@@ -7,7 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useClickAway } from "react-use";
 import styled from "styled-components";
 import { AppStore } from "../../store";
-import { addNewNote, NotesStatus } from "../../store/noteSlice";
+import { addNewNote } from "../../store/note/thunks";
+import { AsyncActionStatus, NoteActions } from "../../utils/types";
 import { AppButton } from "../common/AppButton";
 import { AppCard, AppCardFooter } from "../common/AppCard";
 import { AppError } from "../common/AppError";
@@ -41,8 +42,8 @@ export const CreateNote = () => {
 	const [errorMsg, setErrorMsg] = useState<string>();
 	const titleEditorRef = useRef<Editor>(null);
 	const dispatch = useDispatch();
-	const createNoteStatus = useSelector<AppStore, NotesStatus>(
-		(state) => state.notes.status["notes/create"]
+	const createNoteStatus = useSelector<AppStore, AsyncActionStatus>(
+		(state) => state.notes.status[NoteActions.CREATE_NOTE]
 	);
 
 	const titleBlockStyleFn = () => "noteTitleText";
@@ -80,15 +81,15 @@ export const CreateNote = () => {
 
 	useEffect(() => {
 		switch (true) {
-			case is.equal(createNoteStatus, NotesStatus.LOADING):
+			case is.equal(createNoteStatus, AsyncActionStatus.LOADING):
 				setErrorMsg(undefined);
 				break;
 
-			case is.equal(createNoteStatus, NotesStatus.FAILED):
+			case is.equal(createNoteStatus, AsyncActionStatus.FAILED):
 				setErrorMsg("Failed to create a new Note!");
 				break;
 
-			case is.equal(createNoteStatus, NotesStatus.SUCCEEDED):
+			case is.equal(createNoteStatus, AsyncActionStatus.SUCCEEDED):
 				reset();
 				break;
 		}
@@ -131,11 +132,11 @@ export const CreateNote = () => {
 											onClick={saveNote}
 											isLoading={is.equal(
 												createNoteStatus,
-												NotesStatus.LOADING
+												AsyncActionStatus.LOADING
 											)}
 											isDisabled={is.equal(
 												createNoteStatus,
-												NotesStatus.LOADING
+												AsyncActionStatus.LOADING
 											)}
 										>
 											Save
@@ -145,11 +146,11 @@ export const CreateNote = () => {
 											onClick={reset}
 											isLoading={is.equal(
 												createNoteStatus,
-												NotesStatus.LOADING
+												AsyncActionStatus.LOADING
 											)}
 											isDisabled={is.equal(
 												createNoteStatus,
-												NotesStatus.LOADING
+												AsyncActionStatus.LOADING
 											)}
 										>
 											Cancel
