@@ -3,18 +3,20 @@ import client from "superagent";
 import { CreateNoteInput, Note, NoteActions } from "../../utils/types";
 
 export const fetchNotes = createAsyncThunk(NoteActions.ALL_NOTES, async () => {
+	const token = localStorage.getItem("authToken");
 	const response = await client
-		.get("http://192.168.43.59:8000/api/notes/all")
-		.set("Authorization" as any, `Bearer ${process.env.REACT_APP_TOKEN}`);
+		.get(`${process.env.REACT_APP_API_URL}/notes/all`)
+		.set("Authorization" as any, token ? `Bearer ${token}` : "");
 	return response.body as Note[];
 });
 
 export const addNewNote = createAsyncThunk(
 	NoteActions.CREATE_NOTE,
 	async (data: CreateNoteInput) => {
+		const token = localStorage.getItem("authToken");
 		const response = await client
-			.post("http://192.168.43.59:8000/api/notes/create")
-			.set("Authorization" as any, `Bearer ${process.env.REACT_APP_TOKEN}`)
+			.post(`${process.env.REACT_APP_API_URL}/notes/create`)
+			.set("Authorization" as any, token ? `Bearer ${token}` : "")
 			.send(data);
 		return response.body as Note;
 	}

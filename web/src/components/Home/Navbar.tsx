@@ -4,13 +4,18 @@ import {
 	Notifications,
 	Profile,
 	Search,
-	Settings
+	Settings,
+	SignIn
 } from "@atlaskit/atlassian-navigation";
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useWindowSize } from "react-use";
 import styled from "styled-components";
 import LogoIcon from "../../assets/icon.svg";
 import WordMark from "../../assets/wordmark.svg";
+import { AppStore } from "../../store";
+import { logout } from "../../store/user/thunks";
+import { User } from "../../utils/types";
 
 const NavContainer = styled.div`
 	position: fixed;
@@ -21,6 +26,9 @@ const NavContainer = styled.div`
 
 export const Navbar = () => {
 	const { width } = useWindowSize();
+	const user = useSelector<AppStore, User | null>((store) => store.user.user);
+	const dispatch = useDispatch();
+
 	return (
 		<NavContainer>
 			<AtlassianNavigation
@@ -40,12 +48,12 @@ export const Navbar = () => {
 						}}
 					/>
 				)}
-				renderProfile={() => (
+				renderSignIn={() => (
 					<Profile
-						tooltip="Profile"
+						tooltip={user?.username}
 						icon={
 							<img
-								src="https://source.unsplash.com/featured/100x100"
+								src={user?.avatar}
 								alt="avatar"
 								width={24}
 								height={24}
@@ -66,6 +74,9 @@ export const Navbar = () => {
 				)}
 				renderNotifications={() => (
 					<Notifications badge={() => <div />} tooltip="Notifications" />
+				)}
+				renderProfile={() => (
+					<SignIn tooltip="Logout" onClick={() => dispatch(logout())} />
 				)}
 			/>
 		</NavContainer>

@@ -32,7 +32,9 @@ export type CreateNoteInput = {
 
 export enum UserActions {
 	LOGIN = "user/login",
-	SIGNUP = "user/signup"
+	SIGNUP = "user/signup",
+	ME = "user/me",
+	LOGOUT = "user/logout"
 }
 
 export type User = {

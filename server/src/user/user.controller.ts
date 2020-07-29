@@ -35,7 +35,7 @@ export class UserController {
 	}
 
 	@UseGuards(AuthGuard("jwt"))
-	@Get()
+	@Get("/me")
 	async me(@AuthUser() { salt, password, ...me }: User) {
 		return { me };
 	}
