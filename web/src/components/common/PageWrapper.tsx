@@ -1,3 +1,4 @@
+import { colors } from "@atlaskit/theme";
 import styled from "styled-components";
 
 export const PageWrapper = styled.div`
@@ -7,4 +8,5 @@ export const PageWrapper = styled.div`
 	justify-content: center;
 	align-items: center;
 	font-family: "Montserrat";
+	background-color: ${colors.N10};
 `;

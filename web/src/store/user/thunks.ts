@@ -35,7 +35,7 @@ export const me = createAsyncThunk(UserActions.ME, async () => {
 		.get(`${process.env.REACT_APP_API_URL}/user/me`)
 		.set("Authorization" as any, token ? `Bearer ${token}` : "");
 
-	return response.body as User;
+	return response.body.me as User;
 });
 
 export const logout = createAsyncThunk(UserActions.LOGOUT, async () => {

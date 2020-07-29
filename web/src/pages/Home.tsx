@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
+import { AppNav } from "../components/common/AppNav";
 import { PageWrapper } from "../components/common/PageWrapper";
 import { CreateNote } from "../components/Home/CreateNote";
-import { Navbar } from "../components/Home/Navbar";
 import { NoteList } from "../components/Home/NoteList";
 
 export const HomeContainer = styled.div`
@@ -13,7 +13,7 @@ export const HomeContainer = styled.div`
 export const HomePage = () => {
 	return (
 		<PageWrapper>
-			<Navbar />
+			<AppNav />
 			<HomeContainer>
 				<CreateNote />
 				<NoteList />

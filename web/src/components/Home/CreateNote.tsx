@@ -17,7 +17,7 @@ import { VerticalSpacer } from "../common/VerticalSpacer";
 export const CreateNoteWrapper = styled.div`
 	width: calc(100vw - 40px);
 	padding: 0px 20px;
-	padding-top: 76px;
+	padding-top: 90px;
 	display: flex;
 	justify-content: center;
 `;
@@ -63,10 +63,15 @@ export const CreateNote = () => {
 		titleEditorRef.current?.focus();
 		setTitleEditorState(emptyEditorState);
 		setContentEditorState(emptyEditorState);
+		setErrorMsg(undefined);
 		setIsTitleVisible(false);
 	};
 
-	useClickAway(inputDivRef, () => setIsTitleVisible(false));
+	useClickAway(inputDivRef, () => {
+		const title = titleEditorState.getCurrentContent().getPlainText(" ");
+		const content = contentEditorState.getCurrentContent().getPlainText(" ");
+		if (!title && !content) reset();
+	});
 
 	useEffect(() => {
 		const elem = document.querySelector(

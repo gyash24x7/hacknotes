@@ -6,6 +6,7 @@ export const AppCard = styled.div`
 	border: 1px solid ${colors.N50};
 	padding: 20px;
 	border-radius: 5px;
+	background-color: ${colors.N0};
 `;
 
 export const AppCardFooter = styled.div`
