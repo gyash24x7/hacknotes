@@ -30,7 +30,6 @@ export const AppProductHome = () => {
 
 export const AppProfile = () => {
 	const user = useSelector<AppStore, User | null>((store) => store.user.user);
-	console.log(user);
 
 	return (
 		<Profile

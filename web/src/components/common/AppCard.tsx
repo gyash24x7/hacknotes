@@ -7,10 +7,12 @@ export const AppCard = styled.div`
 	padding: 20px;
 	border-radius: 5px;
 	background-color: ${colors.N0};
+	cursor: pointer;
 `;
 
 export const AppCardFooter = styled.div`
 	display: flex;
 	justify-content: space-between;
-	flex-direction: row-reverse;
+	height: 40px;
+	align-items: flex-end;
 `;

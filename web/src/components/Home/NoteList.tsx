@@ -15,7 +15,7 @@ const listStyles = {
 	padding: 20,
 	display: "grid",
 	gridGap: 10,
-	gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+	gridTemplateColumns: "repeat(auto-fill, minmax(275px, 1fr))",
 	gridAutoRows: 0,
 	width: "calc(100vw - 40px)"
 };

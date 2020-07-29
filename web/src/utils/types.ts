@@ -7,7 +7,8 @@ export enum AsyncActionStatus {
 
 export enum NoteActions {
 	ALL_NOTES = "notes/all",
-	CREATE_NOTE = "notes/create"
+	CREATE_NOTE = "notes/create",
+	ARCHIVE_NOTE = "notes/archive"
 }
 
 export type NoteSliceState = {
