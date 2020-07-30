@@ -19,13 +19,15 @@ model User {
 }
 
 model Note {
-  id       String     @default(cuid()) @id
-  title    String
-  content  String
-  archived Boolean    @default(false)
-  color    NoteColors @default(TRANSPARENT)
-  author   User       @relation("UserNotes", fields: [authorId], references: [id])
-  authorId String
+  id        String     @default(cuid()) @id
+  title     String
+  content   String
+  archived  Boolean    @default(false)
+  color     NoteColors @default(TRANSPARENT)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @default(now())
+  author    User       @relation("UserNotes", fields: [authorId], references: [id])
+  authorId  String
 }
 
 enum NoteColors {

@@ -7,7 +7,17 @@ export class NoteService {
 	constructor(private readonly prismaService: PrismaService) {}
 
 	async getNotes(authorId: string) {
-		return this.prismaService.note.findMany({ where: { authorId } });
+		return this.prismaService.note.findMany({
+			where: { authorId, archived: false },
+			orderBy: { updatedAt: "desc" }
+		});
+	}
+
+	async getArchivedNotes(authorId: string) {
+		return this.prismaService.note.findMany({
+			where: { authorId, archived: true },
+			orderBy: { updatedAt: "desc" }
+		});
 	}
 
 	async getNote(noteId: string, authorId: string) {
@@ -37,7 +47,7 @@ export class NoteService {
 
 		note = await this.prismaService.note.update({
 			where: { id },
-			data: { ...data, archived: Boolean(data.archived) }
+			data: { ...data, archived: Boolean(data.archived), updatedAt: new Date() }
 		});
 		return note;
 	}

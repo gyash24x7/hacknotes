@@ -25,6 +25,12 @@ export class NoteController {
 	}
 
 	@UseGuards(AuthGuard("jwt"))
+	@Get("/archived")
+	async getArchivedNotes(@AuthUser() { id }: User) {
+		return this.noteService.getArchivedNotes(id);
+	}
+
+	@UseGuards(AuthGuard("jwt"))
 	@Get("/:noteId")
 	async getNote(@Param("noteId") noteId: string, @AuthUser() { id }: User) {
 		return this.noteService.getNote(noteId, id);
