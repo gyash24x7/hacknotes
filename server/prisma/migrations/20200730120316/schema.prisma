@@ -1,0 +1,41 @@
+datasource db {
+  provider = "postgresql"
+  url = "***"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id       String @default(cuid()) @id
+  name     String
+  username String @unique
+  email    String @unique
+  password String
+  salt     String
+  avatar   String
+  notes    Note[] @relation("UserNotes")
+}
+
+model Note {
+  id       String     @default(cuid()) @id
+  title    String
+  content  String
+  archived Boolean    @default(false)
+  color    NoteColors @default(TRANSPARENT)
+  author   User       @relation("UserNotes", fields: [authorId], references: [id])
+  authorId String
+}
+
+enum NoteColors {
+  TRANSPARENT
+  VIOLET
+  INDIGO
+  BLUE
+  GREEN
+  YELLOW
+  ORANGE
+  RED
+  PINK
+}

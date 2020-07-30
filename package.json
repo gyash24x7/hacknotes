@@ -16,6 +16,7 @@
 		"dev:web": "yarn workspace web start",
 		"dev:server": "yarn workspace server start:dev",
 		"build:web": "yarn workspace web build",
-		"build:server": "yarn workspace server build"
+		"build:server": "yarn workspace server build",
+		"migrate": "yarn workspace server migrate"
 	}
 }

@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
-import { CreateNoteInput, UpdateNoteColorInput } from "./note.inputs";
+import { CreateNoteInput, UpdateNoteInput } from "./note.inputs";
 
 @Injectable()
 export class NoteService {
@@ -28,37 +28,17 @@ export class NoteService {
 		});
 	}
 
-	async archiveNote(noteId: string, authorId: string) {
-		let note = await this.prismaService.note.findOne({
-			where: { id: noteId }
-		});
+	async updateNote(id: string, data: UpdateNoteInput, authorId: string) {
+		let note = await this.prismaService.note.findOne({ where: { id } });
 
 		if (!note) throw new NotFoundException("Note not found!");
 		if (note.authorId !== authorId)
 			throw new NotFoundException("Access blocked by Owner!");
 
 		note = await this.prismaService.note.update({
-			where: { id: noteId },
-			data: { archived: true }
+			where: { id },
+			data: { ...data, archived: Boolean(data.archived) }
 		});
-
-		return note;
-	}
-
-	async updateColor({ noteId, color }: UpdateNoteColorInput, authorId: string) {
-		let note = await this.prismaService.note.findOne({
-			where: { id: noteId }
-		});
-
-		if (!note) throw new NotFoundException("Note not found!");
-		if (note.authorId !== authorId)
-			throw new NotFoundException("Access blocked by Owner!");
-
-		note = await this.prismaService.note.update({
-			where: { id: noteId },
-			data: { color }
-		});
-
 		return note;
 	}
 }

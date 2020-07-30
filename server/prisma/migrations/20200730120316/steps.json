@@ -1,0 +1,30 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "tag": "CreateEnum",
+      "enum": "NoteColors",
+      "values": [
+        "TRANSPARENT",
+        "VIOLET",
+        "INDIGO",
+        "BLUE",
+        "GREEN",
+        "YELLOW",
+        "ORANGE",
+        "RED",
+        "PINK"
+      ]
+    },
+    {
+      "tag": "DeleteEnum",
+      "enum": "NoteColor"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Note",
+      "field": "color",
+      "type": "NoteColors"
+    }
+  ]
+}

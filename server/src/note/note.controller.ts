@@ -3,6 +3,7 @@ import {
 	Controller,
 	Get,
 	Param,
+	ParseBoolPipe,
 	Post,
 	UseGuards,
 	ValidationPipe
@@ -10,7 +11,7 @@ import {
 import { AuthGuard } from "@nestjs/passport";
 import { User } from "@prisma/client";
 import { AuthUser } from "../user/auth-user.decorator";
-import { CreateNoteInput, UpdateNoteColorInput } from "./note.inputs";
+import { CreateNoteInput, UpdateNoteInput } from "./note.inputs";
 import { NoteService } from "./note.service";
 
 @Controller("/api/notes")
@@ -36,17 +37,13 @@ export class NoteController {
 	}
 
 	@UseGuards(AuthGuard("jwt"))
-	@Post("/:noteId/archive")
-	async archiveNote(@Param("noteId") noteId: string, @AuthUser() { id }: User) {
-		return this.noteService.archiveNote(noteId, id);
-	}
-
-	@UseGuards(AuthGuard("jwt"))
-	@Post("/:noteId/:color")
+	@Post("/update/:noteId")
 	async updateColor(
-		@Param(ValidationPipe) data: UpdateNoteColorInput,
-		@AuthUser() { id }: User
+		@AuthUser() { id }: User,
+		@Param("noteId") noteId: string,
+		@Body("archived", ParseBoolPipe) archived?: boolean,
+		@Body(ValidationPipe) data?: UpdateNoteInput
 	) {
-		return this.noteService.updateColor(data, id);
+		return this.noteService.updateNote(noteId, { ...data, archived }, id);
 	}
 }
