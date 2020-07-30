@@ -6,11 +6,11 @@ import { ButtonGroup } from "@atlaskit/button";
 import React, { Fragment } from "react";
 import { useHover } from "react-use";
 import styled from "styled-components";
-import { Note } from "../../utils/types";
+import { Note, NoteColors } from "../../utils/types";
 import { AppCard, AppCardFooter } from "../common/AppCard";
-// import PaletteIcon from "../common/PaletteIcon";
 import { VerticalSpacer } from "../common/VerticalSpacer";
 import { ArchiveNote } from "./ArchiveNote";
+import { UpdateColor } from "./UpdateColor";
 
 export const NoteTitle = styled.h3`
 	font-weight: bold;
@@ -28,7 +28,10 @@ interface NoteProps {
 
 export const NoteCard = ({ note }: NoteProps) => {
 	const NoteCardElement = (hovered: boolean) => (
-		<AppCard className="note-card">
+		<AppCard
+			className="note-card"
+			style={{ backgroundColor: NoteColors[note.color] }}
+		>
 			{note.title && <NoteTitle>{note.title}</NoteTitle>}
 			{note.title && note.content && <VerticalSpacer />}
 			{note.content && <NoteBody>{note.content}</NoteBody>}
@@ -62,6 +65,7 @@ export const NoteCard = ({ note }: NoteProps) => {
 							appearance="subtle"
 						/> */}
 						<ArchiveNote noteId={note.id} />
+						<UpdateColor noteId={note.id} />
 					</ButtonGroup>
 				)}
 			</AppCardFooter>

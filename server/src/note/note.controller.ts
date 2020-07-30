@@ -2,8 +2,8 @@ import {
 	Body,
 	Controller,
 	Get,
+	Logger,
 	Param,
-	ParseBoolPipe,
 	Post,
 	UseGuards,
 	ValidationPipe
@@ -16,6 +16,7 @@ import { NoteService } from "./note.service";
 
 @Controller("/api/notes")
 export class NoteController {
+	logger = new Logger("NoteController");
 	constructor(private readonly noteService: NoteService) {}
 
 	@UseGuards(AuthGuard("jwt"))
@@ -47,9 +48,8 @@ export class NoteController {
 	async updateColor(
 		@AuthUser() { id }: User,
 		@Param("noteId") noteId: string,
-		@Body("archived", ParseBoolPipe) archived?: boolean,
-		@Body(ValidationPipe) data?: UpdateNoteInput
+		@Body(ValidationPipe) data: UpdateNoteInput
 	) {
-		return this.noteService.updateNote(noteId, { ...data, archived }, id);
+		return this.noteService.updateNote(noteId, data, id);
 	}
 }

@@ -1,3 +1,5 @@
+import { colors } from "@atlaskit/theme";
+
 export enum AsyncActionStatus {
 	IDLE = "idle",
 	LOADING = "loading",
@@ -11,17 +13,18 @@ export enum NoteActions {
 	UPDATE_NOTE = "notes/update"
 }
 
-export enum NoteColor {
-	TRANSPARENT = "#00000000",
-	VIOLET = "#403294ff",
-	INDIGO = "#0747a6ff",
-	BLUE = "#00b8d9ff",
-	GREEN = "#36b37eff",
-	YELLOW = "#ffab00ff",
-	ORANGE = "#ff5630ff",
-	RED = "#de350bff",
-	PINK = "##ff99c8ff"
-}
+export const NoteColors: Record<string, string> = {
+	TRANSPARENT: "#00000000",
+	VIOLET: colors.P75,
+	INDIGO: colors.B75,
+	BLUE: colors.T75,
+	GREEN: colors.G75,
+	YELLOW: colors.Y75,
+	ORANGE: "#ff8b0066",
+	RED: colors.R75,
+	PINK: "#ff99c866",
+	BROWN: "#77493666"
+};
 
 export type NoteFilters = {
 	archived?: boolean;
@@ -53,7 +56,7 @@ export type CreateNoteInput = {
 export type UpdateNoteInput = {
 	noteId: string;
 	archived?: boolean;
-	color?: NoteColor;
+	color?: string;
 	content?: string;
 	title?: string;
 };
