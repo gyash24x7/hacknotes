@@ -1,8 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
+import is from "is_js";
 import {
 	AsyncActionStatus,
 	Note,
 	NoteActions,
+	NoteFilters,
 	NoteSliceState
 } from "../../utils/types";
 import extraReducers from "./extraReducers";
@@ -18,6 +20,23 @@ export const normalizeNotes = (notes: Note[]) => {
 	return normalizedNotes;
 };
 
+export const filterNotes = (
+	notes: Record<string, Note>,
+	filters: NoteFilters
+) => {
+	const filteredNotes: Record<string, Note> = {};
+	for (const noteId in notes) {
+		if (Object.prototype.hasOwnProperty.call(notes, noteId)) {
+			const note = notes[noteId];
+			if (is.equal(note.archived, filters.archived)) {
+				filteredNotes[noteId] = { ...note };
+			}
+		}
+	}
+
+	return filteredNotes;
+};
+
 const note = createSlice({
 	name: "notes",
 	initialState: {
@@ -26,7 +45,8 @@ const note = createSlice({
 			[NoteActions.ALL_NOTES]: AsyncActionStatus.IDLE,
 			[NoteActions.CREATE_NOTE]: AsyncActionStatus.IDLE
 		},
-		error: null
+		error: null,
+		filters: { archived: false }
 	} as NoteSliceState,
 
 	reducers: {},

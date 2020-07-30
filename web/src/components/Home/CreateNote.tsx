@@ -104,7 +104,7 @@ export const CreateNote = () => {
 		<CreateNoteWrapper>
 			<NoteInputContainer>
 				<div style={{ width: "inherit" }} ref={inputDivRef}>
-					<AppCard>
+					<AppCard style={{ cursor: "unset" }}>
 						{isTitleVisible && (
 							<div id="titleEditor">
 								<Editor

@@ -8,13 +8,30 @@ export enum AsyncActionStatus {
 export enum NoteActions {
 	ALL_NOTES = "notes/all",
 	CREATE_NOTE = "notes/create",
-	ARCHIVE_NOTE = "notes/archive"
+	UPDATE_NOTE = "notes/update"
 }
+
+export enum NoteColor {
+	TRANSPARENT = "#00000000",
+	VIOLET = "#403294ff",
+	INDIGO = "#0747a6ff",
+	BLUE = "#00b8d9ff",
+	GREEN = "#36b37eff",
+	YELLOW = "#ffab00ff",
+	ORANGE = "#ff5630ff",
+	RED = "#de350bff",
+	PINK = "##ff99c8ff"
+}
+
+export type NoteFilters = {
+	archived?: boolean;
+};
 
 export type NoteSliceState = {
 	notes: Record<string, Note>;
 	status: Record<NoteActions, AsyncActionStatus>;
 	error: string | null;
+	filters: NoteFilters;
 };
 
 export type Note = {
@@ -24,11 +41,21 @@ export type Note = {
 	color: string;
 	content: string;
 	authorId: string;
+	createdAt: string;
+	updatedAt: string;
 };
 
 export type CreateNoteInput = {
 	title: string;
 	content: string;
+};
+
+export type UpdateNoteInput = {
+	noteId: string;
+	archived?: boolean;
+	color?: NoteColor;
+	content?: string;
+	title?: string;
 };
 
 export enum UserActions {
