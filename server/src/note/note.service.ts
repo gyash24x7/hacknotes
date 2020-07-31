@@ -9,7 +9,7 @@ export class NoteService {
 	async getNotes(authorId: string) {
 		return this.prismaService.note.findMany({
 			where: { authorId, archived: false },
-			orderBy: { updatedAt: "desc" }
+			orderBy: { createdAt: "desc" }
 		});
 	}
 

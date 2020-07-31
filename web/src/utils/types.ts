@@ -14,16 +14,16 @@ export enum NoteActions {
 }
 
 export const NoteColors: Record<string, string> = {
-	TRANSPARENT: "#00000000",
+	TRANSPARENT: colors.N0,
 	VIOLET: colors.P75,
 	INDIGO: colors.B75,
 	BLUE: colors.T75,
 	GREEN: colors.G75,
 	YELLOW: colors.Y75,
-	ORANGE: "#ff8b0066",
+	ORANGE: "#F9D3AE",
 	RED: colors.R75,
-	PINK: "#ff99c866",
-	BROWN: "#77493666"
+	PINK: "#F9D8E8",
+	BROWN: "#C6B7B0"
 };
 
 export type NoteFilters = {

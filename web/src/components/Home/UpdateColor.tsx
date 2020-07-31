@@ -1,5 +1,6 @@
 import Popup from "@atlaskit/popup";
 import { colors } from "@atlaskit/theme";
+import Tooltip from "@atlaskit/tooltip";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
@@ -53,13 +54,15 @@ export const UpdateColor = ({ noteId }: UpdateColorProps) => {
 				</Palette>
 			)}
 			trigger={({ ref, ...triggerProps }) => (
-				<AppIconButton
-					{...triggerProps}
-					innerRef={ref as any}
-					onClick={() => setIsOpen(!isOpen)}
-					iconBefore={<PaletteIcon />}
-					appearance={isOpen ? "default" : "subtle"}
-				/>
+				<Tooltip content="Change Color" position="bottom">
+					<AppIconButton
+						{...triggerProps}
+						innerRef={ref as any}
+						onClick={() => setIsOpen(!isOpen)}
+						iconBefore={<PaletteIcon />}
+						appearance={isOpen ? "default" : "subtle"}
+					/>
+				</Tooltip>
 			)}
 		/>
 	);

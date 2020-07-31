@@ -21,7 +21,7 @@ export const ArchiveNote = ({ noteId }: ArchiveNoteProps) => {
 	const handleClick = () => dispatch(updateNote({ noteId, archived: true }));
 
 	return (
-		<Tooltip content="Archive note">
+		<Tooltip content="Archive note" position="bottom">
 			<AppIconButton
 				spacing="none"
 				iconBefore={<ArchiveIcon />}

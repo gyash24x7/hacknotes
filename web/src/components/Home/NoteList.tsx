@@ -1,6 +1,6 @@
 import Spinner from "@atlaskit/spinner";
 import is from "is_js";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useMount, useUpdateEffect, useWindowSize } from "react-use";
 import styled from "styled-components";
@@ -10,6 +10,7 @@ import { AsyncActionStatus, Note, NoteActions } from "../../utils/types";
 import { AppError } from "../common/AppError";
 import { AppLoader } from "../common/AppLoader";
 import { NoteCard } from "./NoteCard";
+import { ViewNote } from "./ViewNote";
 
 const listStyles = {
 	padding: 20,
@@ -26,6 +27,7 @@ export const ListItem = styled.div`
 `;
 
 export const NoteList = () => {
+	const [selectedNoteId, setselectedNoteId] = useState<string>();
 	const gridRef = useRef<HTMLDivElement>(null);
 	const notes = useSelector<AppStore, Record<string, Note>>(
 		(store) => store.notes.notes
@@ -72,9 +74,15 @@ export const NoteList = () => {
 			<div style={listStyles} ref={gridRef}>
 				{Object.keys(notes).map((id) => (
 					<ListItem key={id}>
-						<NoteCard note={notes[id]} />
+						<NoteCard noteId={id} openView={() => setselectedNoteId(id)} />
 					</ListItem>
 				))}
+				{selectedNoteId && (
+					<ViewNote
+						noteId={selectedNoteId}
+						onClose={() => setselectedNoteId(undefined)}
+					/>
+				)}
 			</div>
 		);
 	}
