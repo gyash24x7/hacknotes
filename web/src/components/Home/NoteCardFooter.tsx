@@ -6,13 +6,13 @@ import { UpdateColor } from "./UpdateColor";
 
 interface NoteCardFooterProps {
 	noteId: string;
-	hovered: boolean;
+	isVisible: boolean;
 }
 
-export const NoteCardFooter = ({ hovered, noteId }: NoteCardFooterProps) => {
+export const NoteCardFooter = ({ isVisible, noteId }: NoteCardFooterProps) => {
 	return (
 		<AppCardFooter>
-			{hovered && (
+			{isVisible && (
 				<ButtonGroup>
 					{/* <AppIconButton
 							spacing="none"

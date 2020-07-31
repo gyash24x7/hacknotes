@@ -2,6 +2,7 @@
 // import CollaboratorIcon from "@atlaskit/icon/glyph/invite-team";
 // import LinkIcon from "@atlaskit/icon/glyph/link";
 // import BellIcon from "@atlaskit/icon/glyph/notification";
+import { convertFromRaw, Editor, EditorState } from "draft-js";
 import React, { useRef } from "react";
 import { useSelector } from "react-redux";
 import { useClickAway, useHover } from "react-use";
@@ -18,7 +19,7 @@ export const NoteTitle = styled.h3`
 	font-family: "Montserrat";
 `;
 
-export const NoteBody = styled.p`
+export const NoteBody = styled.div`
 	font-size: 14px;
 	word-break: break-word;
 	display: -webkit-box;
@@ -52,10 +53,21 @@ export const NoteCard = ({ noteId, openView, onClickAway }: NoteProps) => {
 			<div onClick={openView}>
 				{note.title && <NoteTitle>{note.title}</NoteTitle>}
 				{note.title && note.content && <VerticalSpacer />}
-				{note.content && <NoteBody>{note.content}</NoteBody>}
+				{note.content && (
+					<NoteBody>
+						<Editor
+							readOnly
+							onChange={() => {}}
+							editorState={EditorState.createWithContent(
+								convertFromRaw(JSON.parse(note.content))
+							)}
+							blockStyleFn={() => "noteContentText"}
+						/>
+					</NoteBody>
+				)}
 			</div>
-			<VerticalSpacer />
-			<NoteCardFooter hovered={hovered} noteId={noteId} />
+			<VerticalSpacer size={10} />
+			<NoteCardFooter isVisible={hovered} noteId={noteId} />
 		</AppCard>
 	);
 

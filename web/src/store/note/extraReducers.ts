@@ -1,5 +1,5 @@
 import { ActionReducerMapBuilder } from "@reduxjs/toolkit";
-import { filterNotes, normalizeNotes } from ".";
+import { filterNotes, normalizeNotes, sortNotes } from ".";
 import {
 	AsyncActionStatus,
 	NoteActions,
@@ -34,7 +34,7 @@ export default (builder: ActionReducerMapBuilder<NoteSliceState>) => {
 	builder.addCase(addNewNote.fulfilled, (state, { payload }) => {
 		state.status[NoteActions.CREATE_NOTE] = AsyncActionStatus.SUCCEEDED;
 		state.notes[payload.id] = payload;
-		state.notes = filterNotes(state.notes, state.filters);
+		state.notes = sortNotes(filterNotes(state.notes, state.filters));
 	});
 
 	builder.addCase(updateNote.pending, (state) => {

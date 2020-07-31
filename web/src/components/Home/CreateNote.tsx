@@ -1,5 +1,5 @@
 import { ButtonGroup } from "@atlaskit/button";
-import { Editor, EditorState } from "draft-js";
+import { convertToRaw, Editor, EditorState } from "draft-js";
 import "draft-js/dist/Draft.css";
 import is from "is_js";
 import React, { Fragment, useEffect, useRef, useState } from "react";
@@ -50,9 +50,12 @@ export const CreateNote = () => {
 	const contentBlockStyleFn = () => "noteContentText";
 
 	const saveNote = () => {
-		const title = titleEditorState.getCurrentContent().getPlainText(" ");
-		const content = contentEditorState.getCurrentContent().getPlainText(" ");
-		if (!!title || !!content) {
+		const titleContentState = titleEditorState.getCurrentContent();
+		const title = titleContentState.getPlainText(" ");
+		const contentContentState = contentEditorState.getCurrentContent();
+		const contentStr = contentContentState.getPlainText("");
+		if (!!title || !!contentStr) {
+			const content = JSON.stringify(convertToRaw(contentContentState));
 			dispatch(addNewNote({ title, content }));
 		} else {
 			setErrorMsg("Both Title and Content cannot be Empty!");
@@ -68,8 +71,8 @@ export const CreateNote = () => {
 	};
 
 	useClickAway(inputDivRef, () => {
-		const title = titleEditorState.getCurrentContent().getPlainText(" ");
-		const content = contentEditorState.getCurrentContent().getPlainText(" ");
+		const title = titleEditorState.getCurrentContent().getPlainText("");
+		const content = contentEditorState.getCurrentContent().getPlainText("");
 		if (!title && !content) reset();
 	});
 

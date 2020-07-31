@@ -37,6 +37,16 @@ export const filterNotes = (
 	return filteredNotes;
 };
 
+export const sortNotes = (notes: Record<string, Note>) => {
+	const sortedNotes: Record<string, Note> = {};
+	Object.keys(notes)
+		.map((id) => notes[id])
+		.sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+		.forEach((note) => (sortedNotes[note.id] = note));
+
+	return sortedNotes;
+};
+
 const note = createSlice({
 	name: "notes",
 	initialState: {

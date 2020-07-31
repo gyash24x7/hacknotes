@@ -13,6 +13,6 @@ export const AppCard = styled.div`
 export const AppCardFooter = styled.div`
 	display: flex;
 	justify-content: space-between;
-	height: 40px;
+	height: 35px;
 	align-items: flex-end;
 `;
