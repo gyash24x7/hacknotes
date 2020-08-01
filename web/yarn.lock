@@ -98,6 +98,26 @@
     fbjs "^1.0.0"
     mkdirp "^0.5.1"
 
+"@atlaskit/drawer@^6.0.1":
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/@atlaskit/drawer/-/drawer-6.0.1.tgz#fcf7f897a913f03837cf5e93b5926e5e0dd6670e"
+  integrity sha512-WyQi65VCoVvwSp4H0W5zMhLkLuRTUA1+RMWDQzahFezeKDiYBmA5RlQPZ0TwpjG8cGJk3PrncvWiRfL7RlQAyg==
+  dependencies:
+    "@atlaskit/analytics-next" "^7.0.0"
+    "@atlaskit/avatar" "^20.0.0"
+    "@atlaskit/blanket" "^11.0.0"
+    "@atlaskit/icon" "^21.0.0"
+    "@atlaskit/item" "^12.0.0"
+    "@atlaskit/portal" "^4.0.0"
+    "@atlaskit/theme" "^10.0.0"
+    "@emotion/core" "^10.0.9"
+    chromatism "^2.6.0"
+    exenv "^1.2.2"
+    react-focus-lock "^1.19.1"
+    react-transition-group "^4.4.1"
+    tiny-invariant "^0.0.3"
+    tslib "^1.9.3"
+
 "@atlaskit/form@^8.1.0":
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/@atlaskit/form/-/form-8.1.0.tgz#ce478a67cccb0a0d4280391f206ae76ca9aaa3fa"
@@ -119,6 +139,17 @@
   dependencies:
     "@atlaskit/theme" "^10.0.0"
     tslib "^1.9.3"
+    uuid "^3.1.0"
+
+"@atlaskit/item@^12.0.0":
+  version "12.0.0"
+  resolved "https://registry.yarnpkg.com/@atlaskit/item/-/item-12.0.0.tgz#12261711492e28153d10d4c37209b5104ba314e5"
+  integrity sha512-7+/NRIbO/HtCUe3jlKhD0y1sqaHK1aynZSD6T5Zu4Wm8BZj8EzmWEqXbZYACESOO0wYrIga/48XHa98DOT+rIg==
+  dependencies:
+    "@atlaskit/theme" "^10.0.0"
+    "@babel/runtime" "^7.0.0"
+    prop-types "^15.5.10"
+    react-addons-text-content "^0.0.4"
     uuid "^3.1.0"
 
 "@atlaskit/lozenge@^10.0.1":
@@ -9303,6 +9334,11 @@ raw-body@2.4.0:
     http-errors "1.7.2"
     iconv-lite "0.4.24"
     unpipe "1.0.0"
+
+react-addons-text-content@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/react-addons-text-content/-/react-addons-text-content-0.0.4.tgz#d2e259fdc951d1d8906c08902002108dce8792e5"
+  integrity sha1-0uJZ/clR0diQbAiQIAIQjc6HkuU=
 
 react-app-polyfill@^1.0.6:
   version "1.0.6"

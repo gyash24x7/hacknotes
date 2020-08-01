@@ -1,6 +1,7 @@
 import { colors } from "@atlaskit/theme";
 import React from "react";
 import styled from "styled-components";
+import { AppDrawer } from "./AppDrawer";
 import {
 	AppLogout,
 	AppNotifications,
@@ -42,6 +43,7 @@ export const AppNav = () => {
 				<AppProfile />
 				<AppLogout />
 			</NavItems>
+			<AppDrawer />
 		</NavContainer>
 	);
 };

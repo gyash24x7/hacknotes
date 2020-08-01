@@ -11,8 +11,9 @@ import { useWindowSize } from "react-use";
 import LogoIcon from "../../assets/icon.svg";
 import WordMark from "../../assets/wordmark.svg";
 import { AppStore } from "../../store";
+import { openDrawer } from "../../store/drawer";
 import { logout } from "../../store/user/thunks";
-import { User } from "../../utils/types";
+import { DrawerModes, User } from "../../utils/types";
 
 export const AppProductHome = () => {
 	const { width } = useWindowSize();
@@ -30,9 +31,11 @@ export const AppProductHome = () => {
 
 export const AppProfile = () => {
 	const user = useSelector<AppStore, User | null>((store) => store.user.user);
+	const dispatch = useDispatch();
 
 	return (
 		<Profile
+			onClick={() => dispatch(openDrawer(DrawerModes.PROFILE))}
 			tooltip={user?.username}
 			icon={
 				<img
@@ -57,9 +60,16 @@ export const NoteSearch = () => (
 	<Search placeholder="Search Notes..." tooltip="Search" label="Search" />
 );
 
-export const AppSettings = () => (
-	<Settings onClick={console.log} tooltip="Product settings" />
-);
+export const AppSettings = () => {
+	const dispatch = useDispatch();
+
+	return (
+		<Settings
+			onClick={() => dispatch(openDrawer(DrawerModes.SETTINGS))}
+			tooltip="Product settings"
+		/>
+	);
+};
 
 export const AppNotifications = () => (
 	<Notifications badge={() => <div />} tooltip="Notifications" />

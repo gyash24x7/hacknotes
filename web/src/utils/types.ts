@@ -65,7 +65,8 @@ export enum UserActions {
 	LOGIN = "user/login",
 	SIGNUP = "user/signup",
 	ME = "user/me",
-	LOGOUT = "user/logout"
+	LOGOUT = "user/logout",
+	UPDATE_AVATAR = "user/avatar"
 }
 
 export type User = {
@@ -93,3 +94,9 @@ export type CreateUserInput = {
 	email: string;
 	password: string;
 };
+
+export enum DrawerModes {
+	PROFILE = "PROFILE",
+	SETTINGS = "SETTINGS",
+	CLOSED = "CLOSED"
+}

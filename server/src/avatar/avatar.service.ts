@@ -207,7 +207,7 @@ export class AvatarService {
 			avatarParams[option] = this.options[option][idx];
 		});
 
-		let avatarUrl = `${this.configService.get<string>("APP_URL")}/avatar?`;
+		let avatarUrl = `${this.configService.get<string>("APP_URL")}/api/avatar?`;
 
 		Object.keys(avatarParams).map((key) => {
 			avatarUrl += `${key}=${avatarParams[key]}&`;
