@@ -41,6 +41,7 @@ export type Note = {
 	id: string;
 	title: string;
 	archived: boolean;
+	pinned: boolean;
 	color: string;
 	content: string;
 	authorId: string;
@@ -56,6 +57,7 @@ export type CreateNoteInput = {
 export type UpdateNoteInput = {
 	noteId: string;
 	archived?: boolean;
+	pinned?: boolean;
 	color?: string;
 	content?: string;
 	title?: string;

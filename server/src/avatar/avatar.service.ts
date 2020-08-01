@@ -213,6 +213,8 @@ export class AvatarService {
 			avatarUrl += `${key}=${avatarParams[key]}&`;
 		});
 
+		avatarUrl = avatarUrl.slice(0, avatarUrl.length - 1);
+
 		return { url: avatarUrl, params: avatarParams };
 	};
 }

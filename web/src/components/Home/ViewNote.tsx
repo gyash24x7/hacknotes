@@ -15,7 +15,7 @@ import { updateNote } from "../../store/note/thunks";
 import { Note, NoteColors } from "../../utils/types";
 import { AppCard } from "../common/AppCard";
 import { VerticalSpacer } from "../common/VerticalSpacer";
-import { NoteBody, NoteTitle } from "./NoteCard";
+import { NoteTitle } from "./NoteCard";
 import { NoteCardFooter } from "./NoteCardFooter";
 
 interface ViewNoteProps {
@@ -34,6 +34,14 @@ const ViewNoteWrapper = styled.div`
 	justify-content: center;
 	align-items: center;
 	background-color: ${colors.N900}88;
+`;
+
+const ViewNoteBody = styled.div`
+	font-size: 14px;
+	overflow: scroll;
+	max-height: 70vh;
+	display: flex;
+	flex-direction: column-reverse;
 `;
 
 const NoteCardContainer = styled.div<{ width: number }>`
@@ -86,19 +94,21 @@ export const ViewNote = ({ noteId, onClose }: ViewNoteProps) => {
 							onChange={setTitleEditorState}
 							placeholder="Title"
 							blockStyleFn={() => "noteTitleText"}
+							stripPastedStyles
 						/>
 						<VerticalSpacer />
 					</NoteTitle>
 					{note.title && note.content && <VerticalSpacer />}
 					{note.content && (
-						<NoteBody>
+						<ViewNoteBody>
 							<Editor
 								editorState={contentEditorState}
 								onChange={setContentEditorState}
 								placeholder="Content..."
 								blockStyleFn={() => "noteContentText"}
+								stripPastedStyles
 							/>
-						</NoteBody>
+						</ViewNoteBody>
 					)}
 					<VerticalSpacer />
 					<NoteCardFooter isVisible noteId={noteId} />

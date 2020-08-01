@@ -11,6 +11,7 @@ import styled from "styled-components";
 import client from "superagent";
 import { AppStore } from "../../store";
 import { closeDrawer } from "../../store/drawer";
+import { updateAvatar } from "../../store/user/thunks";
 import { DrawerModes, User } from "../../utils/types";
 import { AppButton } from "./AppButton";
 import { VerticalSpacer } from "./VerticalSpacer";
@@ -87,6 +88,7 @@ export const ProfileDrawer = () => {
 	const user = useSelector<AppStore, User | null>((store) => store.user.user);
 	const [randomAvatar, setRandomAvatar] = useState(user?.avatar);
 	const [isAvatarControlsOpen, setIsAvatarControlsOpen] = useState(false);
+	const dispatch = useDispatch();
 
 	const toggleAvatarControls = () => setIsAvatarControlsOpen((val) => !val);
 
@@ -119,6 +121,7 @@ export const ProfileDrawer = () => {
 							iconBefore={<SaveIcon label="Save Avatar" size="small" />}
 							appearance="primary"
 							spacing="compact"
+							onClick={() => dispatch(updateAvatar({ avatar: randomAvatar! }))}
 						>
 							Save
 						</AppButton>

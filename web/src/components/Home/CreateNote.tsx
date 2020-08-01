@@ -116,6 +116,7 @@ export const CreateNote = () => {
 									placeholder="Title"
 									blockStyleFn={titleBlockStyleFn}
 									ref={titleEditorRef}
+									stripPastedStyles
 								/>
 								<VerticalSpacer />
 							</div>
@@ -127,6 +128,7 @@ export const CreateNote = () => {
 								placeholder="Take a Note..."
 								blockStyleFn={contentBlockStyleFn}
 								onFocus={() => setIsTitleVisible(true)}
+								stripPastedStyles
 							/>
 						</div>
 						{isTitleVisible && (

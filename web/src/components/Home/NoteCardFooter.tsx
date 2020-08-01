@@ -2,6 +2,7 @@ import { ButtonGroup } from "@atlaskit/button";
 import React from "react";
 import { AppCardFooter } from "../common/AppCard";
 import { ArchiveNote } from "./ArchiveNote";
+import { PinNote } from "./PinNote";
 import { UpdateColor } from "./UpdateColor";
 
 interface NoteCardFooterProps {
@@ -41,6 +42,7 @@ export const NoteCardFooter = ({ isVisible, noteId }: NoteCardFooterProps) => {
 						/> */}
 					<ArchiveNote noteId={noteId} />
 					<UpdateColor noteId={noteId} />
+					<PinNote noteId={noteId} />
 				</ButtonGroup>
 			)}
 		</AppCardFooter>

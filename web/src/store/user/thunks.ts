@@ -42,3 +42,16 @@ export const logout = createAsyncThunk(UserActions.LOGOUT, async () => {
 	localStorage.removeItem("authToken");
 	return null;
 });
+
+export const updateAvatar = createAsyncThunk(
+	UserActions.UPDATE_AVATAR,
+	async (data: { avatar: string }) => {
+		const token = localStorage.getItem("authToken");
+		const response = await client
+			.post(`${process.env.REACT_APP_API_URL}/user/update`)
+			.set("Authorization" as any, token ? `Bearer ${token}` : "")
+			.send(data);
+
+		return response.body as User;
+	}
+);

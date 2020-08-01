@@ -39,4 +39,10 @@ export class UserController {
 	async me(@AuthUser() { salt, password, ...me }: User) {
 		return { me };
 	}
+
+	@UseGuards(AuthGuard("jwt"))
+	@Post("/update")
+	async updateAvatar(@Body("avatar") avatar: string, @AuthUser() { id }: User) {
+		return this.userService.updateAvatar(avatar, id);
+	}
 }

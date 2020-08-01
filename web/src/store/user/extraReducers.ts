@@ -4,7 +4,7 @@ import {
 	UserActions,
 	UserSliceState
 } from "../../utils/types";
-import { login, logout, me, signup } from "./thunks";
+import { login, logout, me, signup, updateAvatar } from "./thunks";
 
 export default (builder: ActionReducerMapBuilder<UserSliceState>) => {
 	builder.addCase(login.pending, (state) => {
@@ -50,6 +50,20 @@ export default (builder: ActionReducerMapBuilder<UserSliceState>) => {
 	});
 
 	builder.addCase(logout.fulfilled, (state, { payload }) => {
+		state.user = payload;
+	});
+
+	builder.addCase(updateAvatar.pending, (state) => {
+		state.status[UserActions.UPDATE_AVATAR] = AsyncActionStatus.LOADING;
+	});
+
+	builder.addCase(updateAvatar.rejected, (state, { error }) => {
+		state.status[UserActions.UPDATE_AVATAR] = AsyncActionStatus.FAILED;
+		state.error = error.message || null;
+	});
+
+	builder.addCase(updateAvatar.fulfilled, (state, { payload }) => {
+		state.status[UserActions.UPDATE_AVATAR] = AsyncActionStatus.SUCCEEDED;
 		state.user = payload;
 	});
 };

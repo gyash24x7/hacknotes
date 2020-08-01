@@ -47,11 +47,7 @@ export class NoteService {
 
 		note = await this.prismaService.note.update({
 			where: { id },
-			data: {
-				...data,
-				archived: data.archived === "true",
-				updatedAt: new Date()
-			}
+			data: { ...data, updatedAt: new Date() }
 		});
 		return note;
 	}

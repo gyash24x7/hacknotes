@@ -24,4 +24,4 @@ const CustomIcon = () => (
 	</svg>
 );
 
-export default () => <Icon glyph={CustomIcon} label="palette" />;
+export default () => <Icon glyph={CustomIcon} label="archive" />;

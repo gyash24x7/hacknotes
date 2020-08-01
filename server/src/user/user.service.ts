@@ -40,4 +40,8 @@ export class UserService {
 
 		return user;
 	}
+
+	async updateAvatar(avatar: string, id: string) {
+		return this.prismaService.user.update({ where: { id }, data: { avatar } });
+	}
 }

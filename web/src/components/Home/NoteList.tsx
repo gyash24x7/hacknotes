@@ -1,6 +1,6 @@
 import Spinner from "@atlaskit/spinner";
 import is from "is_js";
-import React, { useRef, useState } from "react";
+import React, { Fragment, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useMount, useUpdateEffect, useWindowSize } from "react-use";
 import styled from "styled-components";
@@ -9,6 +9,7 @@ import { fetchNotes } from "../../store/note/thunks";
 import { AsyncActionStatus, Note, NoteActions } from "../../utils/types";
 import { AppError } from "../common/AppError";
 import { AppLoader } from "../common/AppLoader";
+import { VerticalSpacer } from "../common/VerticalSpacer";
 import { NoteCard } from "./NoteCard";
 import { ViewNote } from "./ViewNote";
 
@@ -26,9 +27,16 @@ export const ListItem = styled.div`
 	overflow: hidden;
 `;
 
+export const ListLabel = styled.div`
+	padding-left: 20px;
+	font-weight: bold;
+	text-transform: uppercase;
+`;
+
 export const NoteList = () => {
 	const [selectedNoteId, setselectedNoteId] = useState<string>();
 	const gridRef = useRef<HTMLDivElement>(null);
+	const pinnedGridRef = useRef<HTMLDivElement>(null);
 	const notes = useSelector<AppStore, Record<string, Note>>(
 		(store) => store.notes.notes
 	);
@@ -59,6 +67,9 @@ export const NoteList = () => {
 		Array.from(gridRef.current?.children || []).forEach((elem) =>
 			resizeMasonryItem(elem as HTMLDivElement)
 		);
+		Array.from(pinnedGridRef.current?.children || []).forEach((elem) =>
+			resizeMasonryItem(elem as HTMLDivElement)
+		);
 	};
 
 	useMount(() => dispatch(fetchNotes()));
@@ -71,19 +82,44 @@ export const NoteList = () => {
 		])
 	) {
 		return (
-			<div style={listStyles} ref={gridRef}>
-				{Object.keys(notes).map((id) => (
-					<ListItem key={id}>
-						<NoteCard noteId={id} openView={() => setselectedNoteId(id)} />
-					</ListItem>
-				))}
+			<Fragment>
+				{Object.keys(notes).filter((id) => notes[id].pinned).length > 0 && (
+					<Fragment>
+						<VerticalSpacer />
+						<ListLabel>Pinned Notes</ListLabel>
+						<div style={listStyles} ref={pinnedGridRef}>
+							{Object.keys(notes)
+								.filter((id) => notes[id].pinned)
+								.map((id) => (
+									<ListItem key={id}>
+										<NoteCard
+											noteId={id}
+											openView={() => setselectedNoteId(id)}
+										/>
+									</ListItem>
+								))}
+						</div>
+					</Fragment>
+				)}
+				{Object.keys(notes).filter((id) => notes[id].pinned).length > 0 && (
+					<ListLabel>Other Notes</ListLabel>
+				)}
+				<div style={listStyles} ref={gridRef}>
+					{Object.keys(notes)
+						.filter((id) => !notes[id].pinned)
+						.map((id) => (
+							<ListItem key={id}>
+								<NoteCard noteId={id} openView={() => setselectedNoteId(id)} />
+							</ListItem>
+						))}
+				</div>
 				{selectedNoteId && (
 					<ViewNote
 						noteId={selectedNoteId}
 						onClose={() => setselectedNoteId(undefined)}
 					/>
 				)}
-			</div>
+			</Fragment>
 		);
 	}
 
