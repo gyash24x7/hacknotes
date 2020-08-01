@@ -15,6 +15,17 @@ export const fetchNotes = createAsyncThunk(NoteActions.ALL_NOTES, async () => {
 	return response.body as Note[];
 });
 
+export const fetchArchivedNotes = createAsyncThunk(
+	NoteActions.ARCHIVED_NOTES,
+	async () => {
+		const token = localStorage.getItem("authToken");
+		const response = await client
+			.get(`${process.env.REACT_APP_API_URL}/notes/archived`)
+			.set("Authorization" as any, token ? `Bearer ${token}` : "");
+		return response.body as Note[];
+	}
+);
+
 export const addNewNote = createAsyncThunk(
 	NoteActions.CREATE_NOTE,
 	async (data: CreateNoteInput) => {

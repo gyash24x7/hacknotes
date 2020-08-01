@@ -2,7 +2,6 @@ import {
 	Notifications,
 	Profile,
 	Search,
-	Settings,
 	SignIn
 } from "@atlaskit/atlassian-navigation";
 import React from "react";
@@ -19,7 +18,7 @@ export const AppProductHome = () => {
 	const { width } = useWindowSize();
 
 	return (
-		<a href="https://hacknotes.yashgupta.dev">
+		<a href="https://hacknotes.yashgupta.dev" style={{ marginRight: 25 }}>
 			{width > 1280 ? (
 				<img src={WordMark} alt="Hacknotes" height="30px" />
 			) : (
@@ -36,7 +35,7 @@ export const AppProfile = () => {
 	return (
 		<Profile
 			onClick={() => dispatch(openDrawer(DrawerModes.PROFILE))}
-			tooltip={user?.username}
+			tooltip="Profile"
 			icon={
 				<img
 					src={user?.avatar}
@@ -59,17 +58,6 @@ export const AppLogout = () => {
 export const NoteSearch = () => (
 	<Search placeholder="Search Notes..." tooltip="Search" label="Search" />
 );
-
-export const AppSettings = () => {
-	const dispatch = useDispatch();
-
-	return (
-		<Settings
-			onClick={() => dispatch(openDrawer(DrawerModes.SETTINGS))}
-			tooltip="Product settings"
-		/>
-	);
-};
 
 export const AppNotifications = () => (
 	<Notifications badge={() => <div />} tooltip="Notifications" />

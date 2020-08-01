@@ -5,7 +5,12 @@ import {
 	NoteActions,
 	NoteSliceState
 } from "../../utils/types";
-import { addNewNote, fetchNotes, updateNote } from "./thunks";
+import {
+	addNewNote,
+	fetchArchivedNotes,
+	fetchNotes,
+	updateNote
+} from "./thunks";
 
 export default (builder: ActionReducerMapBuilder<NoteSliceState>) => {
 	builder.addCase(fetchNotes.pending, (state) => {
@@ -50,5 +55,19 @@ export default (builder: ActionReducerMapBuilder<NoteSliceState>) => {
 		state.status[NoteActions.UPDATE_NOTE] = AsyncActionStatus.SUCCEEDED;
 		state.notes[payload.id] = payload;
 		state.notes = filterNotes(state.notes, state.filters);
+	});
+
+	builder.addCase(fetchArchivedNotes.pending, (state) => {
+		state.status[NoteActions.ARCHIVED_NOTES] = AsyncActionStatus.LOADING;
+	});
+
+	builder.addCase(fetchArchivedNotes.rejected, (state, { error }) => {
+		state.status[NoteActions.ARCHIVED_NOTES] = AsyncActionStatus.FAILED;
+		state.error = error.message || null;
+	});
+
+	builder.addCase(fetchArchivedNotes.fulfilled, (state, { payload }) => {
+		state.status[NoteActions.ARCHIVED_NOTES] = AsyncActionStatus.SUCCEEDED;
+		state.notes = filterNotes(normalizeNotes(payload), state.filters);
 	});
 };

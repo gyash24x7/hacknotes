@@ -59,9 +59,15 @@ const note = createSlice({
 		filters: { archived: false }
 	} as NoteSliceState,
 
-	reducers: {},
+	reducers: {
+		setArchiveFilter(state, { payload }) {
+			state.filters.archived = payload;
+		}
+	},
 
 	extraReducers
 });
 
 export const noteReducer = note.reducer;
+
+export const { setArchiveFilter } = note.actions;

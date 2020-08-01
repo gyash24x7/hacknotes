@@ -99,6 +99,11 @@ export const ProfileDrawer = () => {
 			.catch(console.log);
 	};
 
+	const changeAvatar = () => {
+		dispatch(updateAvatar({ avatar: randomAvatar! }));
+		setIsAvatarControlsOpen(false);
+	};
+
 	return (
 		<AvatarWrapper>
 			<StyledAvatar onClick={toggleAvatarControls}>
@@ -121,7 +126,7 @@ export const ProfileDrawer = () => {
 							iconBefore={<SaveIcon label="Save Avatar" size="small" />}
 							appearance="primary"
 							spacing="compact"
-							onClick={() => dispatch(updateAvatar({ avatar: randomAvatar! }))}
+							onClick={changeAvatar}
 						>
 							Save
 						</AppButton>

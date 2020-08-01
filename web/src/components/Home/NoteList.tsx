@@ -1,15 +1,7 @@
-import Spinner from "@atlaskit/spinner";
-import is from "is_js";
-import React, { Fragment, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useMount, useUpdateEffect, useWindowSize } from "react-use";
+import React, { Fragment, useEffect, useRef, useState } from "react";
+import { useWindowSize } from "react-use";
 import styled from "styled-components";
-import { AppStore } from "../../store";
-import { fetchNotes } from "../../store/note/thunks";
-import { AsyncActionStatus, Note, NoteActions } from "../../utils/types";
-import { AppError } from "../common/AppError";
-import { AppLoader } from "../common/AppLoader";
-import { VerticalSpacer } from "../common/VerticalSpacer";
+import { Note } from "../../utils/types";
 import { NoteCard } from "./NoteCard";
 import { ViewNote } from "./ViewNote";
 
@@ -33,18 +25,15 @@ export const ListLabel = styled.div`
 	text-transform: uppercase;
 `;
 
-export const NoteList = () => {
+interface NoteListProps {
+	notes: Record<string, Note>;
+	pinned?: boolean;
+}
+
+export const NoteList = ({ notes, pinned }: NoteListProps) => {
 	const [selectedNoteId, setselectedNoteId] = useState<string>();
 	const gridRef = useRef<HTMLDivElement>(null);
-	const pinnedGridRef = useRef<HTMLDivElement>(null);
-	const notes = useSelector<AppStore, Record<string, Note>>(
-		(store) => store.notes.notes
-	);
 	const { width } = useWindowSize();
-	const dispatch = useDispatch();
-	const notesStatus = useSelector<AppStore, AsyncActionStatus>(
-		(store) => store.notes.status[NoteActions.ALL_NOTES]
-	);
 
 	const resizeMasonryItem = (item: HTMLDivElement) => {
 		let grid = gridRef.current!;
@@ -67,69 +56,29 @@ export const NoteList = () => {
 		Array.from(gridRef.current?.children || []).forEach((elem) =>
 			resizeMasonryItem(elem as HTMLDivElement)
 		);
-		Array.from(pinnedGridRef.current?.children || []).forEach((elem) =>
-			resizeMasonryItem(elem as HTMLDivElement)
-		);
 	};
 
-	useMount(() => dispatch(fetchNotes()));
-	useUpdateEffect(resizeAllMasonryItems, [width, notes]);
-
-	if (
-		is.inArray(notesStatus, [
-			AsyncActionStatus.IDLE,
-			AsyncActionStatus.SUCCEEDED
-		])
-	) {
-		return (
-			<Fragment>
-				{Object.keys(notes).filter((id) => notes[id].pinned).length > 0 && (
-					<Fragment>
-						<VerticalSpacer />
-						<ListLabel>Pinned Notes</ListLabel>
-						<div style={listStyles} ref={pinnedGridRef}>
-							{Object.keys(notes)
-								.filter((id) => notes[id].pinned)
-								.map((id) => (
-									<ListItem key={id}>
-										<NoteCard
-											noteId={id}
-											openView={() => setselectedNoteId(id)}
-										/>
-									</ListItem>
-								))}
-						</div>
-					</Fragment>
-				)}
-				{Object.keys(notes).filter((id) => notes[id].pinned).length > 0 && (
-					<ListLabel>Other Notes</ListLabel>
-				)}
-				<div style={listStyles} ref={gridRef}>
-					{Object.keys(notes)
-						.filter((id) => !notes[id].pinned)
-						.map((id) => (
-							<ListItem key={id}>
-								<NoteCard noteId={id} openView={() => setselectedNoteId(id)} />
-							</ListItem>
-						))}
-				</div>
-				{selectedNoteId && (
-					<ViewNote
-						noteId={selectedNoteId}
-						onClose={() => setselectedNoteId(undefined)}
-					/>
-				)}
-			</Fragment>
-		);
-	}
-
-	if (is.equal(notesStatus, AsyncActionStatus.FAILED)) {
-		return <AppError>SOME ERROR OCCURRED!</AppError>;
-	}
+	useEffect(resizeAllMasonryItems, [width, notes]);
 
 	return (
-		<AppLoader>
-			<Spinner />
-		</AppLoader>
+		<Fragment>
+			{!!pinned && <ListLabel>Pinned Notes</ListLabel>}
+			<div style={listStyles} ref={gridRef}>
+				{Object.keys(notes)
+					.filter((id) => notes[id].pinned === !!pinned)
+					.map((id) => (
+						<ListItem key={id}>
+							<NoteCard noteId={id} openView={() => setselectedNoteId(id)} />
+						</ListItem>
+					))}
+			</div>
+			{!!pinned && <ListLabel>Other Notes</ListLabel>}
+			{selectedNoteId && (
+				<ViewNote
+					noteId={selectedNoteId}
+					onClose={() => setselectedNoteId(undefined)}
+				/>
+			)}
+		</Fragment>
 	);
 };

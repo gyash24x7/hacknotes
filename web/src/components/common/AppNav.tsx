@@ -1,15 +1,12 @@
+import HomeIcon from "@atlaskit/icon/glyph/home";
 import { colors } from "@atlaskit/theme";
 import React from "react";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
+import { NavButton } from "./AppButton";
 import { AppDrawer } from "./AppDrawer";
-import {
-	AppLogout,
-	AppNotifications,
-	AppProductHome,
-	AppProfile,
-	AppSettings,
-	NoteSearch
-} from "./NavComponents";
+import ArchiveIcon from "./ArchiveIcon";
+import { AppLogout, AppProductHome, AppProfile } from "./NavComponents";
 
 const NavContainer = styled.div`
 	position: fixed;
@@ -31,15 +28,31 @@ const NavItems = styled.div`
 `;
 
 export const AppNav = () => {
+	const history = useHistory();
 	return (
 		<NavContainer>
 			<NavItems>
 				<AppProductHome />
+				<NavButton
+					iconBefore={<HomeIcon label="Home" />}
+					onClick={() => history.push("/")}
+				>
+					Home
+				</NavButton>
+				<NavButton
+					iconBefore={<ArchiveIcon />}
+					onClick={() => history.push("/archive")}
+				>
+					Archive
+				</NavButton>
+				{/* <NavButton
+					iconBefore={<TrashIcon label="trash" />}
+					onClick={() => history.push("/trash")}
+				>
+					Trash
+				</NavButton> */}
 			</NavItems>
 			<NavItems>
-				<NoteSearch />
-				<AppNotifications />
-				<AppSettings />
 				<AppProfile />
 				<AppLogout />
 			</NavItems>

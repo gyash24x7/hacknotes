@@ -1,48 +1,37 @@
 import is from "is_js";
 import React, { Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useMount } from "react-use";
-import styled from "styled-components";
+import { useMount, useUnmount } from "react-use";
 import { AppNav } from "../components/common/AppNav";
 import { PageWrapper } from "../components/common/PageWrapper";
-import { CreateNote } from "../components/Home/CreateNote";
+import { VerticalSpacer } from "../components/common/VerticalSpacer";
 import { NoteList } from "../components/Home/NoteList";
 import { AppStore } from "../store";
-import { fetchNotes } from "../store/note/thunks";
+import { setArchiveFilter } from "../store/note";
+import { fetchArchivedNotes } from "../store/note/thunks";
 import { AsyncActionStatus, Note, NoteActions } from "../utils/types";
+import { HelperText, HomeContainer } from "./Home";
 
-export const HomeContainer = styled.div`
-	width: 100vw;
-	align-self: flex-start;
-`;
-
-export const HelperText = styled.div`
-	text-align: center;
-	text-transform: uppercase;
-	font-weight: bold;
-`;
-
-export const HomePage = () => {
+export const ArchivePage = () => {
 	const dispatch = useDispatch();
 	const notes = useSelector<AppStore, Record<string, Note>>(
 		(store) => store.notes.notes
 	);
 	const notesStatus = useSelector<AppStore, AsyncActionStatus>(
-		(store) => store.notes.status[NoteActions.ALL_NOTES]
+		(store) => store.notes.status[NoteActions.ARCHIVED_NOTES]
 	);
-	useMount(() => dispatch(fetchNotes()));
+	useMount(() => dispatch(setArchiveFilter(true)));
+	useMount(() => dispatch(fetchArchivedNotes()));
+	useUnmount(() => dispatch(setArchiveFilter(false)));
 
 	return (
 		<PageWrapper>
 			<AppNav />
 			<HomeContainer>
-				<CreateNote />
+				<VerticalSpacer size={70} />
 				{is.equal(notesStatus, AsyncActionStatus.SUCCEEDED) && (
 					<Fragment>
-						{Object.keys(notes).filter((id) => notes[id].pinned).length > 0 && (
-							<NoteList notes={notes} pinned />
-						)}
-						<NoteList notes={notes} pinned={false} />
+						<NoteList notes={notes} />
 						{Object.keys(notes).length === 0 && (
 							<HelperText>No Notes in Archive</HelperText>
 						)}

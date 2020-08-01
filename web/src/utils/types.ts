@@ -10,7 +10,8 @@ export enum AsyncActionStatus {
 export enum NoteActions {
 	ALL_NOTES = "notes/all",
 	CREATE_NOTE = "notes/create",
-	UPDATE_NOTE = "notes/update"
+	UPDATE_NOTE = "notes/update",
+	ARCHIVED_NOTES = "notes/archived"
 }
 
 export const NoteColors: Record<string, string> = {
