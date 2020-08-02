@@ -1,21 +1,32 @@
-import { StatusBar } from "expo-status-bar";
+import * as eva from "@eva-design/eva";
+import { ApplicationProvider } from "@ui-kitten/components";
+import { AppLoading } from "expo";
+import { useFonts } from "expo-font";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Provider } from "react-redux";
+import { AppNavigation } from "./navigation";
+import { store } from "./store";
+import { default as theme } from "./theme";
+import { default as mapping } from "./theme/mapping.json";
 
 export default function App() {
+	const [fontsLoaded] = useFonts({
+		"montserrat-regular": require("./assets/fonts/montserrat-regular.ttf"),
+		"montserrat-light": require("./assets/fonts/montserrat-light.ttf"),
+		"montserrat-bold": require("./assets/fonts/montserrat-bold.ttf")
+	});
+
+	if (!fontsLoaded) return <AppLoading />;
+
 	return (
-		<View style={styles.container}>
-			<Text>Open up App.tsx to start working on Hacknotes!</Text>
-			<StatusBar style="auto" />
-		</View>
+		<Provider store={store}>
+			<ApplicationProvider
+				{...eva}
+				theme={{ ...eva.light, ...theme }}
+				customMapping={mapping as any}
+			>
+				<AppNavigation />
+			</ApplicationProvider>
+		</Provider>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: "#fff",
-		alignItems: "center",
-		justifyContent: "center"
-	}
-});
