@@ -1,4 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { AsyncStorage } from "react-native";
 import client from "superagent";
 import { getTokenFromAsyncStorage } from "../../utils";
 import {
@@ -12,9 +13,9 @@ export const login = createAsyncThunk(
 	UserActions.LOGIN,
 	async (data: UserLoginInput) => {
 		const response = await client
-			.post(`${process.env.REACT_APP_API_URL}/user/login`)
+			.post(`http://192.168.43.59:8000/api/user/login`)
 			.send(data);
-		localStorage.setItem("authToken", response.body.token);
+		await AsyncStorage.setItem("authToken", response.body.token);
 		return response.body.user;
 	}
 );
@@ -23,9 +24,9 @@ export const signup = createAsyncThunk(
 	UserActions.SIGNUP,
 	async (data: CreateUserInput) => {
 		const response = await client
-			.post(`${process.env.REACT_APP_API_URL}/user/signup`)
+			.post(`http://192.168.43.59:8000/api/user/signup`)
 			.send(data);
-		localStorage.setItem("authToken", response.body.token);
+		await AsyncStorage.setItem("authToken", response.body.token);
 		return response.body.user;
 	}
 );
@@ -33,14 +34,14 @@ export const signup = createAsyncThunk(
 export const me = createAsyncThunk(UserActions.ME, async () => {
 	const token = await getTokenFromAsyncStorage();
 	const response = await client
-		.get(`${process.env.REACT_APP_API_URL}/user/me`)
+		.get(`http://192.168.43.59:8000/api/user/me`)
 		.set("Authorization" as any, token ? `Bearer ${token}` : "");
 
 	return response.body.me as User;
 });
 
 export const logout = createAsyncThunk(UserActions.LOGOUT, async () => {
-	localStorage.removeItem("authToken");
+	await AsyncStorage.removeItem("authToken");
 	return null;
 });
 
@@ -49,7 +50,7 @@ export const updateAvatar = createAsyncThunk(
 	async (data: { avatar: string }) => {
 		const token = await getTokenFromAsyncStorage();
 		const response = await client
-			.post(`${process.env.REACT_APP_API_URL}/user/update`)
+			.post(`http://192.168.43.59:8000/api/user/update`)
 			.set("Authorization" as any, token ? `Bearer ${token}` : "")
 			.send(data);
 

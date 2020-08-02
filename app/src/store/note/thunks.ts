@@ -13,7 +13,7 @@ export const fetchNotes = createAsyncThunk(
 	async () => {
 		const token = await getTokenFromAsyncStorage();
 		const response = await client
-			.get(`${process.env.REACT_APP_API_URL}/notes/all`)
+			.get(`http://192.168.43.59:8000/api/notes/all`)
 			.set("Authorization" as any, token ? `Bearer ${token}` : "");
 		return response.body as Note[];
 	}
@@ -24,7 +24,7 @@ export const fetchArchivedNotes = createAsyncThunk(
 	async () => {
 		const token = await getTokenFromAsyncStorage();
 		const response = await client
-			.get(`${process.env.REACT_APP_API_URL}/notes/archived`)
+			.get(`http://192.168.43.59:8000/api/notes/archived`)
 			.set("Authorization" as any, token ? `Bearer ${token}` : "");
 		return response.body as Note[];
 	}
@@ -35,7 +35,7 @@ export const fetchDeletedNotes = createAsyncThunk(
 	async () => {
 		const token = await getTokenFromAsyncStorage();
 		const response = await client
-			.get(`${process.env.REACT_APP_API_URL}/notes/deleted`)
+			.get(`http://192.168.43.59:8000/api/notes/deleted`)
 			.set("Authorization" as any, token ? `Bearer ${token}` : "");
 		return response.body as Note[];
 	}
@@ -46,7 +46,7 @@ export const addNewNote = createAsyncThunk(
 	async (data: CreateNoteInput) => {
 		const token = await getTokenFromAsyncStorage();
 		const response = await client
-			.post(`${process.env.REACT_APP_API_URL}/notes/create`)
+			.post(`http://192.168.43.59:8000/api/notes/create`)
 			.set("Authorization" as any, token ? `Bearer ${token}` : "")
 			.send(data);
 		return response.body as Note;
@@ -58,7 +58,7 @@ export const updateNote = createAsyncThunk(
 	async ({ noteId, ...data }: UpdateNoteInput) => {
 		const token = await getTokenFromAsyncStorage();
 		const response = await client
-			.put(`${process.env.REACT_APP_API_URL}/notes/update/${noteId}`)
+			.put(`http://192.168.43.59:8000/api/notes/update/${noteId}`)
 			.set("Authorization" as any, token ? `Bearer ${token}` : "")
 			.send(data);
 
@@ -71,7 +71,7 @@ export const archiveNote = createAsyncThunk(
 	async (noteId: string) => {
 		const token = await getTokenFromAsyncStorage();
 		const response = await client
-			.put(`${process.env.REACT_APP_API_URL}/notes/archive/${noteId}`)
+			.put(`http://192.168.43.59:8000/api/notes/archive/${noteId}`)
 			.set("Authorization" as any, token ? `Bearer ${token}` : "");
 
 		return response.body as Note;
@@ -83,7 +83,7 @@ export const unarchiveNote = createAsyncThunk(
 	async (noteId: string) => {
 		const token = await getTokenFromAsyncStorage();
 		const response = await client
-			.put(`${process.env.REACT_APP_API_URL}/notes/unarchive/${noteId}`)
+			.put(`http://192.168.43.59:8000/api/notes/unarchive/${noteId}`)
 			.set("Authorization" as any, token ? `Bearer ${token}` : "");
 
 		return response.body as Note;
@@ -95,7 +95,7 @@ export const pinNote = createAsyncThunk(
 	async (noteId: string) => {
 		const token = await getTokenFromAsyncStorage();
 		const response = await client
-			.put(`${process.env.REACT_APP_API_URL}/notes/pin/${noteId}`)
+			.put(`http://192.168.43.59:8000/api/notes/pin/${noteId}`)
 			.set("Authorization" as any, token ? `Bearer ${token}` : "");
 
 		return response.body as Note;
@@ -107,7 +107,7 @@ export const unpinNote = createAsyncThunk(
 	async (noteId: string) => {
 		const token = await getTokenFromAsyncStorage();
 		const response = await client
-			.put(`${process.env.REACT_APP_API_URL}/notes/unpin/${noteId}`)
+			.put(`http://192.168.43.59:8000/api/notes/unpin/${noteId}`)
 			.set("Authorization" as any, token ? `Bearer ${token}` : "");
 
 		return response.body as Note;
@@ -119,7 +119,7 @@ export const deleteNote = createAsyncThunk(
 	async (noteId: string) => {
 		const token = await getTokenFromAsyncStorage();
 		const response = await client
-			.delete(`${process.env.REACT_APP_API_URL}/notes/delete/${noteId}`)
+			.delete(`http://192.168.43.59:8000/api/notes/delete/${noteId}`)
 			.set("Authorization" as any, token ? `Bearer ${token}` : "");
 
 		return response.body as Note;
@@ -131,7 +131,7 @@ export const restoreNote = createAsyncThunk(
 	async (noteId: string) => {
 		const token = await getTokenFromAsyncStorage();
 		const response = await client
-			.put(`${process.env.REACT_APP_API_URL}/notes/restore/${noteId}`)
+			.put(`http://192.168.43.59:8000/api/notes/restore/${noteId}`)
 			.set("Authorization" as any, token ? `Bearer ${token}` : "");
 
 		return response.body as Note;

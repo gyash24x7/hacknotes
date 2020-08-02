@@ -1,5 +1,6 @@
 import * as eva from "@eva-design/eva";
-import { ApplicationProvider } from "@ui-kitten/components";
+import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
+import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import { AppLoading } from "expo";
 import { useFonts } from "expo-font";
 import React from "react";
@@ -20,6 +21,7 @@ export default function App() {
 
 	return (
 		<Provider store={store}>
+			<IconRegistry icons={EvaIconsPack} />
 			<ApplicationProvider
 				{...eva}
 				theme={{ ...eva.light, ...theme }}

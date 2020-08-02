@@ -3,7 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import is from "is_js";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AppLoader } from "../components/common/AppLoader";
+import { AppLoader } from "../components/AppLoader";
 import { AppStore } from "../store";
 import { me } from "../store/user/thunks";
 import { AsyncActionStatus, User, UserActions } from "../utils/types";
