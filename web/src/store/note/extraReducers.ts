@@ -1,73 +1,89 @@
-import { ActionReducerMapBuilder } from "@reduxjs/toolkit";
+import { ActionReducerMapBuilder, AsyncThunk } from "@reduxjs/toolkit";
 import { filterNotes, normalizeNotes, sortNotes } from ".";
 import {
 	AsyncActionStatus,
+	CreateNoteInput,
+	Note,
 	NoteActions,
-	NoteSliceState
+	NoteSliceState,
+	UpdateNoteInput
 } from "../../utils/types";
 import {
 	addNewNote,
+	archiveNote,
+	deleteNote,
 	fetchArchivedNotes,
+	fetchDeletedNotes,
 	fetchNotes,
+	pinNote,
+	restoreNote,
+	unarchiveNote,
+	unpinNote,
 	updateNote
 } from "./thunks";
 
+const mutationReducerMap: Record<
+	string,
+	| AsyncThunk<Note, string, {}>
+	| AsyncThunk<Note, UpdateNoteInput, {}>
+	| AsyncThunk<Note, CreateNoteInput, {}>
+> = {
+	[NoteActions.ARCHIVE_NOTE]: archiveNote,
+	[NoteActions.UNARCHIVE_NOTE]: unarchiveNote,
+	[NoteActions.PIN_NOTE]: pinNote,
+	[NoteActions.UNPIN_NOTE]: unpinNote,
+	[NoteActions.DELETE_NOTE]: deleteNote,
+	[NoteActions.RESTORE_NOTE]: restoreNote,
+	[NoteActions.UPDATE_NOTE]: updateNote,
+	[NoteActions.CREATE_NOTE]: addNewNote
+};
+
+const queryReducerMap: Record<string, AsyncThunk<Note[], void, {}>> = {
+	[NoteActions.GET_ALL_NOTES]: fetchNotes,
+	[NoteActions.GET_ARCHIVED_NOTES]: fetchArchivedNotes,
+	[NoteActions.GET_DELETED_NOTES]: fetchDeletedNotes
+};
+
 export default (builder: ActionReducerMapBuilder<NoteSliceState>) => {
-	builder.addCase(fetchNotes.pending, (state) => {
-		state.status[NoteActions.ALL_NOTES] = AsyncActionStatus.LOADING;
+	// QUERY REDUCERS
+
+	Object.keys(queryReducerMap).forEach((actionType) => {
+		const action = queryReducerMap[actionType];
+		builder.addCase(action.pending, (state) => {
+			state.status[actionType as NoteActions] = AsyncActionStatus.LOADING;
+		});
+
+		builder.addCase(action.rejected, (state, { error }) => {
+			state.status[actionType as NoteActions] = AsyncActionStatus.FAILED;
+			state.error = error.message || null;
+		});
+
+		builder.addCase(action.fulfilled, (state, { payload }) => {
+			state.status[actionType as NoteActions] = AsyncActionStatus.SUCCEEDED;
+			state.notes = sortNotes(
+				filterNotes(normalizeNotes(payload), state.filters)
+			);
+		});
 	});
 
-	builder.addCase(fetchNotes.rejected, (state, { error }) => {
-		state.status[NoteActions.ALL_NOTES] = AsyncActionStatus.FAILED;
-		state.error = error.message || null;
-	});
+	// MUTATION REDUCERS
 
-	builder.addCase(fetchNotes.fulfilled, (state, { payload }) => {
-		state.status[NoteActions.ALL_NOTES] = AsyncActionStatus.SUCCEEDED;
-		state.notes = filterNotes(normalizeNotes(payload), state.filters);
-	});
+	Object.keys(mutationReducerMap).forEach((actionType) => {
+		const action = mutationReducerMap[actionType];
 
-	builder.addCase(addNewNote.pending, (state) => {
-		state.status[NoteActions.CREATE_NOTE] = AsyncActionStatus.LOADING;
-	});
+		builder.addCase(action.pending, (state) => {
+			state.status[actionType as NoteActions] = AsyncActionStatus.LOADING;
+		});
 
-	builder.addCase(addNewNote.rejected, (state, { error }) => {
-		state.status[NoteActions.CREATE_NOTE] = AsyncActionStatus.FAILED;
-		state.error = error.message || null;
-	});
+		builder.addCase(action.rejected, (state, { error }) => {
+			state.status[actionType as NoteActions] = AsyncActionStatus.FAILED;
+			state.error = error.message || null;
+		});
 
-	builder.addCase(addNewNote.fulfilled, (state, { payload }) => {
-		state.status[NoteActions.CREATE_NOTE] = AsyncActionStatus.SUCCEEDED;
-		state.notes[payload.id] = payload;
-		state.notes = sortNotes(filterNotes(state.notes, state.filters));
-	});
-
-	builder.addCase(updateNote.pending, (state) => {
-		state.status[NoteActions.UPDATE_NOTE] = AsyncActionStatus.LOADING;
-	});
-
-	builder.addCase(updateNote.rejected, (state, { error }) => {
-		state.status[NoteActions.UPDATE_NOTE] = AsyncActionStatus.FAILED;
-		state.error = error.message || null;
-	});
-
-	builder.addCase(updateNote.fulfilled, (state, { payload }) => {
-		state.status[NoteActions.UPDATE_NOTE] = AsyncActionStatus.SUCCEEDED;
-		state.notes[payload.id] = payload;
-		state.notes = filterNotes(state.notes, state.filters);
-	});
-
-	builder.addCase(fetchArchivedNotes.pending, (state) => {
-		state.status[NoteActions.ARCHIVED_NOTES] = AsyncActionStatus.LOADING;
-	});
-
-	builder.addCase(fetchArchivedNotes.rejected, (state, { error }) => {
-		state.status[NoteActions.ARCHIVED_NOTES] = AsyncActionStatus.FAILED;
-		state.error = error.message || null;
-	});
-
-	builder.addCase(fetchArchivedNotes.fulfilled, (state, { payload }) => {
-		state.status[NoteActions.ARCHIVED_NOTES] = AsyncActionStatus.SUCCEEDED;
-		state.notes = filterNotes(normalizeNotes(payload), state.filters);
+		builder.addCase(action.fulfilled, (state, { payload }) => {
+			state.status[actionType as NoteActions] = AsyncActionStatus.SUCCEEDED;
+			state.notes[payload.id] = payload;
+			state.notes = sortNotes(filterNotes(state.notes, state.filters));
+		});
 	});
 };

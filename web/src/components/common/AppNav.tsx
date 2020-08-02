@@ -1,4 +1,5 @@
 import HomeIcon from "@atlaskit/icon/glyph/home";
+import TrashIcon from "@atlaskit/icon/glyph/trash";
 import { colors } from "@atlaskit/theme";
 import React from "react";
 import { useHistory } from "react-router-dom";
@@ -45,12 +46,12 @@ export const AppNav = () => {
 				>
 					Archive
 				</NavButton>
-				{/* <NavButton
+				<NavButton
 					iconBefore={<TrashIcon label="trash" />}
 					onClick={() => history.push("/trash")}
 				>
 					Trash
-				</NavButton> */}
+				</NavButton>
 			</NavItems>
 			<NavItems>
 				<AppProfile />

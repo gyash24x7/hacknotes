@@ -8,10 +8,17 @@ export enum AsyncActionStatus {
 }
 
 export enum NoteActions {
-	ALL_NOTES = "notes/all",
+	GET_ALL_NOTES = "notes/all",
 	CREATE_NOTE = "notes/create",
 	UPDATE_NOTE = "notes/update",
-	ARCHIVED_NOTES = "notes/archived"
+	GET_ARCHIVED_NOTES = "notes/archived",
+	GET_DELETED_NOTES = "notes/deleted",
+	ARCHIVE_NOTE = "notes/archive",
+	PIN_NOTE = "notes/pin",
+	UNPIN_NOTE = "notes/unpin",
+	UNARCHIVE_NOTE = "notes/unarchive",
+	DELETE_NOTE = "notes/delete",
+	RESTORE_NOTE = "notes/restore"
 }
 
 export const NoteColors: Record<string, string> = {
@@ -59,8 +66,6 @@ export type CreateNoteInput = {
 
 export type UpdateNoteInput = {
 	noteId: string;
-	archived?: boolean;
-	pinned?: boolean;
 	color?: string;
 	content?: string;
 	title?: string;

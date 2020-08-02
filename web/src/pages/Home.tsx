@@ -3,6 +3,7 @@ import React, { Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useMount } from "react-use";
 import styled from "styled-components";
+import { VerticalSpacer } from "../components/common/VerticalSpacer";
 import { CreateNote } from "../components/Home/CreateNote";
 import { NoteList } from "../components/Home/NoteList";
 import { AppStore } from "../store";
@@ -26,7 +27,7 @@ export const HomePage = () => {
 		(store) => store.notes.notes
 	);
 	const notesStatus = useSelector<AppStore, AsyncActionStatus>(
-		(store) => store.notes.status[NoteActions.ALL_NOTES]
+		(store) => store.notes.status[NoteActions.GET_ALL_NOTES]
 	);
 	useMount(() => dispatch(fetchNotes()));
 
@@ -35,6 +36,7 @@ export const HomePage = () => {
 			<CreateNote />
 			{is.equal(notesStatus, AsyncActionStatus.SUCCEEDED) && (
 				<Fragment>
+					<VerticalSpacer />
 					{Object.keys(notes).filter((id) => notes[id].pinned).length > 0 && (
 						<NoteList notes={notes} pinned />
 					)}

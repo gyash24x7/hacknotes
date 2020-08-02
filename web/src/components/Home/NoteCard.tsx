@@ -66,7 +66,7 @@ export const NoteCard = ({ noteId, openView, onClickAway }: NoteProps) => {
 					</NoteBody>
 				)}
 			</div>
-			<VerticalSpacer size={10} />
+			<VerticalSpacer size={20} />
 			<NoteCardFooter isVisible={hovered} noteId={noteId} />
 		</AppCard>
 	);

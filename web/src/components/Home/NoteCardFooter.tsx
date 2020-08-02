@@ -1,7 +1,11 @@
 import { ButtonGroup } from "@atlaskit/button";
-import React from "react";
+import React, { Fragment } from "react";
+import { useSelector } from "react-redux";
+import { AppStore } from "../../store";
+import { Note } from "../../utils/types";
 import { AppCardFooter } from "../common/AppCard";
 import { ArchiveNote } from "./ArchiveNote";
+import { DeleteNote } from "./DeleteNote";
 import { PinNote } from "./PinNote";
 import { UpdateColor } from "./UpdateColor";
 
@@ -11,39 +15,25 @@ interface NoteCardFooterProps {
 }
 
 export const NoteCardFooter = ({ isVisible, noteId }: NoteCardFooterProps) => {
+	const { deleted } = useSelector<AppStore, Note>(
+		(store) => store.notes.notes[noteId]
+	);
+
 	return (
 		<AppCardFooter>
 			{isVisible && (
-				<ButtonGroup>
-					{/* <AppIconButton
-							spacing="none"
-							iconBefore={<BellIcon label="reminder" />}
-							appearance="subtle"
-						/>
-						<AppIconButton
-							spacing="none"
-							iconBefore={<CollaboratorIcon label="collaborators" />}
-							appearance="subtle"
-						/>
-						<AppIconButton
-							spacing="none"
-							iconBefore={<ImageIcon label="image" />}
-							appearance="subtle"
-						/>
-						<AppIconButton
-							spacing="none"
-							iconBefore={<LinkIcon label="links" />}
-							appearance="subtle"
-						/>
-						<AppIconButton
-							spacing="none"
-							iconBefore={<PaletteIcon />}
-							appearance="subtle"
-						/> */}
-					<ArchiveNote noteId={noteId} />
-					<UpdateColor noteId={noteId} />
-					<PinNote noteId={noteId} />
-				</ButtonGroup>
+				<Fragment>
+					{!deleted && (
+						<ButtonGroup>
+							<ArchiveNote noteId={noteId} />
+							<UpdateColor noteId={noteId} />
+							<PinNote noteId={noteId} />
+						</ButtonGroup>
+					)}
+					<ButtonGroup>
+						<DeleteNote noteId={noteId} />
+					</ButtonGroup>
+				</Fragment>
 			)}
 		</AppCardFooter>
 	);

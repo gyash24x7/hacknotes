@@ -28,7 +28,10 @@ export const filterNotes = (
 	for (const noteId in notes) {
 		if (Object.prototype.hasOwnProperty.call(notes, noteId)) {
 			const note = notes[noteId];
-			if (is.equal(note.archived, filters.archived)) {
+			if (
+				is.equal(note.archived, filters.archived) &&
+				is.equal(note.deleted, filters.deleted)
+			) {
 				filteredNotes[noteId] = { ...note };
 			}
 		}
@@ -52,16 +55,20 @@ const note = createSlice({
 	initialState: {
 		notes: initialNotes,
 		status: {
-			[NoteActions.ALL_NOTES]: AsyncActionStatus.IDLE,
+			[NoteActions.GET_ALL_NOTES]: AsyncActionStatus.IDLE,
 			[NoteActions.CREATE_NOTE]: AsyncActionStatus.IDLE
 		},
 		error: null,
-		filters: { archived: false }
+		filters: { archived: false, deleted: false }
 	} as NoteSliceState,
 
 	reducers: {
 		setArchiveFilter(state, { payload }) {
 			state.filters.archived = payload;
+		},
+
+		setDeleteFilter(state, { payload }) {
+			state.filters.deleted = payload;
 		}
 	},
 
@@ -70,4 +77,4 @@ const note = createSlice({
 
 export const noteReducer = note.reducer;
 
-export const { setArchiveFilter } = note.actions;
+export const { setArchiveFilter, setDeleteFilter } = note.actions;

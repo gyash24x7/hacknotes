@@ -3,7 +3,7 @@ import is from "is_js";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppStore } from "../../store";
-import { updateNote } from "../../store/note/thunks";
+import { pinNote, unpinNote } from "../../store/note/thunks";
 import { AsyncActionStatus, Note, NoteActions } from "../../utils/types";
 import { AppIconButton } from "../common/AppButton";
 import PinIcon from "../common/PinIcon";
@@ -22,7 +22,10 @@ export const PinNote = ({ noteId }: PinNoteProps) => {
 		(store) => store.notes.status[NoteActions.UPDATE_NOTE]
 	);
 
-	const handleClick = () => dispatch(updateNote({ noteId, pinned: !pinned }));
+	const handleClick = () => {
+		if (pinned) dispatch(unpinNote(noteId));
+		else dispatch(pinNote(noteId));
+	};
 
 	return (
 		<Tooltip content={`${pinned ? "Unpin" : "Pin"} note`} position="bottom">
