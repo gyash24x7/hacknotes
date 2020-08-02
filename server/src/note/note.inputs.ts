@@ -19,10 +19,17 @@ export class CreateNoteInput {
 	content: string;
 }
 
+export class UpdateNoteTextAndColorInput {
+	@IsOptional() content?: string;
+	@IsOptional() title?: string;
+	@IsOptional() @IsIn(allowedColors) color?: NoteColors;
+}
+
 export class UpdateNoteInput {
 	@IsOptional() @IsIn(allowedColors) color?: NoteColors;
 	@IsOptional() @IsBoolean() archived?: boolean;
 	@IsOptional() @IsBoolean() pinned?: boolean;
+	@IsOptional() @IsBoolean() deleted?: boolean;
 	@IsOptional() content?: string;
 	@IsOptional() title?: string;
 }

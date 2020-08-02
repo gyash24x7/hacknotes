@@ -8,7 +8,7 @@ export class NoteService {
 
 	async getNotes(authorId: string) {
 		return this.prismaService.note.findMany({
-			where: { authorId, archived: false },
+			where: { authorId, archived: false, deleted: false },
 			orderBy: { createdAt: "desc" }
 		});
 	}
@@ -16,6 +16,13 @@ export class NoteService {
 	async getArchivedNotes(authorId: string) {
 		return this.prismaService.note.findMany({
 			where: { authorId, archived: true },
+			orderBy: { updatedAt: "desc" }
+		});
+	}
+
+	async getDeletedNotes(authorId: string) {
+		return this.prismaService.note.findMany({
+			where: { authorId, deleted: true },
 			orderBy: { updatedAt: "desc" }
 		});
 	}
@@ -50,8 +57,8 @@ export class NoteService {
 			data: {
 				...data,
 				updatedAt: new Date(),
-				pinned: data.archived ? false : data.pinned,
-				archived: data.pinned ? false : data.archived
+				pinned: data.deleted ? false : data.archived ? false : data.pinned,
+				archived: data.deleted ? false : data.pinned ? false : data.archived
 			}
 		});
 		return note;
