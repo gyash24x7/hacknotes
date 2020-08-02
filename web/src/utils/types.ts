@@ -29,6 +29,7 @@ export const NoteColors: Record<string, string> = {
 
 export type NoteFilters = {
 	archived?: boolean;
+	deleted?: boolean;
 };
 
 export type NoteSliceState = {
@@ -48,6 +49,7 @@ export type Note = {
 	authorId: string;
 	createdAt: string;
 	updatedAt: string;
+	deleted: boolean;
 };
 
 export type CreateNoteInput = {

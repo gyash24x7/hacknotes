@@ -2,8 +2,6 @@ import is from "is_js";
 import React, { Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useMount, useUnmount } from "react-use";
-import { AppNav } from "../components/common/AppNav";
-import { PageWrapper } from "../components/common/PageWrapper";
 import { VerticalSpacer } from "../components/common/VerticalSpacer";
 import { NoteList } from "../components/Home/NoteList";
 import { AppStore } from "../store";
@@ -25,19 +23,16 @@ export const ArchivePage = () => {
 	useUnmount(() => dispatch(setArchiveFilter(false)));
 
 	return (
-		<PageWrapper>
-			<AppNav />
-			<HomeContainer>
-				<VerticalSpacer size={70} />
-				{is.equal(notesStatus, AsyncActionStatus.SUCCEEDED) && (
-					<Fragment>
-						<NoteList notes={notes} />
-						{Object.keys(notes).length === 0 && (
-							<HelperText>No Notes in Archive</HelperText>
-						)}
-					</Fragment>
-				)}
-			</HomeContainer>
-		</PageWrapper>
+		<HomeContainer>
+			<VerticalSpacer size={70} />
+			{is.equal(notesStatus, AsyncActionStatus.SUCCEEDED) && (
+				<Fragment>
+					<NoteList notes={notes} />
+					{Object.keys(notes).length === 0 && (
+						<HelperText>No Notes in Archive</HelperText>
+					)}
+				</Fragment>
+			)}
+		</HomeContainer>
 	);
 };

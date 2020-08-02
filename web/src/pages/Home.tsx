@@ -3,8 +3,6 @@ import React, { Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useMount } from "react-use";
 import styled from "styled-components";
-import { AppNav } from "../components/common/AppNav";
-import { PageWrapper } from "../components/common/PageWrapper";
 import { CreateNote } from "../components/Home/CreateNote";
 import { NoteList } from "../components/Home/NoteList";
 import { AppStore } from "../store";
@@ -33,22 +31,19 @@ export const HomePage = () => {
 	useMount(() => dispatch(fetchNotes()));
 
 	return (
-		<PageWrapper>
-			<AppNav />
-			<HomeContainer>
-				<CreateNote />
-				{is.equal(notesStatus, AsyncActionStatus.SUCCEEDED) && (
-					<Fragment>
-						{Object.keys(notes).filter((id) => notes[id].pinned).length > 0 && (
-							<NoteList notes={notes} pinned />
-						)}
-						<NoteList notes={notes} pinned={false} />
-						{Object.keys(notes).length === 0 && (
-							<HelperText>No Notes in Archive</HelperText>
-						)}
-					</Fragment>
-				)}
-			</HomeContainer>
-		</PageWrapper>
+		<HomeContainer>
+			<CreateNote />
+			{is.equal(notesStatus, AsyncActionStatus.SUCCEEDED) && (
+				<Fragment>
+					{Object.keys(notes).filter((id) => notes[id].pinned).length > 0 && (
+						<NoteList notes={notes} pinned />
+					)}
+					<NoteList notes={notes} pinned={false} />
+					{Object.keys(notes).length === 0 && (
+						<HelperText>No Notes Available</HelperText>
+					)}
+				</Fragment>
+			)}
+		</HomeContainer>
 	);
 };

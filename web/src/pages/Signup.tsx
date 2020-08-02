@@ -4,14 +4,11 @@ import is from "is_js";
 import React, { Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import LogoIcon from "../assets/icon.svg";
 import IntegratedLogo from "../assets/integrated-logo.svg";
 import { BottomLink } from "../components/Auth/BottomLink";
 import { FormCard } from "../components/Auth/FormCard";
-import { MainGraphic, MainGraphicIcon } from "../components/Auth/MainGraphic";
 import { AppButton } from "../components/common/AppButton";
 import { IntegratedLogoContainer } from "../components/common/IntegratedLogo";
-import { PageWrapper } from "../components/common/PageWrapper";
 import { VerticalSpacer } from "../components/common/VerticalSpacer";
 import { AppStore } from "../store";
 import { signup } from "../store/user/thunks";
@@ -50,60 +47,55 @@ export const SignupPage = () => {
 	};
 
 	return (
-		<PageWrapper>
-			<MainGraphic>
-				<MainGraphicIcon src={LogoIcon} />
-			</MainGraphic>
-			<FormCard>
-				<IntegratedLogoContainer>
-					<img src={IntegratedLogo} alt="Hacknotes" />
-				</IntegratedLogoContainer>
-				<h1>Sign Up</h1>
-				<Form onSubmit={handleSubmit}>
-					{({ formProps }) => (
-						<form {...formProps} noValidate>
-							{signupFields.map((field) => (
-								<Field
-									key={field.label}
-									label={field.label}
-									isRequired
-									name={field.label.toLowerCase()}
-									validate={field.validate}
-									defaultValue=""
-								>
-									{({ fieldProps, error }) => (
-										<Fragment>
-											<TextField
-												{...fieldProps}
-												autoComplete="off"
-												type={field.type}
-											/>
-											{error && <ErrorMessage>{error}</ErrorMessage>}
-											{!error && field.helperMessage && (
-												<HelperMessage>{field.helperMessage}</HelperMessage>
-											)}
-										</Fragment>
-									)}
-								</Field>
-							))}
-							<VerticalSpacer />
-							<AppButton
-								appearance="primary"
-								type="submit"
-								shouldFitContainer
-								isLoading={is.equal(signupStatus, AsyncActionStatus.LOADING)}
+		<FormCard>
+			<IntegratedLogoContainer>
+				<img src={IntegratedLogo} alt="Hacknotes" />
+			</IntegratedLogoContainer>
+			<h1>Sign Up</h1>
+			<Form onSubmit={handleSubmit}>
+				{({ formProps }) => (
+					<form {...formProps} noValidate>
+						{signupFields.map((field) => (
+							<Field
+								key={field.label}
+								label={field.label}
+								isRequired
+								name={field.label.toLowerCase()}
+								validate={field.validate}
+								defaultValue=""
 							>
-								Submit
-							</AppButton>
-							<VerticalSpacer />
-							<BottomLink>
-								<div>Already have an account?</div>
-								<Link to="/login">Login</Link>
-							</BottomLink>
-						</form>
-					)}
-				</Form>
-			</FormCard>
-		</PageWrapper>
+								{({ fieldProps, error }) => (
+									<Fragment>
+										<TextField
+											{...fieldProps}
+											autoComplete="off"
+											type={field.type}
+										/>
+										{error && <ErrorMessage>{error}</ErrorMessage>}
+										{!error && field.helperMessage && (
+											<HelperMessage>{field.helperMessage}</HelperMessage>
+										)}
+									</Fragment>
+								)}
+							</Field>
+						))}
+						<VerticalSpacer />
+						<AppButton
+							appearance="primary"
+							type="submit"
+							shouldFitContainer
+							isLoading={is.equal(signupStatus, AsyncActionStatus.LOADING)}
+						>
+							Submit
+						</AppButton>
+						<VerticalSpacer />
+						<BottomLink>
+							<div>Already have an account?</div>
+							<Link to="/login">Login</Link>
+						</BottomLink>
+					</form>
+				)}
+			</Form>
+		</FormCard>
 	);
 };
