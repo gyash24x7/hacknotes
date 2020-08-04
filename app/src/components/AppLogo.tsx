@@ -12,3 +12,8 @@ export const AppLogo = styled(SvgLogo)`
 	width: 200px;
 	height: 140px;
 `;
+
+export const AppLogoSmall = styled(SvgLogo)`
+	width: 150px;
+	height: 105px;
+`;

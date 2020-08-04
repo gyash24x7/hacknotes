@@ -23,3 +23,9 @@ export const LinkText = styled(Text)`
 	color: #0052cc;
 	font-family: "montserrat-bold";
 `;
+
+export const AppTitle = styled(Text)`
+	text-transform: uppercase;
+	font-family: "montserrat-bold";
+	font-size: 24px;
+`;

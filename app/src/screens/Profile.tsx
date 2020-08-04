@@ -4,12 +4,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { AppContainer } from "../components/AppContainer";
 import { TopNav } from "../components/AppNav";
 
-export const ArchiveScreen = () => {
+export const ProfileScreen = () => {
 	return (
 		<SafeAreaView>
 			<TopNav />
 			<AppContainer>
-				<Text>Archive Screen</Text>
+				<Text>Profile Screen</Text>
 			</AppContainer>
 		</SafeAreaView>
 	);
