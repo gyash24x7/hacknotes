@@ -6,3 +6,9 @@ export const AppContainer = styled(Layout)`
 	align-items: center;
 	justify-content: center;
 `;
+
+export const HelperContainer = styled(Layout)`
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+`;

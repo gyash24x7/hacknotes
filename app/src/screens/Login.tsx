@@ -1,11 +1,17 @@
-import { Icon, Input, Spinner } from "@ui-kitten/components";
+import { useNavigation } from "@react-navigation/native";
+import { Icon, Input, Spinner, Text } from "@ui-kitten/components";
 import is from "is_js";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppButton } from "../components/AppButton";
-import { AppContainer } from "../components/AppContainer";
+import { AppContainer, HelperContainer } from "../components/AppContainer";
 import { AppLogo } from "../components/AppLogo";
-import { ButtonText, ErrorText, Heading } from "../components/AppTypography";
+import {
+	ButtonText,
+	ErrorText,
+	Heading,
+	LinkText
+} from "../components/AppTypography";
 import { FormWrapper } from "../components/FormWrapper";
 import { VerticalSpacer } from "../components/VerticalSpacer";
 import { AppStore } from "../store";
@@ -23,6 +29,7 @@ export const LoginScreen = () => {
 	const loginStatus = useSelector<AppStore, AsyncActionStatus>(
 		(store) => store.user.status[UserActions.LOGIN]
 	);
+	const navigation = useNavigation();
 
 	const validateInput = () => {
 		switch (true) {
@@ -57,7 +64,7 @@ export const LoginScreen = () => {
 					size="large"
 					value={username}
 					onChangeText={setUsername}
-					accessoryLeft={(props) => <Icon name="person-outline" {...props} />}
+					accessoryLeft={(props) => <Icon name="at-outline" {...props} />}
 				/>
 				<VerticalSpacer />
 				<Input
@@ -87,6 +94,12 @@ export const LoginScreen = () => {
 					onPress={handleSubmit}
 				/>
 				<VerticalSpacer />
+				<HelperContainer>
+					<Text>Don't have an account?</Text>
+					<LinkText onPress={() => navigation.navigate("Signup")}>
+						SignUp
+					</LinkText>
+				</HelperContainer>
 				{errorMsg && <ErrorText status="danger">{errorMsg}</ErrorText>}
 			</FormWrapper>
 		</AppContainer>

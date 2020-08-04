@@ -18,3 +18,8 @@ export const ErrorText = styled(Text)`
 	text-transform: uppercase;
 	text-align: center;
 `;
+
+export const LinkText = styled(Text)`
+	color: #0052cc;
+	font-family: "montserrat-bold";
+`;

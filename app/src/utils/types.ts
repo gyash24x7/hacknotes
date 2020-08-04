@@ -88,7 +88,7 @@ export type User = {
 export type UserSliceState = {
 	user: User | null;
 	status: Record<UserActions, AsyncActionStatus>;
-	error: string | null;
+	error: any;
 };
 
 export type UserLoginInput = {
