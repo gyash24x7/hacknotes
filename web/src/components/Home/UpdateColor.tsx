@@ -7,7 +7,7 @@ import styled from "styled-components";
 import { updateNote } from "../../store/note/thunks";
 import { NoteColors } from "../../utils/types";
 import { AppIconButton } from "../common/AppButton";
-import PaletteIcon from "../common/PaletteIcon";
+import PaletteIcon from "../icons/PaletteIcon";
 
 export const Palette = styled.div`
 	padding: 10px;

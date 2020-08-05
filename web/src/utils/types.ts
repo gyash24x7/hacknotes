@@ -110,3 +110,7 @@ export enum DrawerModes {
 	SETTINGS = "SETTINGS",
 	CLOSED = "CLOSED"
 }
+
+export interface AppIconProps {
+	filled?: boolean;
+}

@@ -1,9 +1,4 @@
-import {
-	Notifications,
-	Profile,
-	Search,
-	SignIn
-} from "@atlaskit/atlassian-navigation";
+import { Notifications, Profile, Search } from "@atlaskit/atlassian-navigation";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useWindowSize } from "react-use";
@@ -13,6 +8,8 @@ import { AppStore } from "../../store";
 import { openDrawer } from "../../store/drawer";
 import { logout } from "../../store/user/thunks";
 import { DrawerModes, User } from "../../utils/types";
+import LogoutIcon from "../icons/LogoutIcon";
+import { NavButton } from "./AppButton";
 
 export const AppProductHome = () => {
 	const { width } = useWindowSize();
@@ -36,15 +33,7 @@ export const AppProfile = () => {
 		<Profile
 			onClick={() => dispatch(openDrawer(DrawerModes.PROFILE))}
 			tooltip="Profile"
-			icon={
-				<img
-					src={user?.avatar}
-					alt="avatar"
-					width={30}
-					height={30}
-					style={{ borderRadius: "50%" }}
-				/>
-			}
+			icon={<img src={user?.avatar} alt="avatar" width={30} height={30} />}
 		/>
 	);
 };
@@ -52,7 +41,14 @@ export const AppProfile = () => {
 export const AppLogout = () => {
 	const dispatch = useDispatch();
 	const handleLogout = () => dispatch(logout());
-	return <SignIn tooltip="Logout" onClick={handleLogout} />;
+	return (
+		<NavButton
+			tooltip="Logout"
+			onClick={handleLogout}
+			iconBefore={<LogoutIcon />}
+			style={{ width: 32, borderRadius: "50%", margin: 5 }}
+		/>
+	);
 };
 
 export const NoteSearch = () => (

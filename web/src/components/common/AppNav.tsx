@@ -1,12 +1,13 @@
-import HomeIcon from "@atlaskit/icon/glyph/home";
-import TrashIcon from "@atlaskit/icon/glyph/trash";
 import { colors } from "@atlaskit/theme";
+import is from "is_js";
 import React from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import styled from "styled-components";
+import ArchiveIcon from "../icons/ArchiveIcon";
+import HomeIcon from "../icons/HomeIcon";
+import TrashIcon from "../icons/TrashIcon";
 import { NavButton } from "./AppButton";
 import { AppDrawer } from "./AppDrawer";
-import ArchiveIcon from "./ArchiveIcon";
 import { AppLogout, AppProductHome, AppProfile } from "./NavComponents";
 
 const NavContainer = styled.div`
@@ -30,24 +31,29 @@ const NavItems = styled.div`
 
 export const AppNav = () => {
 	const history = useHistory();
+	const { pathname } = useLocation();
+
 	return (
 		<NavContainer>
 			<NavItems>
 				<AppProductHome />
 				<NavButton
-					iconBefore={<HomeIcon label="Home" />}
+					iconBefore={<HomeIcon filled={is.equal(pathname, "/")} />}
+					isSelected={is.equal(pathname, "/")}
 					onClick={() => history.push("/")}
 				>
 					Home
 				</NavButton>
 				<NavButton
-					iconBefore={<ArchiveIcon />}
+					iconBefore={<ArchiveIcon filled={is.equal(pathname, "/archive")} />}
 					onClick={() => history.push("/archive")}
+					isSelected={is.equal(pathname, "/archive")}
 				>
 					Archive
 				</NavButton>
 				<NavButton
-					iconBefore={<TrashIcon label="trash" />}
+					iconBefore={<TrashIcon filled={is.equal(pathname, "/trash")} />}
+					isSelected={is.equal(pathname, "/trash")}
 					onClick={() => history.push("/trash")}
 				>
 					Trash

@@ -6,8 +6,7 @@ import { AppStore } from "../../store";
 import { pinNote, unpinNote } from "../../store/note/thunks";
 import { AsyncActionStatus, Note, NoteActions } from "../../utils/types";
 import { AppIconButton } from "../common/AppButton";
-import PinIcon from "../common/PinIcon";
-import UnpinIcon from "../common/UnpinIcon";
+import BookmarkIcon from "../icons/BookmarkIcon";
 
 interface PinNoteProps {
 	noteId: string;
@@ -31,7 +30,7 @@ export const PinNote = ({ noteId }: PinNoteProps) => {
 		<Tooltip content={`${pinned ? "Unpin" : "Pin"} note`} position="bottom">
 			<AppIconButton
 				spacing="none"
-				iconBefore={pinned ? <UnpinIcon /> : <PinIcon />}
+				iconBefore={<BookmarkIcon filled={pinned} />}
 				appearance="subtle"
 				isLoading={is.equal(status, AsyncActionStatus.LOADING)}
 				isDisabled={is.equal(status, AsyncActionStatus.LOADING)}

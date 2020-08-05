@@ -6,8 +6,7 @@ import { AppStore } from "../../store";
 import { archiveNote, unarchiveNote } from "../../store/note/thunks";
 import { AsyncActionStatus, Note, NoteActions } from "../../utils/types";
 import { AppIconButton } from "../common/AppButton";
-import ArchiveIcon from "../common/ArchiveIcon";
-import UnarchiveIcon from "../common/UnarchiveIcon";
+import ArchiveIcon from "../icons/ArchiveIcon";
 
 interface ArchiveNoteProps {
 	noteId: string;
@@ -34,7 +33,7 @@ export const ArchiveNote = ({ noteId }: ArchiveNoteProps) => {
 		>
 			<AppIconButton
 				spacing="none"
-				iconBefore={archived ? <UnarchiveIcon /> : <ArchiveIcon />}
+				iconBefore={<ArchiveIcon filled={archived} />}
 				appearance="subtle"
 				isLoading={is.equal(status, AsyncActionStatus.LOADING)}
 				isDisabled={is.equal(status, AsyncActionStatus.LOADING)}

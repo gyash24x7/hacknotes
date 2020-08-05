@@ -1,5 +1,3 @@
-import RestoreIcon from "@atlaskit/icon/glyph/retry";
-import TrashIcon from "@atlaskit/icon/glyph/trash";
 import Tooltip from "@atlaskit/tooltip";
 import is from "is_js";
 import React from "react";
@@ -8,6 +6,8 @@ import { AppStore } from "../../store";
 import { deleteNote, restoreNote } from "../../store/note/thunks";
 import { AsyncActionStatus, Note, NoteActions } from "../../utils/types";
 import { AppIconButton } from "../common/AppButton";
+import RestoreIcon from "../icons/RestoreIcon";
+import TrashIcon from "../icons/TrashIcon";
 
 interface DeleteNoteProps {
 	noteId: string;
@@ -34,13 +34,7 @@ export const DeleteNote = ({ noteId }: DeleteNoteProps) => {
 		>
 			<AppIconButton
 				spacing="none"
-				iconBefore={
-					deleted ? (
-						<RestoreIcon label="Restore" />
-					) : (
-						<TrashIcon label="Delete" />
-					)
-				}
+				iconBefore={deleted ? <RestoreIcon /> : <TrashIcon />}
 				appearance="subtle"
 				isLoading={is.equal(status, AsyncActionStatus.LOADING)}
 				isDisabled={is.equal(status, AsyncActionStatus.LOADING)}
