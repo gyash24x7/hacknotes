@@ -7,13 +7,19 @@ import {
 	Param,
 	Post,
 	Put,
+	Query,
 	UseGuards,
 	ValidationPipe
 } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { User } from "@prisma/client";
 import { AuthUser } from "../user/auth-user.decorator";
-import { CreateNoteInput, UpdateNoteTextAndColorInput } from "./note.inputs";
+import { ValidateNoteFiltersPipe } from "./note-filters.pipe";
+import {
+	CreateNoteInput,
+	GetNotesInput,
+	UpdateNoteTextAndColorInput
+} from "./note.inputs";
 import { NoteService } from "./note.service";
 
 @Controller("/api/notes")
@@ -22,21 +28,12 @@ export class NoteController {
 	constructor(private readonly noteService: NoteService) {}
 
 	@UseGuards(AuthGuard("jwt"))
-	@Get("/all")
-	async getAllNotes(@AuthUser() { id }: User) {
-		return this.noteService.getNotes(id);
-	}
-
-	@UseGuards(AuthGuard("jwt"))
-	@Get("/archived")
-	async getArchivedNotes(@AuthUser() { id }: User) {
-		return this.noteService.getArchivedNotes(id);
-	}
-
-	@UseGuards(AuthGuard("jwt"))
-	@Get("/deleted")
-	async getDeletedNotes(@AuthUser() { id }: User) {
-		return this.noteService.getDeletedNotes(id);
+	@Get("/")
+	async getNotes(
+		@AuthUser() { id }: User,
+		@Query(ValidateNoteFiltersPipe) options: GetNotesInput
+	) {
+		return this.noteService.getNotes(options, id);
 	}
 
 	@UseGuards(AuthGuard("jwt"))

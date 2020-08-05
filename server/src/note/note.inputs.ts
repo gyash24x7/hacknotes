@@ -1,5 +1,5 @@
 import { NoteColors } from "@prisma/client";
-import { IsBoolean, IsIn, IsOptional } from "class-validator";
+import { IsBoolean, IsBooleanString, IsIn, IsOptional } from "class-validator";
 
 const allowedColors: NoteColors[] = [
 	"TRANSPARENT",
@@ -32,4 +32,9 @@ export class UpdateNoteInput {
 	@IsOptional() @IsBoolean() deleted?: boolean;
 	@IsOptional() content?: string;
 	@IsOptional() title?: string;
+}
+
+export class GetNotesInput {
+	@IsOptional() @IsBooleanString() archived?: boolean;
+	@IsOptional() @IsBooleanString() deleted?: boolean;
 }

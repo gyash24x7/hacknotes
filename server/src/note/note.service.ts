@@ -1,29 +1,15 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
-import { CreateNoteInput, UpdateNoteInput } from "./note.inputs";
+import { CreateNoteInput, GetNotesInput, UpdateNoteInput } from "./note.inputs";
 
 @Injectable()
 export class NoteService {
 	constructor(private readonly prismaService: PrismaService) {}
 
-	async getNotes(authorId: string) {
+	async getNotes({ archived, deleted }: GetNotesInput, authorId: string) {
 		return this.prismaService.note.findMany({
-			where: { authorId, archived: false, deleted: false },
+			where: { authorId, archived, deleted },
 			orderBy: { createdAt: "desc" }
-		});
-	}
-
-	async getArchivedNotes(authorId: string) {
-		return this.prismaService.note.findMany({
-			where: { authorId, archived: true },
-			orderBy: { updatedAt: "desc" }
-		});
-	}
-
-	async getDeletedNotes(authorId: string) {
-		return this.prismaService.note.findMany({
-			where: { authorId, deleted: true },
-			orderBy: { updatedAt: "desc" }
 		});
 	}
 
