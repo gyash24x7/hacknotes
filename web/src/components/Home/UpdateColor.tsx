@@ -2,9 +2,9 @@ import Popup from "@atlaskit/popup";
 import { colors } from "@atlaskit/theme";
 import Tooltip from "@atlaskit/tooltip";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useMutation } from "react-query";
 import styled from "styled-components";
-import { updateNote } from "../../store/note/thunks";
+import { updateNote } from "../../api/notes";
 import { NoteColors } from "../../utils/types";
 import { AppIconButton } from "../common/AppButton";
 import PaletteIcon from "../icons/PaletteIcon";
@@ -32,10 +32,10 @@ interface UpdateColorProps {
 
 export const UpdateColor = ({ noteId }: UpdateColorProps) => {
 	const [isOpen, setIsOpen] = useState(false);
-	const dispatch = useDispatch();
+	const [updateColor, { isLoading }] = useMutation(updateNote);
 
 	const handleColorClick = (color: string) => () =>
-		dispatch(updateNote({ color, noteId }));
+		updateColor({ color, noteId });
 
 	return (
 		<Popup
@@ -61,6 +61,8 @@ export const UpdateColor = ({ noteId }: UpdateColorProps) => {
 						onClick={() => setIsOpen(!isOpen)}
 						iconBefore={<PaletteIcon />}
 						appearance={isOpen ? "default" : "subtle"}
+						isLoading={isLoading}
+						isDisabled={isLoading}
 					/>
 				</Tooltip>
 			)}

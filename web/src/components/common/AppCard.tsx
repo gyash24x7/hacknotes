@@ -12,6 +12,7 @@ export const AppCard = styled.div`
 
 export const AppCardFooter = styled.div`
 	display: flex;
+	flex-direction: row-reverse;
 	justify-content: space-between;
 	height: 30px;
 	align-items: center;

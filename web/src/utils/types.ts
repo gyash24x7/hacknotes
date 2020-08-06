@@ -69,6 +69,9 @@ export type UpdateNoteInput = {
 	color?: string;
 	content?: string;
 	title?: string;
+	archived?: boolean;
+	pinned?: boolean;
+	deleted?: boolean;
 };
 
 export enum UserActions {
@@ -113,4 +116,9 @@ export enum DrawerModes {
 
 export interface AppIconProps {
 	filled?: boolean;
+}
+
+export interface GetNotesFilter {
+	archived?: boolean;
+	deleted?: boolean;
 }

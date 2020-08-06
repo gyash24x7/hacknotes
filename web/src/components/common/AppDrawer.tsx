@@ -1,18 +1,13 @@
 import Avatar from "@atlaskit/avatar";
 import { ButtonGroup } from "@atlaskit/button";
 import Drawer from "@atlaskit/drawer";
-import SaveIcon from "@atlaskit/icon/glyph/file";
-import RandomIcon from "@atlaskit/icon/glyph/refresh";
 import { colors } from "@atlaskit/theme";
-import is from "is_js";
 import React, { Fragment, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { queryCache, useMutation } from "react-query";
 import styled from "styled-components";
 import client from "superagent";
-import { AppStore } from "../../store";
-import { closeDrawer } from "../../store/drawer";
-import { updateAvatar } from "../../store/user/thunks";
-import { DrawerModes, User } from "../../utils/types";
+import { updateAvatar } from "../../api/user";
+import { User } from "../../utils/types";
 import { AppButton } from "./AppButton";
 import { VerticalSpacer } from "./VerticalSpacer";
 
@@ -60,24 +55,17 @@ export const StyledAvatar = styled.div`
 	cursor: pointer;
 `;
 
-export const AppDrawer = () => {
-	const mode = useSelector<AppStore, DrawerModes | null>(
-		(store) => store.drawer.mode
-	);
-	const dispatch = useDispatch();
+interface AppDrawerProps {
+	isOpen: boolean;
+	onClose: () => void;
+}
 
+export const AppDrawer = ({ isOpen, onClose }: AppDrawerProps) => {
 	return (
-		<Drawer
-			isOpen={is.not.equal(mode, DrawerModes.CLOSED)}
-			onClose={() => dispatch(closeDrawer())}
-		>
+		<Drawer isOpen={isOpen} onClose={onClose}>
 			<DrawerWrapper>
-				<DrawerHeader>{mode}</DrawerHeader>
-				{is.equal(mode, DrawerModes.PROFILE) ? (
-					<ProfileDrawer />
-				) : (
-					<div>Hello from Settings</div>
-				)}
+				<DrawerHeader>Profile</DrawerHeader>
+				<ProfileDrawer />
 				<div></div>
 			</DrawerWrapper>
 		</Drawer>
@@ -85,22 +73,21 @@ export const AppDrawer = () => {
 };
 
 export const ProfileDrawer = () => {
-	const user = useSelector<AppStore, User | null>((store) => store.user.user);
+	const user = queryCache.getQueryData<User | undefined>("me");
 	const [randomAvatar, setRandomAvatar] = useState(user?.avatar);
 	const [isAvatarControlsOpen, setIsAvatarControlsOpen] = useState(false);
-	const dispatch = useDispatch();
+	const [update, { isLoading }] = useMutation(updateAvatar);
 
 	const toggleAvatarControls = () => setIsAvatarControlsOpen((val) => !val);
 
-	const getRandomAvatar = () => {
+	const getRandomAvatar = () =>
 		client
 			.get(`${process.env.REACT_APP_API_URL}/avatar/random`)
 			.then(({ body: { url } }) => setRandomAvatar(url))
 			.catch(console.log);
-	};
 
 	const changeAvatar = () => {
-		dispatch(updateAvatar({ avatar: randomAvatar! }));
+		update({ avatar: randomAvatar! });
 		setIsAvatarControlsOpen(false);
 	};
 
@@ -113,25 +100,24 @@ export const ProfileDrawer = () => {
 			{isAvatarControlsOpen ? (
 				<Fragment>
 					<AppButton
-						iconBefore={<RandomIcon label="Random Avatar" size="small" />}
 						appearance="default"
 						spacing="compact"
 						onClick={getRandomAvatar}
+						shouldFitContainer
 					>
 						Random
 					</AppButton>
 					<VerticalSpacer size={10} />
 					<ButtonGroup>
 						<AppButton
-							iconBefore={<SaveIcon label="Save Avatar" size="small" />}
 							appearance="primary"
 							spacing="compact"
 							onClick={changeAvatar}
+							isLoading={isLoading}
 						>
 							Save
 						</AppButton>
 						<AppButton
-							iconBefore={<SaveIcon label="Save Avatar" size="small" />}
 							appearance="danger"
 							spacing="compact"
 							onClick={() => setRandomAvatar(user?.avatar)}

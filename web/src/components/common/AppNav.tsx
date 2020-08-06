@@ -1,14 +1,20 @@
+import { Profile } from "@atlaskit/atlassian-navigation";
 import { colors } from "@atlaskit/theme";
-import is from "is_js";
-import React from "react";
+import React, { useContext, useState } from "react";
+import { queryCache } from "react-query";
 import { useHistory, useLocation } from "react-router-dom";
+import { useWindowSize } from "react-use";
 import styled from "styled-components";
+import LogoIcon from "../../assets/icon.svg";
+import WordMark from "../../assets/wordmark.svg";
+import { AuthContext } from "../../utils/context";
+import { User } from "../../utils/types";
 import ArchiveIcon from "../icons/ArchiveIcon";
 import HomeIcon from "../icons/HomeIcon";
+import LogoutIcon from "../icons/LogoutIcon";
 import TrashIcon from "../icons/TrashIcon";
 import { NavButton } from "./AppButton";
 import { AppDrawer } from "./AppDrawer";
-import { AppLogout, AppProductHome, AppProfile } from "./NavComponents";
 
 const NavContainer = styled.div`
 	position: fixed;
@@ -32,38 +38,62 @@ const NavItems = styled.div`
 export const AppNav = () => {
 	const history = useHistory();
 	const { pathname } = useLocation();
+	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+	const { setIsAuthenticated } = useContext(AuthContext);
+	const { width } = useWindowSize();
+	let data: User | undefined = queryCache.getQueryData("me");
+
+	const handleLogout = () => {
+		localStorage.removeItem("authToken");
+		setIsAuthenticated(false);
+	};
 
 	return (
 		<NavContainer>
 			<NavItems>
-				<AppProductHome />
+				<a href="https://hacknotes.yashgupta.dev" style={{ marginRight: 25 }}>
+					<img
+						src={width > 1280 ? WordMark : LogoIcon}
+						alt="Hacknotes"
+						height="30px"
+					/>
+				</a>
 				<NavButton
-					iconBefore={<HomeIcon filled={is.equal(pathname, "/")} />}
-					isSelected={is.equal(pathname, "/")}
+					iconBefore={<HomeIcon filled={pathname === "/"} />}
+					isSelected={pathname === "/"}
 					onClick={() => history.push("/")}
 				>
 					Home
 				</NavButton>
 				<NavButton
-					iconBefore={<ArchiveIcon filled={is.equal(pathname, "/archive")} />}
+					iconBefore={<ArchiveIcon filled={pathname === "/archive"} />}
 					onClick={() => history.push("/archive")}
-					isSelected={is.equal(pathname, "/archive")}
+					isSelected={pathname === "/archive"}
 				>
 					Archive
 				</NavButton>
 				<NavButton
-					iconBefore={<TrashIcon filled={is.equal(pathname, "/trash")} />}
-					isSelected={is.equal(pathname, "/trash")}
+					iconBefore={<TrashIcon filled={pathname === "/trash"} />}
+					isSelected={pathname === "/trash"}
 					onClick={() => history.push("/trash")}
 				>
 					Trash
 				</NavButton>
 			</NavItems>
 			<NavItems>
-				<AppProfile />
-				<AppLogout />
+				<Profile
+					onClick={() => setIsDrawerOpen(true)}
+					tooltip="Profile"
+					icon={<img src={data?.avatar} alt="avatar" width={30} height={30} />}
+				/>
+				<NavButton
+					tooltip="Logout"
+					onClick={handleLogout}
+					iconBefore={<LogoutIcon />}
+					style={{ width: 32, borderRadius: "50%", margin: 5 }}
+				/>
 			</NavItems>
-			<AppDrawer />
+			<AppDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
 		</NavContainer>
 	);
 };

@@ -1,6 +1,5 @@
 import { PrimaryButton } from "@atlaskit/atlassian-navigation";
 import Button from "@atlaskit/button";
-import is from "is_js";
 import styled from "styled-components";
 
 export const AppButton = styled(Button)`
@@ -8,9 +7,7 @@ export const AppButton = styled(Button)`
 	display: flex;
 	justify-content: center;
 	font-weight: bold !important;
-
-	height: 40px
-		${({ spacing }) => is.not.equal(spacing, "compact") && "!important"};
+	height: 40px ${({ spacing }) => spacing !== "compact" && "!important"};
 `;
 
 export const AppIconButton = styled(AppButton)`

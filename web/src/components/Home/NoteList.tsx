@@ -26,12 +26,12 @@ export const ListLabel = styled.div`
 `;
 
 interface NoteListProps {
-	notes: Record<string, Note>;
+	notes: Note[];
 	pinned?: boolean;
 }
 
 export const NoteList = ({ notes, pinned }: NoteListProps) => {
-	const [selectedNoteId, setselectedNoteId] = useState<string>();
+	const [selectedNote, setselectedNote] = useState<Note>();
 	const gridRef = useRef<HTMLDivElement>(null);
 	const { width } = useWindowSize();
 
@@ -64,19 +64,19 @@ export const NoteList = ({ notes, pinned }: NoteListProps) => {
 		<Fragment>
 			{!!pinned && <ListLabel>Pinned Notes</ListLabel>}
 			<div style={listStyles} ref={gridRef}>
-				{Object.keys(notes)
-					.filter((id) => notes[id].pinned === !!pinned)
-					.map((id) => (
-						<ListItem key={id}>
-							<NoteCard noteId={id} openView={() => setselectedNoteId(id)} />
+				{notes
+					.filter((note) => note.pinned === !!pinned)
+					.map((note) => (
+						<ListItem key={note.id}>
+							<NoteCard note={note} openView={() => setselectedNote(note)} />
 						</ListItem>
 					))}
 			</div>
 			{!!pinned && <ListLabel>Other Notes</ListLabel>}
-			{selectedNoteId && (
+			{selectedNote && (
 				<ViewNote
-					noteId={selectedNoteId}
-					onClose={() => setselectedNoteId(undefined)}
+					note={selectedNote}
+					onClose={() => setselectedNote(undefined)}
 				/>
 			)}
 		</Fragment>

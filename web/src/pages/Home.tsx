@@ -1,14 +1,12 @@
-import is from "is_js";
 import React, { Fragment } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useMount } from "react-use";
+import { useQuery } from "react-query";
 import styled from "styled-components";
+import { getAllNotes } from "../api/notes";
+import { AppError } from "../components/common/AppError";
+import AppLoader from "../components/common/AppLoader";
 import { VerticalSpacer } from "../components/common/VerticalSpacer";
 import { CreateNote } from "../components/Home/CreateNote";
 import { NoteList } from "../components/Home/NoteList";
-import { AppStore } from "../store";
-import { fetchNotes } from "../store/note/thunks";
-import { AsyncActionStatus, Note, NoteActions } from "../utils/types";
 
 export const HomeContainer = styled.div`
 	width: 100vw;
@@ -22,30 +20,25 @@ export const HelperText = styled.div`
 `;
 
 export const HomePage = () => {
-	const dispatch = useDispatch();
-	const notes = useSelector<AppStore, Record<string, Note>>(
-		(store) => store.notes.notes
-	);
-	const notesStatus = useSelector<AppStore, AsyncActionStatus>(
-		(store) => store.notes.status[NoteActions.GET_ALL_NOTES]
-	);
-	useMount(() => dispatch(fetchNotes()));
+	const { error, data, isLoading } = useQuery("notes", () => getAllNotes(), {
+		refetchOnWindowFocus: false
+	});
 
 	return (
 		<HomeContainer>
 			<CreateNote />
-			{is.equal(notesStatus, AsyncActionStatus.SUCCEEDED) && (
+			{isLoading && <AppLoader />}
+			{data && (
 				<Fragment>
 					<VerticalSpacer />
-					{Object.keys(notes).filter((id) => notes[id].pinned).length > 0 && (
-						<NoteList notes={notes} pinned />
+					{data.filter((note) => note.pinned).length > 0 && (
+						<NoteList notes={data} pinned />
 					)}
-					<NoteList notes={notes} pinned={false} />
-					{Object.keys(notes).length === 0 && (
-						<HelperText>No Notes Available</HelperText>
-					)}
+					<NoteList notes={data} pinned={false} />
+					{data.length === 0 && <HelperText>No Notes Available</HelperText>}
 				</Fragment>
 			)}
+			{error && <AppError>{error.message}</AppError>}
 		</HomeContainer>
 	);
 };

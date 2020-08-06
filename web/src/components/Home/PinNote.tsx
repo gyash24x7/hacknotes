@@ -1,30 +1,18 @@
 import Tooltip from "@atlaskit/tooltip";
-import is from "is_js";
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { AppStore } from "../../store";
-import { pinNote, unpinNote } from "../../store/note/thunks";
-import { AsyncActionStatus, Note, NoteActions } from "../../utils/types";
+import { useMutation } from "react-query";
+import { updateNote } from "../../api/notes";
 import { AppIconButton } from "../common/AppButton";
 import BookmarkIcon from "../icons/BookmarkIcon";
 
 interface PinNoteProps {
 	noteId: string;
+	pinned: boolean;
 }
 
-export const PinNote = ({ noteId }: PinNoteProps) => {
-	const { pinned } = useSelector<AppStore, Note>(
-		(store) => store.notes.notes[noteId]
-	);
-	const dispatch = useDispatch();
-	const status = useSelector<AppStore, AsyncActionStatus>(
-		(store) => store.notes.status[NoteActions.UPDATE_NOTE]
-	);
-
-	const handleClick = () => {
-		if (pinned) dispatch(unpinNote(noteId));
-		else dispatch(pinNote(noteId));
-	};
+export const PinNote = ({ noteId, pinned }: PinNoteProps) => {
+	const [togglePin, { isLoading }] = useMutation(updateNote);
+	const handleClick = () => togglePin({ noteId, pinned: !pinned });
 
 	return (
 		<Tooltip content={`${pinned ? "Unpin" : "Pin"} note`} position="bottom">
@@ -32,8 +20,8 @@ export const PinNote = ({ noteId }: PinNoteProps) => {
 				spacing="none"
 				iconBefore={<BookmarkIcon filled={pinned} />}
 				appearance="subtle"
-				isLoading={is.equal(status, AsyncActionStatus.LOADING)}
-				isDisabled={is.equal(status, AsyncActionStatus.LOADING)}
+				isLoading={isLoading}
+				isDisabled={isLoading}
 				onClick={handleClick}
 			/>
 		</Tooltip>

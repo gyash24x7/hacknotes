@@ -1,30 +1,16 @@
 import Tooltip from "@atlaskit/tooltip";
-import is from "is_js";
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { AppStore } from "../../store";
-import { archiveNote, unarchiveNote } from "../../store/note/thunks";
-import { AsyncActionStatus, Note, NoteActions } from "../../utils/types";
+import { useUpdateNoteMutation } from "../../hooks/useUpdateNoteMutation";
 import { AppIconButton } from "../common/AppButton";
 import ArchiveIcon from "../icons/ArchiveIcon";
 
 interface ArchiveNoteProps {
 	noteId: string;
+	archived: boolean;
 }
 
-export const ArchiveNote = ({ noteId }: ArchiveNoteProps) => {
-	const dispatch = useDispatch();
-	const status = useSelector<AppStore, AsyncActionStatus>(
-		(store) => store.notes.status[NoteActions.UPDATE_NOTE]
-	);
-	const { archived } = useSelector<AppStore, Note>(
-		(store) => store.notes.notes[noteId]
-	);
-
-	const handleClick = () => {
-		if (archived) dispatch(unarchiveNote(noteId));
-		else dispatch(archiveNote(noteId));
-	};
+export const ArchiveNote = ({ noteId, archived }: ArchiveNoteProps) => {
+	const [toggleArchive, { isLoading }] = useUpdateNoteMutation();
 
 	return (
 		<Tooltip
@@ -35,9 +21,9 @@ export const ArchiveNote = ({ noteId }: ArchiveNoteProps) => {
 				spacing="none"
 				iconBefore={<ArchiveIcon filled={archived} />}
 				appearance="subtle"
-				isLoading={is.equal(status, AsyncActionStatus.LOADING)}
-				isDisabled={is.equal(status, AsyncActionStatus.LOADING)}
-				onClick={handleClick}
+				isLoading={isLoading}
+				isDisabled={isLoading}
+				onClick={() => toggleArchive({ noteId, archived: !archived })}
 			/>
 		</Tooltip>
 	);

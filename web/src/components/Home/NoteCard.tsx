@@ -4,10 +4,8 @@
 // import BellIcon from "@atlaskit/icon/glyph/notification";
 import { convertFromRaw, Editor, EditorState } from "draft-js";
 import React, { useRef } from "react";
-import { useSelector } from "react-redux";
 import { useClickAway, useHover } from "react-use";
 import styled from "styled-components";
-import { AppStore } from "../../store";
 import { Note, NoteColors } from "../../utils/types";
 import { AppCard } from "../common/AppCard";
 import { VerticalSpacer } from "../common/VerticalSpacer";
@@ -29,15 +27,12 @@ export const NoteBody = styled.div`
 `;
 
 interface NoteProps {
-	noteId: string;
+	note: Note;
 	openView?: () => void;
 	onClickAway?: () => void;
 }
 
-export const NoteCard = ({ noteId, openView, onClickAway }: NoteProps) => {
-	const note = useSelector<AppStore, Note>(
-		(store) => store.notes.notes[noteId]
-	);
+export const NoteCard = ({ note, openView, onClickAway }: NoteProps) => {
 	const appCardRef = useRef<HTMLDivElement>(null);
 
 	useClickAway(appCardRef, () => {
@@ -67,7 +62,7 @@ export const NoteCard = ({ noteId, openView, onClickAway }: NoteProps) => {
 				)}
 			</div>
 			<VerticalSpacer size={20} />
-			<NoteCardFooter isVisible={hovered} noteId={noteId} />
+			<NoteCardFooter isVisible={hovered} note={note} />
 		</AppCard>
 	);
 

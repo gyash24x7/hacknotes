@@ -1,14 +1,11 @@
 import { ButtonGroup } from "@atlaskit/button";
 import { convertToRaw, Editor, EditorState } from "draft-js";
 import "draft-js/dist/Draft.css";
-import is from "is_js";
 import React, { Fragment, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useMutation } from "react-query";
 import { useClickAway } from "react-use";
 import styled from "styled-components";
-import { AppStore } from "../../store";
-import { addNewNote } from "../../store/note/thunks";
-import { AsyncActionStatus, NoteActions } from "../../utils/types";
+import { createNote } from "../../api/notes";
 import { AppButton } from "../common/AppButton";
 import { AppCard, AppCardFooter } from "../common/AppCard";
 import { AppError } from "../common/AppError";
@@ -41,10 +38,10 @@ export const CreateNote = () => {
 	const [isTitleVisible, setIsTitleVisible] = useState(false);
 	const [errorMsg, setErrorMsg] = useState<string>();
 	const titleEditorRef = useRef<Editor>(null);
-	const dispatch = useDispatch();
-	const createNoteStatus = useSelector<AppStore, AsyncActionStatus>(
-		(state) => state.notes.status[NoteActions.CREATE_NOTE]
-	);
+	const [create, { isLoading }] = useMutation(createNote, {
+		onError: (err) => setErrorMsg(err.message),
+		onSuccess: () => reset()
+	});
 
 	const titleBlockStyleFn = () => "noteTitleText";
 	const contentBlockStyleFn = () => "noteContentText";
@@ -56,7 +53,7 @@ export const CreateNote = () => {
 		const contentStr = contentContentState.getPlainText("");
 		if (!!title || !!contentStr) {
 			const content = JSON.stringify(convertToRaw(contentContentState));
-			dispatch(addNewNote({ title, content }));
+			create({ title, content });
 		} else {
 			setErrorMsg("Both Title and Content cannot be Empty!");
 		}
@@ -86,22 +83,6 @@ export const CreateNote = () => {
 			elem?.classList.remove("isFocused");
 		}
 	}, [isTitleVisible]);
-
-	useEffect(() => {
-		switch (true) {
-			case is.equal(createNoteStatus, AsyncActionStatus.LOADING):
-				setErrorMsg(undefined);
-				break;
-
-			case is.equal(createNoteStatus, AsyncActionStatus.FAILED):
-				setErrorMsg("Failed to create a new Note!");
-				break;
-
-			case is.equal(createNoteStatus, AsyncActionStatus.SUCCEEDED):
-				reset();
-				break;
-		}
-	}, [createNoteStatus]);
 
 	return (
 		<CreateNoteWrapper>
@@ -140,29 +121,12 @@ export const CreateNote = () => {
 											spacing="compact"
 											appearance="primary"
 											onClick={saveNote}
-											isLoading={is.equal(
-												createNoteStatus,
-												AsyncActionStatus.LOADING
-											)}
-											isDisabled={is.equal(
-												createNoteStatus,
-												AsyncActionStatus.LOADING
-											)}
+											isLoading={isLoading}
+											isDisabled={isLoading}
 										>
 											Save
 										</AppButton>
-										<AppButton
-											spacing="compact"
-											onClick={reset}
-											isLoading={is.equal(
-												createNoteStatus,
-												AsyncActionStatus.LOADING
-											)}
-											isDisabled={is.equal(
-												createNoteStatus,
-												AsyncActionStatus.LOADING
-											)}
-										>
+										<AppButton spacing="compact" onClick={reset}>
 											Cancel
 										</AppButton>
 									</ButtonGroup>

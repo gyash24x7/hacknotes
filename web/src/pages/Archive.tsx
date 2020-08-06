@@ -1,38 +1,30 @@
-import is from "is_js";
 import React, { Fragment } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useMount, useUnmount } from "react-use";
+import { useQuery } from "react-query";
+import { getAllNotes } from "../api/notes";
+import { AppError } from "../components/common/AppError";
+import AppLoader from "../components/common/AppLoader";
 import { VerticalSpacer } from "../components/common/VerticalSpacer";
 import { NoteList } from "../components/Home/NoteList";
-import { AppStore } from "../store";
-import { setArchiveFilter } from "../store/note";
-import { fetchArchivedNotes } from "../store/note/thunks";
-import { AsyncActionStatus, Note, NoteActions } from "../utils/types";
 import { HelperText, HomeContainer } from "./Home";
 
 export const ArchivePage = () => {
-	const dispatch = useDispatch();
-	const notes = useSelector<AppStore, Record<string, Note>>(
-		(store) => store.notes.notes
+	const { error, data, isLoading } = useQuery(
+		["notes", { archived: true }],
+		(_key, filters) => getAllNotes(filters),
+		{ refetchOnWindowFocus: false }
 	);
-	const notesStatus = useSelector<AppStore, AsyncActionStatus>(
-		(store) => store.notes.status[NoteActions.GET_ARCHIVED_NOTES]
-	);
-	useMount(() => dispatch(setArchiveFilter(true)));
-	useMount(() => dispatch(fetchArchivedNotes()));
-	useUnmount(() => dispatch(setArchiveFilter(false)));
 
 	return (
 		<HomeContainer>
 			<VerticalSpacer size={70} />
-			{is.equal(notesStatus, AsyncActionStatus.SUCCEEDED) && (
+			{isLoading && <AppLoader />}
+			{data && (
 				<Fragment>
-					<NoteList notes={notes} />
-					{Object.keys(notes).length === 0 && (
-						<HelperText>No Notes in Archive</HelperText>
-					)}
+					<NoteList notes={data} />
+					{data.length === 0 && <HelperText>No Notes in Archive</HelperText>}
 				</Fragment>
 			)}
+			{error && <AppError>{error.message}</AppError>}
 		</HomeContainer>
 	);
 };

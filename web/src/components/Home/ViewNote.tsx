@@ -7,19 +7,18 @@ import {
 	EditorState
 } from "draft-js";
 import React, { useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useWindowSize } from "react-use";
 import styled from "styled-components";
-import { AppStore } from "../../store";
-import { updateNote } from "../../store/note/thunks";
+import { useUpdateNoteMutation } from "../../hooks/useUpdateNoteMutation";
 import { Note, NoteColors } from "../../utils/types";
 import { AppCard } from "../common/AppCard";
+import AppLoader from "../common/AppLoader";
 import { VerticalSpacer } from "../common/VerticalSpacer";
 import { NoteTitle } from "./NoteCard";
 import { NoteCardFooter } from "./NoteCardFooter";
 
 interface ViewNoteProps {
-	noteId: string;
+	note: Note;
 	onClose: () => void;
 }
 
@@ -51,13 +50,11 @@ const NoteCardContainer = styled.div<{ width: number }>`
 	align-items: center;
 `;
 
-export const ViewNote = ({ noteId, onClose }: ViewNoteProps) => {
+export const ViewNote = ({ note, onClose }: ViewNoteProps) => {
 	const noteCardContainerRef = useRef<HTMLDivElement>(null);
 	const { width } = useWindowSize();
-	const dispatch = useDispatch();
-	const note = useSelector<AppStore, Note>(
-		(store) => store.notes.notes[noteId]
-	);
+	const [updateNote, { isLoading }] = useUpdateNoteMutation();
+
 	const [titleEditorState, setTitleEditorState] = useState(
 		EditorState.createWithContent(ContentState.createFromText(note.title))
 	);
@@ -76,7 +73,7 @@ export const ViewNote = ({ noteId, onClose }: ViewNoteProps) => {
 			const content = JSON.stringify(
 				convertToRaw(contentEditorState.getCurrentContent())
 			);
-			dispatch(updateNote({ title, content, noteId }));
+			updateNote({ title, content, noteId: note.id });
 			onClose();
 		}
 	};
@@ -110,8 +107,9 @@ export const ViewNote = ({ noteId, onClose }: ViewNoteProps) => {
 							/>
 						</ViewNoteBody>
 					)}
+					{isLoading && <AppLoader />}
 					<VerticalSpacer />
-					<NoteCardFooter isVisible noteId={noteId} />
+					<NoteCardFooter isVisible note={note} />
 				</AppCard>
 			</NoteCardContainer>
 		</ViewNoteWrapper>
