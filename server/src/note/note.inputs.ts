@@ -1,3 +1,4 @@
+import { Injectable, PipeTransform } from "@nestjs/common";
 import { NoteColors } from "@prisma/client";
 import { IsBoolean, IsBooleanString, IsIn, IsOptional } from "class-validator";
 
@@ -19,12 +20,6 @@ export class CreateNoteInput {
 	content: string;
 }
 
-export class UpdateNoteTextAndColorInput {
-	@IsOptional() content?: string;
-	@IsOptional() title?: string;
-	@IsOptional() @IsIn(allowedColors) color?: NoteColors;
-}
-
 export class UpdateNoteInput {
 	@IsOptional() @IsIn(allowedColors) color?: NoteColors;
 	@IsOptional() @IsBoolean() archived?: boolean;
@@ -37,4 +32,15 @@ export class UpdateNoteInput {
 export class GetNotesInput {
 	@IsOptional() @IsBooleanString() archived?: boolean;
 	@IsOptional() @IsBooleanString() deleted?: boolean;
+}
+
+@Injectable()
+export class ParseNoteInputPipe implements PipeTransform {
+	transform({ archived, deleted }: any) {
+		let options: GetNotesInput = { archived: false, deleted: false };
+		if (!!archived && archived === "true") options.archived = true;
+		if (!!deleted && deleted === "true") options.deleted = true;
+
+		return options;
+	}
 }
