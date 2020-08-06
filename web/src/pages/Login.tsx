@@ -1,18 +1,17 @@
 import Form, { ErrorMessage, Field, HelperMessage } from "@atlaskit/form";
 import TextField from "@atlaskit/textfield";
-import is from "is_js";
-import React, { Fragment } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { Fragment, useContext, useState } from "react";
+import { queryCache, useMutation } from "react-query";
 import { Link } from "react-router-dom";
+import { userLogin } from "../api/user";
 import IntegratedLogo from "../assets/integrated-logo.svg";
 import { BottomLink } from "../components/Auth/BottomLink";
 import { FormCard } from "../components/Auth/FormCard";
 import { AppButton } from "../components/common/AppButton";
+import { AppError } from "../components/common/AppError";
 import { IntegratedLogoContainer } from "../components/common/IntegratedLogo";
 import { VerticalSpacer } from "../components/common/VerticalSpacer";
-import { AppStore } from "../store";
-import { login } from "../store/user/thunks";
-import { AsyncActionStatus, UserActions } from "../utils/types";
+import { AuthContext } from "../utils/context";
 
 const usernameRegex = /^[a-zA-Z0-9]+$/;
 export interface FormField {
@@ -48,13 +47,20 @@ export const loginFields: FormField[] = [
 ];
 
 export const LoginPage = () => {
-	const dispatch = useDispatch();
-	const loginStatus = useSelector<AppStore, AsyncActionStatus>(
-		(store) => store.user.status[UserActions.LOGIN]
-	);
+	const { setIsAuthenticated } = useContext(AuthContext);
+	const [errorMsg, setErrorMsg] = useState<string>();
+	const [login, { isLoading }] = useMutation(userLogin, {
+		onError: (err) => {
+			setErrorMsg(err.message);
+		},
+		onSuccess: (data) => {
+			queryCache.setQueryData("me", data);
+			setIsAuthenticated(true);
+		}
+	});
 
 	const handleSubmit = ({ username, password }: any) => {
-		dispatch(login({ username, password }));
+		login({ username, password });
 	};
 
 	return (
@@ -95,7 +101,7 @@ export const LoginPage = () => {
 							appearance="primary"
 							type="submit"
 							shouldFitContainer
-							isLoading={is.equal(loginStatus, AsyncActionStatus.LOADING)}
+							isLoading={isLoading}
 						>
 							Submit
 						</AppButton>
@@ -104,6 +110,8 @@ export const LoginPage = () => {
 							<div>Don't have an account?</div>
 							<Link to="/signup">Sign Up</Link>
 						</BottomLink>
+						<VerticalSpacer />
+						{errorMsg && <AppError>{errorMsg}</AppError>}
 					</form>
 				)}
 			</Form>

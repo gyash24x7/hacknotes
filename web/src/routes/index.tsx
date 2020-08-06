@@ -1,29 +1,74 @@
-import is from "is_js";
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useMount } from "react-use";
+import React, { useContext, useEffect, useState } from "react";
+import { useQuery } from "react-query";
+import {
+	BrowserRouter,
+	Redirect,
+	Route,
+	RouteProps,
+	Switch
+} from "react-router-dom";
+import { me } from "../api/user";
+import LogoIcon from "../assets/icon.svg";
+import { MainGraphic, MainGraphicIcon } from "../components/Auth/MainGraphic";
 import AppLoader from "../components/common/AppLoader";
-import { AppStore } from "../store";
-import { me } from "../store/user/thunks";
-import { AsyncActionStatus, User, UserActions } from "../utils/types";
-import { PrivateRoutes } from "./PrivateRoutes";
-import { PublicRoutes } from "./PublicRoutes";
+import { AppNav } from "../components/common/AppNav";
+import { PageWrapper } from "../components/common/PageWrapper";
+import { ArchivePage } from "../pages/Archive";
+import { HomePage } from "../pages/Home";
+import { LoginPage } from "../pages/Login";
+import { SignupPage } from "../pages/Signup";
+import { TrashPage } from "../pages/Trash";
+import { AuthContext } from "../utils/context";
 
 export const AppRoutes = () => {
-	const user = useSelector<AppStore, User | null>((store) => store.user.user);
-	const dispatch = useDispatch();
-	const meStatus = useSelector<AppStore, AsyncActionStatus>(
-		(store) => store.user.status[UserActions.ME]
-	);
-
-	useMount(() => {
-		dispatch(me());
+	const { error, data } = useQuery("me", me, {
+		retry: false,
+		refetchOnWindowFocus: false
 	});
+	const [isAuthenticated, setIsAuthenticated] = useState<boolean>();
 
-	if (is.not.equal(meStatus, AsyncActionStatus.LOADING)) {
-		if (is.not.null(user)) return <PrivateRoutes />;
-		else return <PublicRoutes />;
-	} else {
-		return <AppLoader />;
-	}
+	useEffect(() => {
+		if (error) setIsAuthenticated(false);
+		if (data) setIsAuthenticated(true);
+		if (error || data) {
+			console.log(error, data);
+		}
+	}, [error, data]);
+
+	if (typeof isAuthenticated !== "undefined") {
+		return (
+			<BrowserRouter>
+				<PageWrapper>
+					{isAuthenticated ? (
+						<AppNav />
+					) : (
+						<MainGraphic>
+							<MainGraphicIcon src={LogoIcon} />
+						</MainGraphic>
+					)}
+					<AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
+						<Switch>
+							<PublicRoute path="/login" component={LoginPage} exact />
+							<PublicRoute path="/signup" component={SignupPage} exact />
+							<PrivateRoute path="/archive" component={ArchivePage} exact />
+							<PrivateRoute path="/trash" component={TrashPage} exact />
+							<PrivateRoute path="/" component={HomePage} exact />
+						</Switch>
+					</AuthContext.Provider>
+				</PageWrapper>
+			</BrowserRouter>
+		);
+	} else return <AppLoader />;
+};
+
+export const PrivateRoute = (props: RouteProps) => {
+	const { isAuthenticated } = useContext(AuthContext);
+	if (isAuthenticated) return <Route {...props} />;
+	else return <Redirect to="/login" />;
+};
+
+export const PublicRoute = (props: RouteProps) => {
+	const { isAuthenticated } = useContext(AuthContext);
+	if (!isAuthenticated) return <Route {...props} />;
+	else return <Redirect to="/" />;
 };

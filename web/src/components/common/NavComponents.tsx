@@ -1,13 +1,11 @@
 import { Notifications, Profile, Search } from "@atlaskit/atlassian-navigation";
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useContext } from "react";
+import { queryCache } from "react-query";
 import { useWindowSize } from "react-use";
 import LogoIcon from "../../assets/icon.svg";
 import WordMark from "../../assets/wordmark.svg";
-import { AppStore } from "../../store";
-import { openDrawer } from "../../store/drawer";
-import { logout } from "../../store/user/thunks";
-import { DrawerModes, User } from "../../utils/types";
+import { AuthContext } from "../../utils/context";
+import { User } from "../../utils/types";
 import LogoutIcon from "../icons/LogoutIcon";
 import { NavButton } from "./AppButton";
 
@@ -26,21 +24,22 @@ export const AppProductHome = () => {
 };
 
 export const AppProfile = () => {
-	const user = useSelector<AppStore, User | null>((store) => store.user.user);
-	const dispatch = useDispatch();
-
+	let data: User | undefined = queryCache.getQueryData("me");
 	return (
 		<Profile
-			onClick={() => dispatch(openDrawer(DrawerModes.PROFILE))}
 			tooltip="Profile"
-			icon={<img src={user?.avatar} alt="avatar" width={30} height={30} />}
+			icon={<img src={data?.avatar} alt="avatar" width={30} height={30} />}
 		/>
 	);
 };
 
 export const AppLogout = () => {
-	const dispatch = useDispatch();
-	const handleLogout = () => dispatch(logout());
+	const { setIsAuthenticated } = useContext(AuthContext);
+	const handleLogout = () => {
+		localStorage.removeItem("authToken");
+		setIsAuthenticated(false);
+	};
+
 	return (
 		<NavButton
 			tooltip="Logout"

@@ -1,18 +1,17 @@
 import Form, { ErrorMessage, Field, HelperMessage } from "@atlaskit/form";
 import TextField from "@atlaskit/textfield";
-import is from "is_js";
-import React, { Fragment } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { Fragment, useContext, useState } from "react";
+import { queryCache, useMutation } from "react-query";
 import { Link } from "react-router-dom";
+import { userSignup } from "../api/user";
 import IntegratedLogo from "../assets/integrated-logo.svg";
 import { BottomLink } from "../components/Auth/BottomLink";
 import { FormCard } from "../components/Auth/FormCard";
 import { AppButton } from "../components/common/AppButton";
+import { AppError } from "../components/common/AppError";
 import { IntegratedLogoContainer } from "../components/common/IntegratedLogo";
 import { VerticalSpacer } from "../components/common/VerticalSpacer";
-import { AppStore } from "../store";
-import { signup } from "../store/user/thunks";
-import { AsyncActionStatus, UserActions } from "../utils/types";
+import { AuthContext } from "../utils/context";
 import { FormField, loginFields } from "./Login";
 
 const emailRegex = /^([a-zA-Z0-9_\-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
@@ -37,13 +36,18 @@ export const signupFields: FormField[] = [
 ];
 
 export const SignupPage = () => {
-	const dispatch = useDispatch();
-	const signupStatus = useSelector<AppStore, AsyncActionStatus>(
-		(store) => store.user.status[UserActions.SIGNUP]
-	);
+	const { setIsAuthenticated } = useContext(AuthContext);
+	const [errorMsg, setErrorMsg] = useState<string>();
+	const [signup, { isLoading }] = useMutation(userSignup, {
+		onError: (err) => setErrorMsg(err.message),
+		onSuccess: (data) => {
+			queryCache.setQueryData("me", data);
+			setIsAuthenticated(true);
+		}
+	});
 
-	const handleSubmit = ({ username, password, name, email }: any) => {
-		dispatch(signup({ username, password, name, email }));
+	const handleSubmit = ({ username, password, email, name }: any) => {
+		signup({ username, password, email, name });
 	};
 
 	return (
@@ -84,7 +88,7 @@ export const SignupPage = () => {
 							appearance="primary"
 							type="submit"
 							shouldFitContainer
-							isLoading={is.equal(signupStatus, AsyncActionStatus.LOADING)}
+							isLoading={isLoading}
 						>
 							Submit
 						</AppButton>
@@ -93,6 +97,7 @@ export const SignupPage = () => {
 							<div>Already have an account?</div>
 							<Link to="/login">Login</Link>
 						</BottomLink>
+						{errorMsg && <AppError>{errorMsg}</AppError>}
 					</form>
 				)}
 			</Form>

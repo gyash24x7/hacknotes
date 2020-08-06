@@ -12,7 +12,7 @@ export const fetchNotes = createAsyncThunk(
 	async () => {
 		const token = localStorage.getItem("authToken");
 		const response = await client
-			.get(`${process.env.REACT_APP_API_URL}/notes/all`)
+			.get(`${process.env.REACT_APP_API_URL}/notes`)
 			.set("Authorization" as any, token ? `Bearer ${token}` : "");
 		return response.body as Note[];
 	}
@@ -23,7 +23,7 @@ export const fetchArchivedNotes = createAsyncThunk(
 	async () => {
 		const token = localStorage.getItem("authToken");
 		const response = await client
-			.get(`${process.env.REACT_APP_API_URL}/notes/archived`)
+			.get(`${process.env.REACT_APP_API_URL}/notes`)
 			.set("Authorization" as any, token ? `Bearer ${token}` : "");
 		return response.body as Note[];
 	}
@@ -34,7 +34,7 @@ export const fetchDeletedNotes = createAsyncThunk(
 	async () => {
 		const token = localStorage.getItem("authToken");
 		const response = await client
-			.get(`${process.env.REACT_APP_API_URL}/notes/deleted`)
+			.get(`${process.env.REACT_APP_API_URL}/notes`)
 			.set("Authorization" as any, token ? `Bearer ${token}` : "");
 		return response.body as Note[];
 	}
