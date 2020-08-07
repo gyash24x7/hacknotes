@@ -1,6 +1,6 @@
 import Form, { ErrorMessage, Field, HelperMessage } from "@atlaskit/form";
 import TextField from "@atlaskit/textfield";
-import React, { Fragment, useContext, useState } from "react";
+import React, { Fragment, useState } from "react";
 import { queryCache, useMutation } from "react-query";
 import { Link } from "react-router-dom";
 import { userLogin } from "../api/user";
@@ -11,7 +11,7 @@ import { AppButton } from "../components/common/AppButton";
 import { AppError } from "../components/common/AppError";
 import { IntegratedLogoContainer } from "../components/common/IntegratedLogo";
 import { VerticalSpacer } from "../components/common/VerticalSpacer";
-import { AuthContext } from "../utils/context";
+import { useAuth } from "../utils/context";
 
 const usernameRegex = /^[a-zA-Z0-9]+$/;
 export interface FormField {
@@ -47,7 +47,7 @@ export const loginFields: FormField[] = [
 ];
 
 export const LoginPage = () => {
-	const { setIsAuthenticated } = useContext(AuthContext);
+	const { setIsAuthenticated } = useAuth();
 	const [errorMsg, setErrorMsg] = useState<string>();
 	const [login, { isLoading }] = useMutation(userLogin, {
 		onError: (err) => {

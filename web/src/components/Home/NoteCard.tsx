@@ -1,7 +1,3 @@
-// import ImageIcon from "@atlaskit/icon/glyph/image";
-// import CollaboratorIcon from "@atlaskit/icon/glyph/invite-team";
-// import LinkIcon from "@atlaskit/icon/glyph/link";
-// import BellIcon from "@atlaskit/icon/glyph/notification";
 import { convertFromRaw, Editor, EditorState } from "draft-js";
 import React, { useRef } from "react";
 import { useClickAway, useHover } from "react-use";

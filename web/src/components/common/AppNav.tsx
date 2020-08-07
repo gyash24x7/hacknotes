@@ -1,13 +1,13 @@
 import { Profile } from "@atlaskit/atlassian-navigation";
 import { colors } from "@atlaskit/theme";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { queryCache } from "react-query";
 import { useHistory, useLocation } from "react-router-dom";
 import { useWindowSize } from "react-use";
 import styled from "styled-components";
 import LogoIcon from "../../assets/icon.svg";
 import WordMark from "../../assets/wordmark.svg";
-import { AuthContext } from "../../utils/context";
+import { useAuth } from "../../utils/context";
 import { User } from "../../utils/types";
 import ArchiveIcon from "../icons/ArchiveIcon";
 import HomeIcon from "../icons/HomeIcon";
@@ -39,7 +39,7 @@ export const AppNav = () => {
 	const history = useHistory();
 	const { pathname } = useLocation();
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-	const { setIsAuthenticated } = useContext(AuthContext);
+	const { setIsAuthenticated } = useAuth();
 	const { width } = useWindowSize();
 	let data: User | undefined = queryCache.getQueryData("me");
 

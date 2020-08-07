@@ -122,3 +122,9 @@ export interface GetNotesFilter {
 	archived?: boolean;
 	deleted?: boolean;
 }
+
+export type FlagData = {
+	description?: string;
+	appearance: "success" | "error";
+	title: string;
+};

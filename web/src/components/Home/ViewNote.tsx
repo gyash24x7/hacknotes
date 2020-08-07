@@ -8,9 +8,10 @@ import {
 } from "draft-js";
 import React, { useRef, useState } from "react";
 import { queryCache, useMutation } from "react-query";
-import { useWindowSize } from "react-use";
+import useWindowSize from "react-use/lib/useWindowSize";
 import styled from "styled-components";
 import { updateNote } from "../../api/notes";
+import { useFlag } from "../../utils/context";
 import { Note, NoteColors } from "../../utils/types";
 import { AppCard } from "../common/AppCard";
 import AppLoader from "../common/AppLoader";
@@ -54,12 +55,15 @@ const NoteCardContainer = styled.div<{ width: number }>`
 export const ViewNote = ({ note, onClose }: ViewNoteProps) => {
 	const noteCardContainerRef = useRef<HTMLDivElement>(null);
 	const { width } = useWindowSize();
+	const { addFlag } = useFlag();
 	const [update, { isLoading }] = useMutation(updateNote, {
 		onSuccess(data) {
 			queryCache.setQueryData<Note[]>(
 				note.archived ? ["notes", { archived: true }] : "notes",
 				(notes) => notes?.map((note) => (note.id === data.id ? data : note))
 			);
+
+			addFlag({ title: "Note Updated!", appearance: "success" });
 		}
 	});
 

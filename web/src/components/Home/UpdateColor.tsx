@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import { queryCache, useMutation } from "react-query";
 import styled from "styled-components";
 import { updateNote } from "../../api/notes";
+import { useFlag } from "../../utils/context";
 import { Note, NoteColors } from "../../utils/types";
 import { AppIconButton } from "../common/AppButton";
 import PaletteIcon from "../icons/PaletteIcon";
@@ -32,6 +33,7 @@ interface UpdateColorProps {
 
 export const UpdateColor = ({ noteId }: UpdateColorProps) => {
 	const [isOpen, setIsOpen] = useState(false);
+	const { addFlag } = useFlag();
 	const [updateColor, { isLoading }] = useMutation(updateNote, {
 		onSuccess: (data) => {
 			queryCache.setQueryData<Note[]>(
@@ -45,6 +47,7 @@ export const UpdateColor = ({ noteId }: UpdateColorProps) => {
 					return newNotes || [];
 				}
 			);
+			addFlag({ title: "Note Color Changed!", appearance: "success" });
 		}
 	});
 

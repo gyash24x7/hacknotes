@@ -6,6 +6,7 @@ import { queryCache, useMutation } from "react-query";
 import { useClickAway } from "react-use";
 import styled from "styled-components";
 import { createNote } from "../../api/notes";
+import { useFlag } from "../../utils/context";
 import { Note } from "../../utils/types";
 import { AppButton } from "../common/AppButton";
 import { AppCard, AppCardFooter } from "../common/AppCard";
@@ -32,6 +33,7 @@ const emptyEditorState = EditorState.createEmpty();
 
 export const CreateNote = () => {
 	const inputDivRef = useRef<HTMLDivElement>(null);
+	const { addFlag } = useFlag();
 	const [titleEditorState, setTitleEditorState] = useState(emptyEditorState);
 	const [contentEditorState, setContentEditorState] = useState(
 		emptyEditorState
@@ -45,6 +47,7 @@ export const CreateNote = () => {
 			queryCache.setQueryData<Note[]>("notes", (notes) =>
 				[data].concat(...(notes || []))
 			);
+			addFlag({ title: "Note Added!", appearance: "success" });
 			reset();
 		}
 	});

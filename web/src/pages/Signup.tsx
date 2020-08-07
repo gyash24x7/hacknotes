@@ -1,6 +1,6 @@
 import Form, { ErrorMessage, Field, HelperMessage } from "@atlaskit/form";
 import TextField from "@atlaskit/textfield";
-import React, { Fragment, useContext, useState } from "react";
+import React, { Fragment, useState } from "react";
 import { queryCache, useMutation } from "react-query";
 import { Link } from "react-router-dom";
 import { userSignup } from "../api/user";
@@ -11,7 +11,7 @@ import { AppButton } from "../components/common/AppButton";
 import { AppError } from "../components/common/AppError";
 import { IntegratedLogoContainer } from "../components/common/IntegratedLogo";
 import { VerticalSpacer } from "../components/common/VerticalSpacer";
-import { AuthContext } from "../utils/context";
+import { useAuth } from "../utils/context";
 import { FormField, loginFields } from "./Login";
 
 const emailRegex = /^([a-zA-Z0-9_\-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
@@ -36,7 +36,7 @@ export const signupFields: FormField[] = [
 ];
 
 export const SignupPage = () => {
-	const { setIsAuthenticated } = useContext(AuthContext);
+	const { setIsAuthenticated } = useAuth();
 	const [errorMsg, setErrorMsg] = useState<string>();
 	const [signup, { isLoading }] = useMutation(userSignup, {
 		onError: (err) => setErrorMsg(err.message),
