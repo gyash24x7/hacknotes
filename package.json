@@ -14,6 +14,7 @@
 	],
 	"scripts": {
 		"dev:web": "yarn workspace web start",
+		"dev:app": "yarn workspace app start",
 		"dev:server": "yarn workspace server start:dev",
 		"build:web": "yarn workspace web build",
 		"build:server": "yarn workspace server build",

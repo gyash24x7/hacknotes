@@ -3,10 +3,8 @@ import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import { AppLoading } from "expo";
 import { useFonts } from "expo-font";
-import React from "react";
-import { Provider } from "react-redux";
+import React, { Fragment } from "react";
 import { AppNavigation } from "./navigation";
-import { store } from "./store";
 import { default as theme } from "./theme";
 import { default as mapping } from "./theme/mapping.json";
 
@@ -20,7 +18,7 @@ export default function App() {
 	if (!fontsLoaded) return <AppLoading />;
 
 	return (
-		<Provider store={store}>
+		<Fragment>
 			<IconRegistry icons={EvaIconsPack} />
 			<ApplicationProvider
 				{...eva}
@@ -29,6 +27,6 @@ export default function App() {
 			>
 				<AppNavigation />
 			</ApplicationProvider>
-		</Provider>
+		</Fragment>
 	);
 }

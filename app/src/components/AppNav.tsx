@@ -11,12 +11,19 @@ import {
 	TopNavigationAction
 } from "@ui-kitten/components";
 import React, { Fragment } from "react";
-import { StatusBar } from "react-native";
-import { useDispatch } from "react-redux";
+import { AsyncStorage, StatusBar } from "react-native";
 import styled from "styled-components/native";
-import { logout } from "../store/user/thunks";
+import { useAuth } from "../utils/context";
 import { AppLogoSmall } from "./AppLogo";
 import { AppWordmark } from "./AppWordmark";
+
+const StyledTopNavigation = styled(TopNavigation)`
+	height: 70px;
+	z-index: 100;
+	elevation: 5;
+	border-bottom-color: #c1c7d0;
+	border-bottom-width: 1px;
+`;
 
 export const TopNav = () => {
 	const navigation = useNavigation();
@@ -24,8 +31,7 @@ export const TopNav = () => {
 	return (
 		<Fragment>
 			<StatusBar backgroundColor="white" barStyle="dark-content" />
-			<TopNavigation
-				style={{ height: 70, zIndex: 100 }}
+			<StyledTopNavigation
 				title={() => <AppWordmark />}
 				alignment="start"
 				accessoryLeft={() => (
@@ -47,14 +53,14 @@ export const DrawerHeader = styled(Layout)`
 	width: 100%;
 	height: 150px;
 	border-bottom-width: 2px;
-	border-bottom-color: #dfe1e6;
+	border-bottom-color: #c1c7d0;
 	border-right-width: 2px;
-	border-right-color: #dfe1e6;
+	border-right-color: #c1c7d0;
 `;
 
 export const AppDrawer = styled(Drawer)`
 	border-right-width: 2px;
-	border-right-color: #dfe1e6;
+	border-right-color: #c1c7d0;
 `;
 
 export const DrawerItemTitle = styled(Text)`
@@ -62,7 +68,11 @@ export const DrawerItemTitle = styled(Text)`
 `;
 
 const DrawerNavFooter = () => {
-	const dispatch = useDispatch();
+	const { setIsAuthenticated } = useAuth();
+	const handleLogout = async () => {
+		await AsyncStorage.removeItem("authToken");
+		setIsAuthenticated(false);
+	};
 
 	return (
 		<DrawerItem
@@ -74,7 +84,7 @@ const DrawerNavFooter = () => {
 			accessoryLeft={(props) => (
 				<Icon {...props} name={getIconNameValue("Logout", 0)} />
 			)}
-			onPress={() => dispatch(logout())}
+			onPress={handleLogout}
 		/>
 	);
 };
@@ -105,7 +115,7 @@ export const DrawerNav = ({
 					accessoryLeft={(props) => (
 						<Icon {...props} name={getIconNameValue(name, state.index)} />
 					)}
-					style={{ backgroundColor: state.index === i ? "#dfe1e6" : "#fff" }}
+					style={{ backgroundColor: state.index === i ? "#c1c7d0" : "#fff" }}
 				/>
 			))}
 		</AppDrawer>

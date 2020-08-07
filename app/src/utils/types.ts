@@ -67,6 +67,9 @@ export type UpdateNoteInput = {
 	color?: string;
 	content?: string;
 	title?: string;
+	archived?: boolean;
+	pinned?: boolean;
+	deleted?: boolean;
 };
 
 export enum UserActions {
@@ -88,7 +91,7 @@ export type User = {
 export type UserSliceState = {
 	user: User | null;
 	status: Record<UserActions, AsyncActionStatus>;
-	error: any;
+	error: string | null;
 };
 
 export type UserLoginInput = {
@@ -108,3 +111,18 @@ export enum DrawerModes {
 	SETTINGS = "SETTINGS",
 	CLOSED = "CLOSED"
 }
+
+export interface AppIconProps {
+	filled?: boolean;
+}
+
+export interface GetNotesFilter {
+	archived?: boolean;
+	deleted?: boolean;
+}
+
+export type FlagData = {
+	description?: string;
+	appearance: "success" | "error";
+	title: string;
+};

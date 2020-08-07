@@ -1,21 +1,33 @@
-import { Text } from "@ui-kitten/components";
-import React from "react";
+import React, { Fragment } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useDispatch } from "react-redux";
-import { AppButton } from "../components/AppButton";
+import { useQuery } from "react-query";
+import { getAllNotes } from "../api/notes";
 import { AppContainer } from "../components/AppContainer";
+import { AppLoader } from "../components/AppLoader";
 import { TopNav } from "../components/AppNav";
-import { logout } from "../store/user/thunks";
+import { ErrorText, HelperText } from "../components/AppTypography";
+import { NoteList } from "../components/NoteList";
 
 export const HomeScreen = () => {
-	const dispatch = useDispatch();
+	const { error, data, isLoading } = useQuery("notes", () => getAllNotes(), {
+		refetchOnWindowFocus: false
+	});
 
 	return (
-		<SafeAreaView>
+		<SafeAreaView style={{ flex: 1 }}>
 			<TopNav />
 			<AppContainer>
-				<Text>Home Screen</Text>
-				<AppButton onPress={() => dispatch(logout())}>Logout</AppButton>
+				{data && (
+					<Fragment>
+						{data.filter((note) => note.pinned).length > 0 && (
+							<NoteList notes={data} pinned />
+						)}
+						<NoteList notes={data} pinned={false} />
+						{data.length === 0 && <HelperText>No Notes Available</HelperText>}
+					</Fragment>
+				)}
+				{isLoading && <AppLoader />}
+				{error && <ErrorText status="danger">{error.message}</ErrorText>}
 			</AppContainer>
 		</SafeAreaView>
 	);

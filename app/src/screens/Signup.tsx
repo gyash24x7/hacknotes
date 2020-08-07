@@ -1,8 +1,8 @@
 import { useNavigation } from "@react-navigation/native";
 import { Icon, Input, Spinner, Text } from "@ui-kitten/components";
-import is from "is_js";
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { queryCache, useMutation } from "react-query";
+import { userSignup } from "../api/user";
 import { AppButton } from "../components/AppButton";
 import { AppContainer, HelperContainer } from "../components/AppContainer";
 import { AppLogo } from "../components/AppLogo";
@@ -14,9 +14,7 @@ import {
 } from "../components/AppTypography";
 import { FormWrapper } from "../components/FormWrapper";
 import { VerticalSpacer } from "../components/VerticalSpacer";
-import { AppStore } from "../store";
-import { signup } from "../store/user/thunks";
-import { AsyncActionStatus, UserActions } from "../utils/types";
+import { useAuth } from "../utils/context";
 
 const usernameRegex = /^[a-zA-Z0-9]+$/;
 const emailRegex = /^([a-zA-Z0-9_\-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
@@ -27,12 +25,16 @@ export const SignupScreen = () => {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [securePasswordEntry, setSecurePasswordEntry] = useState(true);
-	const [errorMsg, setErrorMsg] = useState<string>();
-	const dispatch = useDispatch();
-	const signupStatus = useSelector<AppStore, AsyncActionStatus>(
-		(store) => store.user.status[UserActions.SIGNUP]
-	);
+	const { setIsAuthenticated } = useAuth();
 	const navigation = useNavigation();
+	const [errorMsg, setErrorMsg] = useState<string>();
+	const [signup, { isLoading }] = useMutation(userSignup, {
+		onError: (err) => setErrorMsg(err.message),
+		onSuccess: (data) => {
+			queryCache.setQueryData("me", data);
+			setIsAuthenticated(true);
+		}
+	});
 
 	const validateInput = () => {
 		switch (true) {
@@ -57,7 +59,7 @@ export const SignupScreen = () => {
 
 	const handleSubmit = () => {
 		const error = validateInput();
-		if (!error) dispatch(signup({ username, password, name, email }));
+		if (!error) signup({ username, password, name, email });
 		setErrorMsg(error);
 	};
 
@@ -112,8 +114,7 @@ export const SignupScreen = () => {
 					size="large"
 					status="primary"
 					children={() => {
-						if (is.equal(signupStatus, AsyncActionStatus.LOADING))
-							return <Spinner status="control" />;
+						if (isLoading) return <Spinner status="control" />;
 						return <ButtonText>Submit</ButtonText>;
 					}}
 					onPress={handleSubmit}

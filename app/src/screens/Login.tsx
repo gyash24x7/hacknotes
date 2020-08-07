@@ -1,8 +1,8 @@
 import { useNavigation } from "@react-navigation/native";
 import { Icon, Input, Spinner, Text } from "@ui-kitten/components";
-import is from "is_js";
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { queryCache, useMutation } from "react-query";
+import { userLogin } from "../api/user";
 import { AppButton } from "../components/AppButton";
 import { AppContainer, HelperContainer } from "../components/AppContainer";
 import { AppLogo } from "../components/AppLogo";
@@ -14,9 +14,7 @@ import {
 } from "../components/AppTypography";
 import { FormWrapper } from "../components/FormWrapper";
 import { VerticalSpacer } from "../components/VerticalSpacer";
-import { AppStore } from "../store";
-import { login } from "../store/user/thunks";
-import { AsyncActionStatus, UserActions } from "../utils/types";
+import { useAuth } from "../utils/context";
 
 const usernameRegex = /^[a-zA-Z0-9]+$/;
 
@@ -25,11 +23,17 @@ export const LoginScreen = () => {
 	const [password, setPassword] = useState("");
 	const [securePasswordEntry, setSecurePasswordEntry] = useState(true);
 	const [errorMsg, setErrorMsg] = useState<string>();
-	const dispatch = useDispatch();
-	const loginStatus = useSelector<AppStore, AsyncActionStatus>(
-		(store) => store.user.status[UserActions.LOGIN]
-	);
 	const navigation = useNavigation();
+	const { setIsAuthenticated } = useAuth();
+	const [login, { isLoading }] = useMutation(userLogin, {
+		onError: (err) => {
+			setErrorMsg(err.message);
+		},
+		onSuccess: (data) => {
+			queryCache.setQueryData("me", data);
+			setIsAuthenticated(true);
+		}
+	});
 
 	const validateInput = () => {
 		switch (true) {
@@ -48,7 +52,7 @@ export const LoginScreen = () => {
 
 	const handleSubmit = () => {
 		const error = validateInput();
-		if (!error) dispatch(login({ username, password }));
+		if (!error) login({ username, password });
 		setErrorMsg(error);
 	};
 
@@ -87,8 +91,7 @@ export const LoginScreen = () => {
 					size="large"
 					status="primary"
 					children={() => {
-						if (is.equal(loginStatus, AsyncActionStatus.LOADING))
-							return <Spinner status="control" />;
+						if (isLoading) return <Spinner status="control" />;
 						return <ButtonText>Submit</ButtonText>;
 					}}
 					onPress={handleSubmit}

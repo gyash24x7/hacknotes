@@ -29,3 +29,8 @@ export const AppTitle = styled(Text)`
 	font-family: "montserrat-bold";
 	font-size: 24px;
 `;
+
+export const HelperText = styled(Text)`
+	text-transform: uppercase;
+	font-size: 18px;
+`;
