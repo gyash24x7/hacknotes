@@ -4,11 +4,11 @@ import Tooltip from "@atlaskit/tooltip";
 import React, { useState } from "react";
 import { queryCache, useMutation } from "react-query";
 import styled from "styled-components";
-import { updateNote } from "../../api/notes";
-import { useFlag } from "../../utils/context";
-import { Note, NoteColors } from "../../utils/types";
-import { AppIconButton } from "../common/AppButton";
-import PaletteIcon from "../icons/PaletteIcon";
+import { updateNote } from "../api/notes";
+import { useFlag } from "../utils/context";
+import { Note, NoteColors } from "../utils/types";
+import { AppIconButton } from "./AppButton";
+import PaletteIcon from "./icons/PaletteIcon";
 
 export const Palette = styled.div`
 	padding: 10px;

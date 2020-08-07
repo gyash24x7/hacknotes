@@ -1,7 +1,9 @@
+import React from "react";
 import styled from "styled-components";
-import BgImage from "../../assets/absbg.png";
+import BgImage from "../assets/absbg.png";
+import LogoIcon from "../assets/icon.svg";
 
-export const MainGraphic = styled.div`
+export const MainGraphicWrapper = styled.div`
 	height: 100vh;
 	flex: 1;
 	background-image: url(${BgImage});
@@ -16,3 +18,9 @@ export const MainGraphicIcon = styled.img`
 	left: 20px;
 	max-width: 60px;
 `;
+
+export const MainGraphic = () => (
+	<MainGraphicWrapper>
+		<MainGraphicIcon src={LogoIcon} />
+	</MainGraphicWrapper>
+);

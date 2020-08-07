@@ -13,6 +13,8 @@ export const AuthContext = createContext<IAuthContext>({
 
 export const useAuth = () => useContext(AuthContext);
 
+export const AuthProvider = AuthContext.Provider;
+
 interface IFlagContext {
 	addFlag: (options: FlagData) => void;
 }

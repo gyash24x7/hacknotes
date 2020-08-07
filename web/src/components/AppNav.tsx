@@ -5,16 +5,16 @@ import { queryCache } from "react-query";
 import { useHistory, useLocation } from "react-router-dom";
 import { useWindowSize } from "react-use";
 import styled from "styled-components";
-import LogoIcon from "../../assets/icon.svg";
-import WordMark from "../../assets/wordmark.svg";
-import { useAuth } from "../../utils/context";
-import { User } from "../../utils/types";
-import ArchiveIcon from "../icons/ArchiveIcon";
-import HomeIcon from "../icons/HomeIcon";
-import LogoutIcon from "../icons/LogoutIcon";
-import TrashIcon from "../icons/TrashIcon";
+import LogoIcon from "../assets/icon.svg";
+import WordMark from "../assets/wordmark.svg";
+import { useAuth } from "../utils/context";
+import { User } from "../utils/types";
 import { NavButton } from "./AppButton";
 import { AppDrawer } from "./AppDrawer";
+import ArchiveIcon from "./icons/ArchiveIcon";
+import HomeIcon from "./icons/HomeIcon";
+import LogoutIcon from "./icons/LogoutIcon";
+import TrashIcon from "./icons/TrashIcon";
 
 const NavContainer = styled.div`
 	position: fixed;

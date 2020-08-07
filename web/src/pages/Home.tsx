@@ -2,11 +2,11 @@ import React, { Fragment } from "react";
 import { useQuery } from "react-query";
 import styled from "styled-components";
 import { getAllNotes } from "../api/notes";
-import { AppError } from "../components/common/AppError";
-import AppLoader from "../components/common/AppLoader";
-import { VerticalSpacer } from "../components/common/VerticalSpacer";
-import { CreateNote } from "../components/Home/CreateNote";
-import { NoteList } from "../components/Home/NoteList";
+import { AppError } from "../components/AppError";
+import AppLoader from "../components/AppLoader";
+import { CreateNote } from "../components/CreateNote";
+import { NoteList } from "../components/NoteList";
+import { VerticalSpacer } from "../components/VerticalSpacer";
 
 export const HomeContainer = styled.div`
 	width: 100vw;

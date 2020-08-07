@@ -1,12 +1,12 @@
 import Tooltip from "@atlaskit/tooltip";
 import React from "react";
 import { queryCache, useMutation } from "react-query";
-import { updateNote } from "../../api/notes";
-import { useFlag } from "../../utils/context";
-import { Note } from "../../utils/types";
-import { AppIconButton } from "../common/AppButton";
-import RestoreIcon from "../icons/RestoreIcon";
-import TrashIcon from "../icons/TrashIcon";
+import { updateNote } from "../api/notes";
+import { useFlag } from "../utils/context";
+import { Note } from "../utils/types";
+import { AppIconButton } from "./AppButton";
+import RestoreIcon from "./icons/RestoreIcon";
+import TrashIcon from "./icons/TrashIcon";
 
 interface DeleteNoteProps {
 	noteId: string;

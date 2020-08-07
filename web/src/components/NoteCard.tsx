@@ -2,10 +2,10 @@ import { convertFromRaw, Editor, EditorState } from "draft-js";
 import React, { useRef } from "react";
 import { useClickAway, useHover } from "react-use";
 import styled from "styled-components";
-import { Note, NoteColors } from "../../utils/types";
-import { AppCard } from "../common/AppCard";
-import { VerticalSpacer } from "../common/VerticalSpacer";
+import { Note, NoteColors } from "../utils/types";
+import { AppCard } from "./AppCard";
 import { NoteCardFooter } from "./NoteCardFooter";
+import { VerticalSpacer } from "./VerticalSpacer";
 
 export const NoteTitle = styled.h3`
 	font-weight: bold;

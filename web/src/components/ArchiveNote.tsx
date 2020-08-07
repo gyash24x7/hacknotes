@@ -1,11 +1,11 @@
 import Tooltip from "@atlaskit/tooltip";
 import React from "react";
 import { queryCache, useMutation } from "react-query";
-import { updateNote } from "../../api/notes";
-import { useFlag } from "../../utils/context";
-import { Note } from "../../utils/types";
-import { AppIconButton } from "../common/AppButton";
-import ArchiveIcon from "../icons/ArchiveIcon";
+import { updateNote } from "../api/notes";
+import { useFlag } from "../utils/context";
+import { Note } from "../utils/types";
+import { AppIconButton } from "./AppButton";
+import ArchiveIcon from "./icons/ArchiveIcon";
 
 interface ArchiveNoteProps {
 	noteId: string;

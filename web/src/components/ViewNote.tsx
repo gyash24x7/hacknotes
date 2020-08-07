@@ -10,14 +10,14 @@ import React, { useRef, useState } from "react";
 import { queryCache, useMutation } from "react-query";
 import useWindowSize from "react-use/lib/useWindowSize";
 import styled from "styled-components";
-import { updateNote } from "../../api/notes";
-import { useFlag } from "../../utils/context";
-import { Note, NoteColors } from "../../utils/types";
-import { AppCard } from "../common/AppCard";
-import AppLoader from "../common/AppLoader";
-import { VerticalSpacer } from "../common/VerticalSpacer";
+import { updateNote } from "../api/notes";
+import { useFlag } from "../utils/context";
+import { Note, NoteColors } from "../utils/types";
+import { AppCard } from "./AppCard";
+import AppLoader from "./AppLoader";
 import { NoteTitle } from "./NoteCard";
 import { NoteCardFooter } from "./NoteCardFooter";
+import { VerticalSpacer } from "./VerticalSpacer";
 
 interface ViewNoteProps {
 	note: Note;

@@ -1,7 +1,7 @@
 import { ButtonGroup } from "@atlaskit/button";
 import React, { Fragment } from "react";
-import { Note } from "../../utils/types";
-import { AppCardFooter } from "../common/AppCard";
+import { Note } from "../utils/types";
+import { AppCardFooter } from "./AppCard";
 import { ArchiveNote } from "./ArchiveNote";
 import { DeleteNote } from "./DeleteNote";
 import { PinNote } from "./PinNote";

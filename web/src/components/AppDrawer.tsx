@@ -6,8 +6,8 @@ import React, { Fragment, useState } from "react";
 import { queryCache, useMutation } from "react-query";
 import styled from "styled-components";
 import client from "superagent";
-import { updateAvatar } from "../../api/user";
-import { User } from "../../utils/types";
+import { updateAvatar } from "../api/user";
+import { User } from "../utils/types";
 import { AppButton } from "./AppButton";
 import { VerticalSpacer } from "./VerticalSpacer";
 

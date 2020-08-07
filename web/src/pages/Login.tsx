@@ -5,12 +5,12 @@ import { queryCache, useMutation } from "react-query";
 import { Link } from "react-router-dom";
 import { userLogin } from "../api/user";
 import IntegratedLogo from "../assets/integrated-logo.svg";
-import { BottomLink } from "../components/Auth/BottomLink";
-import { FormCard } from "../components/Auth/FormCard";
-import { AppButton } from "../components/common/AppButton";
-import { AppError } from "../components/common/AppError";
-import { IntegratedLogoContainer } from "../components/common/IntegratedLogo";
-import { VerticalSpacer } from "../components/common/VerticalSpacer";
+import { AppButton } from "../components/AppButton";
+import { AppError } from "../components/AppError";
+import { BottomLink } from "../components/BottomLink";
+import { FormCard } from "../components/FormCard";
+import { IntegratedLogoContainer } from "../components/IntegratedLogo";
+import { VerticalSpacer } from "../components/VerticalSpacer";
 import { useAuth } from "../utils/context";
 
 const usernameRegex = /^[a-zA-Z0-9]+$/;

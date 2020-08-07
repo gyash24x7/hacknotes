@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import { useWindowSize } from "react-use";
 import styled from "styled-components";
-import { Note } from "../../utils/types";
+import { Note } from "../utils/types";
 import { NoteCard } from "./NoteCard";
 import { ViewNote } from "./ViewNote";
 

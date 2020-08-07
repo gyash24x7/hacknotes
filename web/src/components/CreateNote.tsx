@@ -5,13 +5,13 @@ import React, { Fragment, useEffect, useRef, useState } from "react";
 import { queryCache, useMutation } from "react-query";
 import { useClickAway } from "react-use";
 import styled from "styled-components";
-import { createNote } from "../../api/notes";
-import { useFlag } from "../../utils/context";
-import { Note } from "../../utils/types";
-import { AppButton } from "../common/AppButton";
-import { AppCard, AppCardFooter } from "../common/AppCard";
-import { AppError } from "../common/AppError";
-import { VerticalSpacer } from "../common/VerticalSpacer";
+import { createNote } from "../api/notes";
+import { useFlag } from "../utils/context";
+import { Note } from "../utils/types";
+import { AppButton } from "./AppButton";
+import { AppCard, AppCardFooter } from "./AppCard";
+import { AppError } from "./AppError";
+import { VerticalSpacer } from "./VerticalSpacer";
 
 export const CreateNoteWrapper = styled.div`
 	width: calc(100vw - 40px);
