@@ -1,7 +1,8 @@
 import Tooltip from "@atlaskit/tooltip";
 import React from "react";
-import { useMutation } from "react-query";
+import { queryCache, useMutation } from "react-query";
 import { updateNote } from "../../api/notes";
+import { Note } from "../../utils/types";
 import { AppIconButton } from "../common/AppButton";
 import RestoreIcon from "../icons/RestoreIcon";
 import TrashIcon from "../icons/TrashIcon";
@@ -12,7 +13,19 @@ interface DeleteNoteProps {
 }
 
 export const DeleteNote = ({ noteId, deleted }: DeleteNoteProps) => {
-	const [toggleDelete, { isLoading }] = useMutation(updateNote);
+	const [toggleDelete, { isLoading }] = useMutation(updateNote, {
+		onSuccess: (data) => {
+			queryCache.setQueryData<Note[]>(
+				data.deleted ? ["notes", { deleted: true }] : "notes",
+				(notes) => [data].concat(...(notes || []))
+			);
+			queryCache.setQueryData<Note[]>(
+				data.deleted ? "notes" : ["notes", { deleted: true }],
+				(notes) => notes?.filter(({ id }) => id !== data.id) || []
+			);
+		}
+	});
+
 	const handleClick = () => toggleDelete({ noteId, deleted: !deleted });
 
 	return (

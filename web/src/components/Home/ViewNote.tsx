@@ -7,9 +7,10 @@ import {
 	EditorState
 } from "draft-js";
 import React, { useRef, useState } from "react";
+import { queryCache, useMutation } from "react-query";
 import { useWindowSize } from "react-use";
 import styled from "styled-components";
-import { useUpdateNoteMutation } from "../../hooks/useUpdateNoteMutation";
+import { updateNote } from "../../api/notes";
 import { Note, NoteColors } from "../../utils/types";
 import { AppCard } from "../common/AppCard";
 import AppLoader from "../common/AppLoader";
@@ -53,7 +54,14 @@ const NoteCardContainer = styled.div<{ width: number }>`
 export const ViewNote = ({ note, onClose }: ViewNoteProps) => {
 	const noteCardContainerRef = useRef<HTMLDivElement>(null);
 	const { width } = useWindowSize();
-	const [updateNote, { isLoading }] = useUpdateNoteMutation();
+	const [update, { isLoading }] = useMutation(updateNote, {
+		onSuccess(data) {
+			queryCache.setQueryData<Note[]>(
+				note.archived ? ["notes", { archived: true }] : "notes",
+				(notes) => notes?.map((note) => (note.id === data.id ? data : note))
+			);
+		}
+	});
 
 	const [titleEditorState, setTitleEditorState] = useState(
 		EditorState.createWithContent(ContentState.createFromText(note.title))
@@ -73,7 +81,7 @@ export const ViewNote = ({ note, onClose }: ViewNoteProps) => {
 			const content = JSON.stringify(
 				convertToRaw(contentEditorState.getCurrentContent())
 			);
-			updateNote({ title, content, noteId: note.id });
+			update({ title, content, noteId: note.id });
 			onClose();
 		}
 	};

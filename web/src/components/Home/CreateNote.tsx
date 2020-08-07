@@ -2,10 +2,11 @@ import { ButtonGroup } from "@atlaskit/button";
 import { convertToRaw, Editor, EditorState } from "draft-js";
 import "draft-js/dist/Draft.css";
 import React, { Fragment, useEffect, useRef, useState } from "react";
-import { useMutation } from "react-query";
+import { queryCache, useMutation } from "react-query";
 import { useClickAway } from "react-use";
 import styled from "styled-components";
 import { createNote } from "../../api/notes";
+import { Note } from "../../utils/types";
 import { AppButton } from "../common/AppButton";
 import { AppCard, AppCardFooter } from "../common/AppCard";
 import { AppError } from "../common/AppError";
@@ -40,7 +41,12 @@ export const CreateNote = () => {
 	const titleEditorRef = useRef<Editor>(null);
 	const [create, { isLoading }] = useMutation(createNote, {
 		onError: (err) => setErrorMsg(err.message),
-		onSuccess: () => reset()
+		onSuccess: (data) => {
+			queryCache.setQueryData<Note[]>("notes", (notes) =>
+				[data].concat(...(notes || []))
+			);
+			reset();
+		}
 	});
 
 	const titleBlockStyleFn = () => "noteTitleText";

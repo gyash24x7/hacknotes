@@ -76,7 +76,9 @@ export const ProfileDrawer = () => {
 	const user = queryCache.getQueryData<User | undefined>("me");
 	const [randomAvatar, setRandomAvatar] = useState(user?.avatar);
 	const [isAvatarControlsOpen, setIsAvatarControlsOpen] = useState(false);
-	const [update, { isLoading }] = useMutation(updateAvatar);
+	const [update, { isLoading }] = useMutation(updateAvatar, {
+		onSuccess: (data) => queryCache.setQueryData("me", data)
+	});
 
 	const toggleAvatarControls = () => setIsAvatarControlsOpen((val) => !val);
 
