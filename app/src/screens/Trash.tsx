@@ -1,11 +1,11 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useQuery } from "react-query";
 import { getAllNotes } from "../api/notes";
 import { AppContainer } from "../components/AppContainer";
 import { AppLoader } from "../components/AppLoader";
 import { TopNav } from "../components/AppNav";
-import { ErrorText } from "../components/AppTypography";
+import { ErrorText, HelperText } from "../components/AppTypography";
 import { NoteList } from "../components/NoteList";
 
 export const TrashScreen = () => {
@@ -17,9 +17,17 @@ export const TrashScreen = () => {
 
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
-			<TopNav />
+			<TopNav title="Trash" />
 			<AppContainer>
-				{data && <NoteList notes={data} />}
+				{data && (
+					<Fragment>
+						{data.length > 0 ? (
+							<NoteList notes={data} />
+						) : (
+							<HelperText>No Notes in Trash</HelperText>
+						)}
+					</Fragment>
+				)}
 				{error && <ErrorText status="danger">{error.message}</ErrorText>}
 				{isLoading && <AppLoader />}
 			</AppContainer>

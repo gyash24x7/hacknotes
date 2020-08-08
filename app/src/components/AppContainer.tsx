@@ -5,6 +5,7 @@ export const AppContainer = styled(Layout)`
 	flex: 1;
 	align-items: center;
 	justify-content: center;
+	background-color: #ffffff;
 `;
 
 export const HelperContainer = styled(Layout)`

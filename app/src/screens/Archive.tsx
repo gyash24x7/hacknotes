@@ -5,7 +5,7 @@ import { getAllNotes } from "../api/notes";
 import { AppContainer } from "../components/AppContainer";
 import { AppLoader } from "../components/AppLoader";
 import { TopNav } from "../components/AppNav";
-import { ErrorText } from "../components/AppTypography";
+import { ErrorText, HelperText } from "../components/AppTypography";
 import { NoteList } from "../components/NoteList";
 import { VerticalSpacer } from "../components/VerticalSpacer";
 
@@ -18,9 +18,17 @@ export const ArchiveScreen = () => {
 
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
-			<TopNav />
+			<TopNav title="Archive" />
 			<AppContainer>
-				{data && <NoteList notes={data} />}
+				{data && (
+					<Fragment>
+						{data.length > 0 ? (
+							<NoteList notes={data} />
+						) : (
+							<HelperText>No Notes in Archive</HelperText>
+						)}
+					</Fragment>
+				)}
 				{error && (
 					<Fragment>
 						<VerticalSpacer size={100} />

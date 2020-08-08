@@ -1,6 +1,10 @@
 import { Text } from "@ui-kitten/components";
 import styled from "styled-components/native";
 
+export const BoldText = styled(Text)`
+	font-family: "montserrat-bold";
+`;
+
 export const Heading = styled(Text)`
 	font-family: "montserrat-light";
 	text-transform: uppercase;
@@ -32,5 +36,6 @@ export const AppTitle = styled(Text)`
 
 export const HelperText = styled(Text)`
 	text-transform: uppercase;
-	font-size: 18px;
+	font-size: 13px;
+	font-family: "montserrat-bold";
 `;

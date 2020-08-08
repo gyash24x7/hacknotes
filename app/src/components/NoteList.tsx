@@ -22,6 +22,7 @@ export const NoteList = ({ notes, pinned }: NoteListProps) => {
 			<List
 				data={notes.filter((note) => note.pinned === !!pinned)}
 				renderItem={({ item }) => <NoteCard note={item} />}
+				style={{ backgroundColor: "#fff" }}
 			/>
 			{!!pinned && <VerticalSpacer />}
 		</NoteListContainer>

@@ -14,7 +14,7 @@ export const HomeScreen = () => {
 	});
 
 	return (
-		<SafeAreaView style={{ flex: 1 }}>
+		<SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
 			<TopNav />
 			<AppContainer>
 				{data && (
@@ -22,7 +22,7 @@ export const HomeScreen = () => {
 						{data.filter((note) => note.pinned).length > 0 && (
 							<NoteList notes={data} pinned />
 						)}
-						<NoteList notes={data} pinned={false} />
+						<NoteList notes={data} />
 						{data.length === 0 && <HelperText>No Notes Available</HelperText>}
 					</Fragment>
 				)}

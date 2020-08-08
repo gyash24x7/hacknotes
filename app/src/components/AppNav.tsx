@@ -6,7 +6,7 @@ import {
 	Icon,
 	IndexPath,
 	Layout,
-	Text,
+	TextProps,
 	TopNavigation,
 	TopNavigationAction
 } from "@ui-kitten/components";
@@ -15,31 +15,50 @@ import { AsyncStorage, StatusBar } from "react-native";
 import styled from "styled-components/native";
 import { useAuth } from "../utils/context";
 import { AppLogoSmall } from "./AppLogo";
+import { BoldText } from "./AppTypography";
 import { AppWordmark } from "./AppWordmark";
 
 const StyledTopNavigation = styled(TopNavigation)`
 	height: 70px;
 	z-index: 100;
-	elevation: 5;
-	border-bottom-color: #c1c7d0;
-	border-bottom-width: 1px;
 `;
 
-export const TopNav = () => {
+export const NavTitle = styled(BoldText)`
+	text-transform: uppercase;
+	font-size: 24px;
+	line-height: 30px;
+	margin-right: 10px;
+`;
+
+interface TopNavProps {
+	title?: string;
+	isNoteScreen?: boolean;
+}
+
+export const TopNav = ({ title, isNoteScreen }: TopNavProps) => {
 	const navigation = useNavigation();
 
 	return (
 		<Fragment>
 			<StatusBar backgroundColor="white" barStyle="dark-content" />
 			<StyledTopNavigation
-				title={() => <AppWordmark />}
+				title={() => (title ? <NavTitle>{title}</NavTitle> : <AppWordmark />)}
 				alignment="start"
-				accessoryLeft={() => (
-					<TopNavigationAction
-						icon={(props) => <Icon name="menu" {...props} size="xlarge" />}
-						onPress={() => navigation.dispatch(DrawerActions.toggleDrawer)}
-					/>
-				)}
+				accessoryLeft={() =>
+					!isNoteScreen ? (
+						<TopNavigationAction
+							icon={(props) => <Icon name="menu" {...props} size="xlarge" />}
+							onPress={() => navigation.dispatch(DrawerActions.toggleDrawer)}
+						/>
+					) : (
+						<TopNavigationAction
+							icon={(props) => (
+								<Icon name="arrow-back" {...props} size="xlarge" />
+							)}
+							onPress={() => navigation.goBack()}
+						/>
+					)
+				}
 			/>
 		</Fragment>
 	);
@@ -52,19 +71,25 @@ export const DrawerHeader = styled(Layout)`
 	align-items: center;
 	width: 100%;
 	height: 150px;
-	border-bottom-width: 2px;
-	border-bottom-color: #c1c7d0;
-	border-right-width: 2px;
-	border-right-color: #c1c7d0;
 `;
 
-export const AppDrawer = styled(Drawer)`
-	border-right-width: 2px;
-	border-right-color: #c1c7d0;
+export const AppDrawerItem = styled(DrawerItem)<any>`
+	background-color: ${({ isSelected }) => (isSelected ? "#deebff" : "#fff")};
 `;
 
-export const DrawerItemTitle = styled(Text)`
-	font-family: "montserrat-bold";
+export const DrawerItemTitle = styled(BoldText)<
+	TextProps & { isSelected?: boolean }
+>`
+	flex: 1;
+	text-align: left;
+	font-size: 13px;
+	color: ${({ isSelected }) => (isSelected ? "#0052cc" : "#141414")};
+`;
+
+export const DrawerItemIcon = styled(Icon)<any>`
+	width: 20px;
+	height: 20px;
+	margin: auto 8px;
 `;
 
 const DrawerNavFooter = () => {
@@ -76,13 +101,9 @@ const DrawerNavFooter = () => {
 
 	return (
 		<DrawerItem
-			title={(props) => (
-				<Text style={[props?.style, { fontFamily: "montserrat-bold" }]}>
-					Logout
-				</Text>
-			)}
-			accessoryLeft={(props) => (
-				<Icon {...props} name={getIconNameValue("Logout", 0)} />
+			title={() => <DrawerItemTitle>Logout</DrawerItemTitle>}
+			accessoryLeft={() => (
+				<DrawerItemIcon name={getIconNameValue("Logout", 0)} />
 			)}
 			onPress={handleLogout}
 		/>
@@ -94,7 +115,7 @@ export const DrawerNav = ({
 	navigation
 }: DrawerContentComponentProps) => {
 	return (
-		<AppDrawer
+		<Drawer
 			header={() => (
 				<DrawerHeader>
 					<AppLogoSmall />
@@ -104,21 +125,26 @@ export const DrawerNav = ({
 			selectedIndex={new IndexPath(state.index, 0)}
 			onSelect={(index) => navigation.navigate(state.routeNames[index.row])}
 		>
-			{state.routes.map(({ key, name }, i) => (
-				<DrawerItem
-					key={key}
-					title={(props) => (
-						<Text style={[props?.style, { fontFamily: "montserrat-bold" }]}>
-							{name}
-						</Text>
-					)}
-					accessoryLeft={(props) => (
-						<Icon {...props} name={getIconNameValue(name, state.index)} />
-					)}
-					style={{ backgroundColor: state.index === i ? "#c1c7d0" : "#fff" }}
-				/>
-			))}
-		</AppDrawer>
+			{state.routes
+				.filter(({ name }) => name !== "Note")
+				.map(({ key, name }, i) => (
+					<AppDrawerItem
+						key={key}
+						title={() => (
+							<DrawerItemTitle isSelected={state.index === i}>
+								{name}
+							</DrawerItemTitle>
+						)}
+						accessoryLeft={() => (
+							<DrawerItemIcon
+								name={getIconNameValue(name, state.index)}
+								fill={state.index === i ? "#0052cc" : "#141414"}
+							/>
+						)}
+						isSelected={state.index === i}
+					/>
+				))}
+		</Drawer>
 	);
 };
 

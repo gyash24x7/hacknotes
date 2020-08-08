@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import { Card, Layout, Text } from "@ui-kitten/components";
 import React, { Fragment } from "react";
 import styled from "styled-components/native";
@@ -36,10 +37,12 @@ interface NoteCardProps {
 }
 
 export const NoteCard = ({ note }: NoteCardProps) => {
+	const navigation = useNavigation();
 	return (
 		<NoteCardContainer
 			appearance="filled"
 			key={note.id}
+			onPress={() => navigation.navigate("Note")}
 			style={{ backgroundColor: NoteColors[note.color] }}
 			header={
 				note.title
