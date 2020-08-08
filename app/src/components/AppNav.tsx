@@ -1,5 +1,9 @@
 import { DrawerContentComponentProps } from "@react-navigation/drawer";
-import { DrawerActions, useNavigation } from "@react-navigation/native";
+import {
+	DrawerActions,
+	useIsFocused,
+	useNavigation
+} from "@react-navigation/native";
 import {
 	Drawer,
 	DrawerItem,
@@ -8,19 +12,29 @@ import {
 	Layout,
 	TextProps,
 	TopNavigation,
-	TopNavigationAction
+	TopNavigationAction,
+	TopNavigationProps
 } from "@ui-kitten/components";
 import React, { Fragment } from "react";
-import { AsyncStorage, StatusBar } from "react-native";
+import {
+	AsyncStorage,
+	ImageProps,
+	StatusBar,
+	StatusBarProps
+} from "react-native";
 import styled from "styled-components/native";
 import { useAuth } from "../utils/context";
+import { NoteColors } from "../utils/types";
 import { AppLogoSmall } from "./AppLogo";
 import { BoldText } from "./AppTypography";
 import { AppWordmark } from "./AppWordmark";
 
-const StyledTopNavigation = styled(TopNavigation)`
+const StyledTopNavigation = styled(TopNavigation)<
+	TopNavigationProps & { color?: string }
+>`
 	height: 70px;
 	z-index: 100;
+	background-color: ${({ color }) => (!!color ? NoteColors[color] : "#fff")};
 `;
 
 export const NavTitle = styled(BoldText)`
@@ -33,32 +47,40 @@ export const NavTitle = styled(BoldText)`
 interface TopNavProps {
 	title?: string;
 	isNoteScreen?: boolean;
+	color: string;
 }
 
-export const TopNav = ({ title, isNoteScreen }: TopNavProps) => {
+export const TopNav = ({ title, isNoteScreen, color }: TopNavProps) => {
 	const navigation = useNavigation();
+
+	const renderAccessoryLeft = (isBack: boolean = false) => () => {
+		const handleOnPress = () => {
+			if (!isBack) navigation.dispatch(DrawerActions.toggleDrawer);
+			else navigation.goBack();
+		};
+
+		const renderNavigationActionIcon = () => (props?: Partial<ImageProps>) => (
+			<Icon name={isBack ? "arrow-back" : "menu"} {...props} size="xlarge" />
+		);
+
+		return (
+			<TopNavigationAction
+				icon={renderNavigationActionIcon()}
+				onPress={handleOnPress}
+			/>
+		);
+	};
 
 	return (
 		<Fragment>
-			<StatusBar backgroundColor="white" barStyle="dark-content" />
+			<FocusAwareStatusBar
+				backgroundColor={NoteColors[color]}
+				barStyle="dark-content"
+			/>
 			<StyledTopNavigation
 				title={() => (title ? <NavTitle>{title}</NavTitle> : <AppWordmark />)}
-				alignment="start"
-				accessoryLeft={() =>
-					!isNoteScreen ? (
-						<TopNavigationAction
-							icon={(props) => <Icon name="menu" {...props} size="xlarge" />}
-							onPress={() => navigation.dispatch(DrawerActions.toggleDrawer)}
-						/>
-					) : (
-						<TopNavigationAction
-							icon={(props) => (
-								<Icon name="arrow-back" {...props} size="xlarge" />
-							)}
-							onPress={() => navigation.goBack()}
-						/>
-					)
-				}
+				color={color}
+				accessoryLeft={renderAccessoryLeft(isNoteScreen)}
 			/>
 		</Fragment>
 	);
@@ -99,29 +121,42 @@ const DrawerNavFooter = () => {
 		setIsAuthenticated(false);
 	};
 
+	const renderAccessoryLeft = () => () => (
+		<DrawerItemIcon name={getIconNameValue("Logout", 0)} />
+	);
+
 	return (
 		<DrawerItem
 			title={() => <DrawerItemTitle>Logout</DrawerItemTitle>}
-			accessoryLeft={() => (
-				<DrawerItemIcon name={getIconNameValue("Logout", 0)} />
-			)}
+			accessoryLeft={renderAccessoryLeft()}
 			onPress={handleLogout}
 		/>
 	);
 };
 
-export const DrawerNav = ({
-	state,
-	navigation
-}: DrawerContentComponentProps) => {
+export const DrawerNav = (props: DrawerContentComponentProps) => {
+	const { state, navigation } = props;
+
+	const renderDrawerHeader = () => () => (
+		<DrawerHeader>
+			<AppLogoSmall />
+		</DrawerHeader>
+	);
+
+	const renderDrawerFooter = () => DrawerNavFooter;
+
+	const renderDrawerItemTitle = (name: string, isSelected: boolean) => () => (
+		<DrawerItemTitle isSelected={isSelected}>{name}</DrawerItemTitle>
+	);
+
+	const renderDrawerItemIcon = (iconName: string, fill: string) => () => (
+		<DrawerItemIcon name={iconName} fill={fill} />
+	);
+
 	return (
 		<Drawer
-			header={() => (
-				<DrawerHeader>
-					<AppLogoSmall />
-				</DrawerHeader>
-			)}
-			footer={DrawerNavFooter}
+			header={renderDrawerHeader()}
+			footer={renderDrawerFooter()}
 			selectedIndex={new IndexPath(state.index, 0)}
 			onSelect={(index) => navigation.navigate(state.routeNames[index.row])}
 		>
@@ -130,16 +165,10 @@ export const DrawerNav = ({
 				.map(({ key, name }, i) => (
 					<AppDrawerItem
 						key={key}
-						title={() => (
-							<DrawerItemTitle isSelected={state.index === i}>
-								{name}
-							</DrawerItemTitle>
-						)}
-						accessoryLeft={() => (
-							<DrawerItemIcon
-								name={getIconNameValue(name, state.index)}
-								fill={state.index === i ? "#0052cc" : "#141414"}
-							/>
+						title={renderDrawerItemTitle(name, state.index === i)}
+						accessoryLeft={renderDrawerItemIcon(
+							getIconNameValue(name, state.index),
+							state.index === i ? "#0052cc" : "#141414"
 						)}
 						isSelected={state.index === i}
 					/>
@@ -161,4 +190,9 @@ const getIconNameValue = (screen: string, index: number) => {
 	}
 
 	return "log-out";
+};
+
+export const FocusAwareStatusBar = (props: StatusBarProps) => {
+	const isFocused = useIsFocused();
+	return isFocused ? <StatusBar {...props} /> : null;
 };

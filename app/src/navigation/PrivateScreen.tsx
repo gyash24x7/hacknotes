@@ -6,8 +6,9 @@ import { HomeScreen } from "../screens/Home";
 import { NoteScreen } from "../screens/Note";
 import { ProfileScreen } from "../screens/Profile";
 import { TrashScreen } from "../screens/Trash";
+import { AppScreenParamList } from "../utils/types";
 
-const { Navigator, Screen } = createDrawerNavigator();
+const { Navigator, Screen } = createDrawerNavigator<AppScreenParamList>();
 
 export const PrivateScreen = () => {
 	return (

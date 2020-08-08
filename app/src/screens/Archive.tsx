@@ -18,7 +18,7 @@ export const ArchiveScreen = () => {
 
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
-			<TopNav title="Archive" />
+			<TopNav title="Archive" color="TRANSPARENT" />
 			<AppContainer>
 				{data && (
 					<Fragment>
