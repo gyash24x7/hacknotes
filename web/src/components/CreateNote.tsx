@@ -1,8 +1,7 @@
 import { ButtonGroup } from "@atlaskit/button";
-import { convertToRaw, Editor, EditorState } from "draft-js";
-import "draft-js/dist/Draft.css";
-import React, { Fragment, useEffect, useRef, useState } from "react";
+import React, { Fragment, useRef, useState } from "react";
 import { queryCache, useMutation } from "react-query";
+import TextArea from "react-textarea-autosize";
 import { useClickAway } from "react-use";
 import styled from "styled-components";
 import { createNote } from "../api/notes";
@@ -29,18 +28,44 @@ export const NoteInputContainer = styled.div`
 	align-self: center;
 `;
 
-const emptyEditorState = EditorState.createEmpty();
+export const ContentTextArea = styled(TextArea)`
+	background-color: transparent;
+	border-color: transparent;
+	width: 100%;
+	font-size: 18px;
+	font-family: "Montserrat";
+	resize: none;
+
+	&:focus {
+		outline-style: unset;
+	}
+
+	&.withTitle {
+		font-size: 14px;
+	}
+`;
+
+export const TitleTextInput = styled.input`
+	background-color: transparent;
+	border-color: transparent;
+	width: 100%;
+	font-size: 18px;
+	font-family: "Montserrat";
+	font-weight: bold;
+
+	&:focus {
+		outline-style: unset;
+	}
+`;
 
 export const CreateNote = () => {
 	const inputDivRef = useRef<HTMLDivElement>(null);
 	const { addFlag } = useFlag();
-	const [titleEditorState, setTitleEditorState] = useState(emptyEditorState);
-	const [contentEditorState, setContentEditorState] = useState(
-		emptyEditorState
-	);
+	const [title, setTitle] = useState("");
+	const [content, setContent] = useState("");
 	const [isTitleVisible, setIsTitleVisible] = useState(false);
 	const [errorMsg, setErrorMsg] = useState<string>();
-	const titleEditorRef = useRef<Editor>(null);
+
 	const [create, { isLoading }] = useMutation(createNote, {
 		onError: (err) => setErrorMsg(err.message),
 		onSuccess: (data) => {
@@ -52,46 +77,27 @@ export const CreateNote = () => {
 		}
 	});
 
-	const titleBlockStyleFn = () => "noteTitleText";
-	const contentBlockStyleFn = () => "noteContentText";
-
 	const saveNote = () => {
-		const titleContentState = titleEditorState.getCurrentContent();
-		const title = titleContentState.getPlainText(" ");
-		const contentContentState = contentEditorState.getCurrentContent();
-		const contentStr = contentContentState.getPlainText("");
-		if (!!title || !!contentStr) {
-			const content = JSON.stringify(convertToRaw(contentContentState));
-			create({ title, content });
+		if (!!title || !!content) {
+			create({
+				title,
+				content: JSON.stringify({ blocks: content.split("\n") })
+			});
 		} else {
 			setErrorMsg("Both Title and Content cannot be Empty!");
 		}
 	};
 
 	const reset = () => {
-		titleEditorRef.current?.focus();
-		setTitleEditorState(emptyEditorState);
-		setContentEditorState(emptyEditorState);
+		setTitle("");
+		setContent("");
 		setErrorMsg(undefined);
 		setIsTitleVisible(false);
 	};
 
 	useClickAway(inputDivRef, () => {
-		const title = titleEditorState.getCurrentContent().getPlainText("");
-		const content = contentEditorState.getCurrentContent().getPlainText("");
 		if (!title && !content) reset();
 	});
-
-	useEffect(() => {
-		const elem = document.querySelector(
-			"#contentEditor .public-DraftEditorPlaceholder-inner"
-		);
-		if (isTitleVisible) {
-			elem?.classList.add("isFocused");
-		} else {
-			elem?.classList.remove("isFocused");
-		}
-	}, [isTitleVisible]);
 
 	return (
 		<CreateNoteWrapper>
@@ -99,28 +105,22 @@ export const CreateNote = () => {
 				<div style={{ width: "inherit" }} ref={inputDivRef}>
 					<AppCard style={{ cursor: "unset" }}>
 						{isTitleVisible && (
-							<div id="titleEditor">
-								<Editor
-									editorState={titleEditorState}
-									onChange={setTitleEditorState}
+							<Fragment>
+								<TitleTextInput
 									placeholder="Title"
-									blockStyleFn={titleBlockStyleFn}
-									ref={titleEditorRef}
-									stripPastedStyles
+									value={title}
+									onChange={(e) => setTitle(e.target.value)}
 								/>
-								<VerticalSpacer />
-							</div>
+								<VerticalSpacer size={10} />
+							</Fragment>
 						)}
-						<div id="contentEditor">
-							<Editor
-								editorState={contentEditorState}
-								onChange={setContentEditorState}
-								placeholder="Take a Note..."
-								blockStyleFn={contentBlockStyleFn}
-								onFocus={() => setIsTitleVisible(true)}
-								stripPastedStyles
-							/>
-						</div>
+						<ContentTextArea
+							value={content}
+							onChange={(e) => setContent(e.target.value)}
+							placeholder="Take a Note..."
+							onFocus={() => setIsTitleVisible(true)}
+							className={isTitleVisible ? "withTitle" : ""}
+						/>
 						{isTitleVisible && (
 							<Fragment>
 								<VerticalSpacer />

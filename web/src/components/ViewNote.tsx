@@ -1,11 +1,4 @@
 import { colors } from "@atlaskit/theme";
-import {
-	ContentState,
-	convertFromRaw,
-	convertToRaw,
-	Editor,
-	EditorState
-} from "draft-js";
 import React, { useRef, useState } from "react";
 import { queryCache, useMutation } from "react-query";
 import useWindowSize from "react-use/lib/useWindowSize";
@@ -15,7 +8,7 @@ import { useFlag } from "../utils/context";
 import { Note, NoteColors } from "../utils/types";
 import { AppCard } from "./AppCard";
 import AppLoader from "./AppLoader";
-import { NoteTitle } from "./NoteCard";
+import { ContentTextArea, TitleTextInput } from "./CreateNote";
 import { NoteCardFooter } from "./NoteCardFooter";
 import { VerticalSpacer } from "./VerticalSpacer";
 
@@ -35,14 +28,6 @@ const ViewNoteWrapper = styled.div`
 	justify-content: center;
 	align-items: center;
 	background-color: ${colors.N900}88;
-`;
-
-const ViewNoteBody = styled.div`
-	font-size: 14px;
-	overflow: scroll;
-	max-height: 70vh;
-	display: flex;
-	flex-direction: column-reverse;
 `;
 
 const NoteCardContainer = styled.div<{ width: number }>`
@@ -67,25 +52,25 @@ export const ViewNote = ({ note, onClose }: ViewNoteProps) => {
 		}
 	});
 
-	const [titleEditorState, setTitleEditorState] = useState(
-		EditorState.createWithContent(ContentState.createFromText(note.title))
-	);
-	const [contentEditorState, setContentEditorState] = useState(
-		EditorState.createWithContent(convertFromRaw(JSON.parse(note.content)))
+	const [title, setTitle] = useState(note.title);
+	const [content, setContent] = useState<string>(
+		JSON.parse(note.content).blocks.join("\n")
 	);
 
 	const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
 		e.persist();
+		const { pageX, pageY } = e;
 		const rect = noteCardContainerRef.current!.getBoundingClientRect();
 		const { top, bottom, left, right } = rect;
-		if (
-			!(top < e.pageY && bottom > e.pageY && left < e.pageX && right > e.pageX)
-		) {
-			const title = titleEditorState.getCurrentContent().getPlainText();
-			const content = JSON.stringify(
-				convertToRaw(contentEditorState.getCurrentContent())
-			);
-			update({ title, content, noteId: note.id });
+		if (!(top < pageY && bottom > pageY && left < pageX && right > pageX)) {
+			const oldContent = JSON.parse(note.content).blocks.join("\n");
+			if (title !== note.title || content !== oldContent)
+				update({
+					title,
+					content: JSON.stringify({ blocks: content.split("\n") }),
+					noteId: note.id
+				});
+
 			onClose();
 		}
 	};
@@ -97,27 +82,19 @@ export const ViewNote = ({ note, onClose }: ViewNoteProps) => {
 					className="note-card"
 					style={{ backgroundColor: NoteColors[note.color], cursor: "unset" }}
 				>
-					<NoteTitle>
-						<Editor
-							editorState={titleEditorState}
-							onChange={setTitleEditorState}
-							placeholder="Title"
-							blockStyleFn={() => "noteTitleText"}
-							stripPastedStyles
-						/>
-						<VerticalSpacer />
-					</NoteTitle>
+					<TitleTextInput
+						placeholder="Title"
+						value={title}
+						onChange={(e) => setTitle(e.target.value)}
+					/>
 					{note.title && note.content && <VerticalSpacer />}
 					{note.content && (
-						<ViewNoteBody>
-							<Editor
-								editorState={contentEditorState}
-								onChange={setContentEditorState}
-								placeholder="Content..."
-								blockStyleFn={() => "noteContentText"}
-								stripPastedStyles
-							/>
-						</ViewNoteBody>
+						<ContentTextArea
+							value={content}
+							onChange={(e) => setContent(e.target.value)}
+							placeholder="Take a Note..."
+							className="withTitle"
+						/>
 					)}
 					{isLoading && <AppLoader />}
 					<VerticalSpacer />

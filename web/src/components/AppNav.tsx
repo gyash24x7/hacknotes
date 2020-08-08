@@ -22,7 +22,6 @@ const NavContainer = styled.div`
 	top: 0;
 	z-index: 100;
 	height: 70px;
-	box-shadow: 0px 0px 5px ${colors.N50};
 	display: flex;
 	justify-content: space-between;
 	align-items: center;

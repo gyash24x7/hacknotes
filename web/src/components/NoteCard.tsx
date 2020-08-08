@@ -1,4 +1,3 @@
-import { convertFromRaw, Editor, EditorState } from "draft-js";
 import React, { useRef } from "react";
 import { useClickAway, useHover } from "react-use";
 import styled from "styled-components";
@@ -46,14 +45,9 @@ export const NoteCard = ({ note, openView, onClickAway }: NoteProps) => {
 				{note.title && note.content && <VerticalSpacer />}
 				{note.content && (
 					<NoteBody>
-						<Editor
-							readOnly
-							onChange={() => {}}
-							editorState={EditorState.createWithContent(
-								convertFromRaw(JSON.parse(note.content))
-							)}
-							blockStyleFn={() => "noteContentText"}
-						/>
+						{JSON.parse(note.content).blocks.map((text: string) => (
+							<p key={text}>{text}</p>
+						))}
 					</NoteBody>
 				)}
 			</div>
