@@ -15,7 +15,7 @@ export const HomeScreen = () => {
 
 	return (
 		<SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-			<TopNav color="TRANSPARENT" />
+			<TopNav color="TRANSPARENT" screen="Home" />
 			<AppContainer>
 				{data && (
 					<Fragment>

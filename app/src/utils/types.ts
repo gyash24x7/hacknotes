@@ -80,5 +80,6 @@ export type AppScreenParamList = {
 	Archive: undefined;
 	Trash: undefined;
 	Profile: undefined;
-	Note: { note: Note };
+	ViewNote: { note: Note };
+	NewNote: undefined;
 };

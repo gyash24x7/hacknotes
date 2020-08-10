@@ -26,8 +26,8 @@ export const NoteContent = ({ content }: NoteContentProps) => {
 
 	return (
 		<Fragment>
-			{blocks.map(({ text, key }: any) => (
-				<Text key={key}>{text}</Text>
+			{blocks.map((text: string, i: number) => (
+				<Text key={i}>{text}</Text>
 			))}
 		</Fragment>
 	);
@@ -54,7 +54,7 @@ export const NoteCard = ({ note }: NoteCardProps) => {
 		<NoteCardContainer
 			appearance="filled"
 			key={note.id}
-			onPress={() => navigation.navigate("Note", { note })}
+			onPress={() => navigation.navigate("ViewNote", { note })}
 			style={{ backgroundColor: NoteColors[note.color] }}
 			header={renderCardHeader(note.title)}
 		>

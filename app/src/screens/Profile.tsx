@@ -7,7 +7,7 @@ import { TopNav } from "../components/AppNav";
 export const ProfileScreen = () => {
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
-			<TopNav title="Profile" color="TRANSPARENT" />
+			<TopNav title="Profile" color="TRANSPARENT" screen="Profile" />
 			<AppContainer>
 				<Text>Profile Screen</Text>
 			</AppContainer>

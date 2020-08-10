@@ -17,7 +17,7 @@ export const TrashScreen = () => {
 
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
-			<TopNav title="Trash" color="TRANSPARENT" />
+			<TopNav title="Trash" color="TRANSPARENT" screen="Trash" />
 			<AppContainer>
 				{data && (
 					<Fragment>
