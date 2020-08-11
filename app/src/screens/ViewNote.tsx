@@ -11,12 +11,24 @@ import { TopNav } from "../components/AppNav";
 import { VerticalSpacer } from "../components/VerticalSpacer";
 import { AppScreenParamList, Note, NoteColors } from "../utils/types";
 
-const ViewNoteCardContainer = styled(Layout)<LayoutProps & { color: string }>`
+const ViewNoteContainer = styled(Layout)<LayoutProps & { color: string }>`
 	flex: 1;
 	background-color: ${({ color }) => color};
 	padding: 10px 20px;
 	width: 100%;
 `;
+
+// const ViewNoteFooter = styled(Layout)`
+// 	width: 100%;
+// 	display: flex;
+// 	flex-direction: row;
+// 	justify-content: center;
+// 	align-items: center;
+// 	height: 30px;
+// 	position: absolute;
+// 	bottom: 0;
+// 	background-color: transparent;
+// `;
 
 const NoteTitleInput = styled(TextInput)`
 	color: #141414;
@@ -41,6 +53,7 @@ export const ViewNoteScreen = ({
 }: DrawerScreenProps<AppScreenParamList, "ViewNote">) => {
 	const [title, setTitle] = useState("");
 	const [content, setContent] = useState("");
+	const [noteColor, setNoteColor] = useState("TRANSPARENT");
 	const [update] = useMutation(updateNote, {
 		onSuccess(data) {
 			queryCache.setQueryData<Note[]>(
@@ -53,9 +66,14 @@ export const ViewNoteScreen = ({
 	});
 
 	useEffect(() => {
-		setTitle(note.title);
-		setContent(JSON.parse(note.content).blocks.join("\n"));
-	}, [note]);
+		const unsubscribe = navigation.addListener("focus", () => {
+			setTitle(note.title);
+			setContent(JSON.parse(note.content).blocks.join("\n"));
+			setNoteColor(note.color);
+		});
+
+		return () => unsubscribe();
+	}, [note, navigation]);
 
 	useEffect(() => {
 		const unsubscribe = navigation.addListener("blur", () => {
@@ -73,9 +91,14 @@ export const ViewNoteScreen = ({
 
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
-			<TopNav title=" " screen="ViewNote" note={note} />
+			<TopNav
+				title=" "
+				screen="ViewNote"
+				note={{ ...note, color: noteColor }}
+				setNoteColor={setNoteColor}
+			/>
 			<AppContainer>
-				<ViewNoteCardContainer color={NoteColors[note.color]}>
+				<ViewNoteContainer color={NoteColors[noteColor]}>
 					<NoteTitleInput
 						value={title}
 						placeholder="Title"
@@ -91,7 +114,12 @@ export const ViewNoteScreen = ({
 						placeholderTextColor="#14141466"
 						multiline
 					/>
-				</ViewNoteCardContainer>
+				</ViewNoteContainer>
+				{/* <ViewNoteFooter>
+					<Text category="label">
+						Edited {formatDistance(updatedAt, new Date())} ago
+					</Text>
+				</ViewNoteFooter> */}
 			</AppContainer>
 		</SafeAreaView>
 	);

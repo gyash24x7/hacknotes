@@ -31,6 +31,7 @@ import { AppWordmark } from "./AppWordmark";
 import { ArchiveNote } from "./ArchiveNote";
 import { CreateNote } from "./CreateNote";
 import { PinNote } from "./PinNote";
+import { UpdateColor } from "./UpdateColor";
 
 const StyledTopNavigation = styled(TopNavigation)<
 	TopNavigationProps & { color?: string }
@@ -51,9 +52,10 @@ interface TopNavProps {
 	title?: string;
 	screen: "Home" | "ViewNote" | "NewNote" | "Profile" | "Trash" | "Archive";
 	note?: Note;
+	setNoteColor?: (color: string) => void;
 }
 
-export const TopNav = ({ title, screen, note }: TopNavProps) => {
+export const TopNav = ({ title, screen, note, setNoteColor }: TopNavProps) => {
 	const navigation = useNavigation();
 
 	const renderAccessoryLeft = (isBack: boolean = false) => () => {
@@ -80,6 +82,7 @@ export const TopNav = ({ title, screen, note }: TopNavProps) => {
 				<Fragment>
 					<ArchiveNote noteId={note!.id} archived={note!.archived} />
 					<PinNote noteId={note!.id} pinned={note!.pinned} />
+					<UpdateColor setNoteColor={setNoteColor!} noteId={note!.id} />
 				</Fragment>
 			);
 
