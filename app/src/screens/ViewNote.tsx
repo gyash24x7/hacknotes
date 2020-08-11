@@ -9,7 +9,13 @@ import { updateNote } from "../api/notes";
 import { AppContainer } from "../components/AppContainer";
 import { TopNav } from "../components/AppNav";
 import { VerticalSpacer } from "../components/VerticalSpacer";
-import { AppScreenParamList, Note, NoteColors } from "../utils/types";
+import { ActiveNoteProvider } from "../utils/context";
+import {
+	AppScreenParamList,
+	defaultNote,
+	Note,
+	NoteColors
+} from "../utils/types";
 
 const ViewNoteContainer = styled(Layout)<LayoutProps & { color: string }>`
 	flex: 1;
@@ -47,17 +53,17 @@ const NoteContentInput = styled(TextInput)`
 
 export const ViewNoteScreen = ({
 	route: {
-		params: { note }
+		params: { noteId, queryKey }
 	},
 	navigation
 }: DrawerScreenProps<AppScreenParamList, "ViewNote">) => {
 	const [title, setTitle] = useState("");
 	const [content, setContent] = useState("");
-	const [noteColor, setNoteColor] = useState("TRANSPARENT");
+	const [note, setNote] = useState(defaultNote);
 	const [update] = useMutation(updateNote, {
 		onSuccess(data) {
 			queryCache.setQueryData<Note[]>(
-				note.archived ? ["notes", { archived: true }] : "notes",
+				note?.archived ? ["notes", { archived: true }] : "notes",
 				(notes) => notes?.map((note) => (note.id === data.id ? data : note))
 			);
 			setTitle("");
@@ -67,22 +73,26 @@ export const ViewNoteScreen = ({
 
 	useEffect(() => {
 		const unsubscribe = navigation.addListener("focus", () => {
-			setTitle(note.title);
-			setContent(JSON.parse(note.content).blocks.join("\n"));
-			setNoteColor(note.color);
+			const notes = queryCache.getQueryData<Note[]>(queryKey);
+			const foundNote = notes?.find((note) => note.id === noteId);
+			setNote(foundNote || defaultNote);
+			setTitle(foundNote?.title || "");
+			setContent(
+				JSON.parse(foundNote?.content || "{blocks:[]}").blocks.join("\n")
+			);
 		});
 
 		return () => unsubscribe();
-	}, [note, navigation]);
+	}, [noteId, navigation]);
 
 	useEffect(() => {
 		const unsubscribe = navigation.addListener("blur", () => {
-			const oldContent = JSON.parse(note.content).blocks.join("\n");
-			if (title !== note.title || content !== oldContent)
+			const oldContent = JSON.parse(note!.content).blocks.join("\n");
+			if (title !== note!.title || content !== oldContent)
 				update({
 					title,
 					content: JSON.stringify({ blocks: content.split("\n") }),
-					noteId: note.id
+					noteId
 				});
 		});
 
@@ -91,36 +101,33 @@ export const ViewNoteScreen = ({
 
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
-			<TopNav
-				title=" "
-				screen="ViewNote"
-				note={{ ...note, color: noteColor }}
-				setNoteColor={setNoteColor}
-			/>
-			<AppContainer>
-				<ViewNoteContainer color={NoteColors[noteColor]}>
-					<NoteTitleInput
-						value={title}
-						placeholder="Title"
-						placeholderTextColor="#14141466"
-						onChangeText={setTitle}
-						multiline
-					/>
-					<VerticalSpacer />
-					<NoteContentInput
-						value={content}
-						onChangeText={setContent}
-						placeholder="Content"
-						placeholderTextColor="#14141466"
-						multiline
-					/>
-				</ViewNoteContainer>
-				{/* <ViewNoteFooter>
+			<ActiveNoteProvider value={{ note, setNote }}>
+				<TopNav title=" " screen="ViewNote" noteColor={note.color} />
+				<AppContainer>
+					<ViewNoteContainer color={NoteColors[note.color]}>
+						<NoteTitleInput
+							value={title}
+							placeholder="Title"
+							placeholderTextColor="#14141466"
+							onChangeText={setTitle}
+							multiline
+						/>
+						<VerticalSpacer />
+						<NoteContentInput
+							value={content}
+							onChangeText={setContent}
+							placeholder="Content"
+							placeholderTextColor="#14141466"
+							multiline
+						/>
+					</ViewNoteContainer>
+					{/* <ViewNoteFooter>
 					<Text category="label">
 						Edited {formatDistance(updatedAt, new Date())} ago
 					</Text>
 				</ViewNoteFooter> */}
-			</AppContainer>
+				</AppContainer>
+			</ActiveNoteProvider>
 		</SafeAreaView>
 	);
 };

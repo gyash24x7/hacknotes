@@ -1,3 +1,5 @@
+import { QueryKeyOrPredicateFn } from "react-query";
+
 export const NoteColors: Record<string, string> = {
 	TRANSPARENT: "#FFFFFF",
 	VIOLET: "#C0B6F2",
@@ -80,6 +82,19 @@ export type AppScreenParamList = {
 	Archive: undefined;
 	Trash: undefined;
 	Profile: undefined;
-	ViewNote: { note: Note };
+	ViewNote: { noteId: string; queryKey: QueryKeyOrPredicateFn };
 	NewNote: undefined;
+};
+
+export const defaultNote: Note = {
+	id: "defaultNote",
+	title: "",
+	content: "{blocks:[]}",
+	archived: false,
+	pinned: false,
+	deleted: false,
+	color: "TRANSPARENT",
+	authorId: "defaultAuthorId",
+	createdAt: new Date().toISOString(),
+	updatedAt: new Date().toISOString()
 };

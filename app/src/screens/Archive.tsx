@@ -25,7 +25,10 @@ export const ArchiveScreen = () => {
 					{data && (
 						<Fragment>
 							{data.length > 0 ? (
-								<NoteList notes={data} />
+								<NoteList
+									notes={data}
+									queryKey={["notes", { archived: true }]}
+								/>
 							) : (
 								<HelperText>No Notes in Archive</HelperText>
 							)}

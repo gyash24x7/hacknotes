@@ -24,7 +24,7 @@ import {
 } from "react-native";
 import styled from "styled-components/native";
 import { useAuth } from "../utils/context";
-import { Note, NoteColors } from "../utils/types";
+import { NoteColors } from "../utils/types";
 import { AppLogoSmall } from "./AppLogo";
 import { BoldText } from "./AppTypography";
 import { AppWordmark } from "./AppWordmark";
@@ -51,11 +51,10 @@ export const NavTitle = styled(BoldText)`
 interface TopNavProps {
 	title?: string;
 	screen: "Home" | "ViewNote" | "NewNote" | "Profile" | "Trash" | "Archive";
-	note?: Note;
-	setNoteColor?: (color: string) => void;
+	noteColor?: string;
 }
 
-export const TopNav = ({ title, screen, note, setNoteColor }: TopNavProps) => {
+export const TopNav = ({ title, screen, noteColor }: TopNavProps) => {
 	const navigation = useNavigation();
 
 	const renderAccessoryLeft = (isBack: boolean = false) => () => {
@@ -80,9 +79,9 @@ export const TopNav = ({ title, screen, note, setNoteColor }: TopNavProps) => {
 		if (screen === "ViewNote")
 			return () => (
 				<Fragment>
-					<ArchiveNote noteId={note!.id} archived={note!.archived} />
-					<PinNote noteId={note!.id} pinned={note!.pinned} />
-					<UpdateColor setNoteColor={setNoteColor!} noteId={note!.id} />
+					<ArchiveNote />
+					<PinNote />
+					<UpdateColor />
 				</Fragment>
 			);
 
@@ -94,12 +93,12 @@ export const TopNav = ({ title, screen, note, setNoteColor }: TopNavProps) => {
 	return (
 		<Fragment>
 			<FocusAwareStatusBar
-				backgroundColor={NoteColors[note?.color || "TRANSPARENT"]}
+				backgroundColor={NoteColors[noteColor || "TRANSPARENT"]}
 				barStyle="dark-content"
 			/>
 			<StyledTopNavigation
 				title={() => (title ? <NavTitle>{title}</NavTitle> : <AppWordmark />)}
-				color={note?.color}
+				color={noteColor}
 				accessoryLeft={renderAccessoryLeft(
 					screen === "NewNote" || screen === "ViewNote"
 				)}

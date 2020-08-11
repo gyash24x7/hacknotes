@@ -1,17 +1,13 @@
 import { Icon, TopNavigationAction } from "@ui-kitten/components";
-import React, { useState } from "react";
+import React from "react";
 import { ImageProps } from "react-native";
 import { queryCache, useMutation } from "react-query";
 import { updateNote } from "../api/notes";
+import { useActiveNote } from "../utils/context";
 import { Note } from "../utils/types";
 
-interface ArchiveNoteProps {
-	noteId: string;
-	archived: boolean;
-}
-
-export const ArchiveNote = ({ noteId, archived }: ArchiveNoteProps) => {
-	const [isArchived, setIsArchived] = useState(archived);
+export const ArchiveNote = () => {
+	const { note, setNote } = useActiveNote();
 	const [toggleArchive] = useMutation(updateNote, {
 		onSuccess: (data) => {
 			queryCache.setQueryData<Note[]>(
@@ -22,19 +18,20 @@ export const ArchiveNote = ({ noteId, archived }: ArchiveNoteProps) => {
 				data.archived ? "notes" : ["notes", { archived: true }],
 				(notes) => notes?.filter(({ id }) => id !== data.id) || []
 			);
-			setIsArchived(!isArchived);
+			setNote(data);
 		}
 	});
 
 	const renderNavigationActionIcon = () => (props?: Partial<ImageProps>) => (
 		<Icon
-			name={isArchived ? "archive" : "archive-outline"}
+			name={note.archived ? "archive" : "archive-outline"}
 			{...props}
 			size="xlarge"
 		/>
 	);
 
-	const handleOnPress = () => toggleArchive({ noteId, archived: !isArchived });
+	const handleOnPress = () =>
+		toggleArchive({ noteId: note.id, archived: !note.archived });
 
 	return (
 		<TopNavigationAction

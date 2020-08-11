@@ -23,9 +23,9 @@ export const HomeScreen = () => {
 					{data && (
 						<Fragment>
 							{data.filter((note) => note.pinned).length > 0 && (
-								<NoteList notes={data} pinned />
+								<NoteList notes={data} pinned queryKey="notes" />
 							)}
-							<NoteList notes={data} />
+							<NoteList notes={data} queryKey="notes" />
 							{data.length === 0 && <HelperText>No Notes Available</HelperText>}
 						</Fragment>
 					)}

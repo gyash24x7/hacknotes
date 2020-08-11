@@ -1,17 +1,13 @@
 import { Icon, TopNavigationAction } from "@ui-kitten/components";
-import React, { useState } from "react";
+import React from "react";
 import { ImageProps } from "react-native";
 import { queryCache, useMutation } from "react-query";
 import { updateNote } from "../api/notes";
+import { useActiveNote } from "../utils/context";
 import { Note } from "../utils/types";
 
-interface PinNoteProps {
-	noteId: string;
-	pinned: boolean;
-}
-
-export const PinNote = ({ noteId, pinned }: PinNoteProps) => {
-	const [isPinned, setIsPinned] = useState(pinned);
+export const PinNote = () => {
+	const { note, setNote } = useActiveNote();
 	const [togglePin] = useMutation(updateNote, {
 		onSuccess: (data) => {
 			queryCache.setQueryData<Note[]>("notes", (oldNotes) => {
@@ -23,19 +19,20 @@ export const PinNote = ({ noteId, pinned }: PinNoteProps) => {
 				return newNotes || [];
 			});
 
-			setIsPinned(!isPinned);
+			setNote(data);
 		}
 	});
 
 	const renderNavigationActionIcon = () => (props?: Partial<ImageProps>) => (
 		<Icon
-			name={isPinned ? "bookmark" : "bookmark-outline"}
+			name={note.pinned ? "bookmark" : "bookmark-outline"}
 			{...props}
 			size="xlarge"
 		/>
 	);
 
-	const handleOnPress = () => togglePin({ noteId, pinned: !isPinned });
+	const handleOnPress = () =>
+		togglePin({ noteId: note.id, pinned: !note.pinned });
 
 	return (
 		<TopNavigationAction

@@ -9,12 +9,8 @@ import { ImageProps, View } from "react-native";
 import { queryCache, useMutation } from "react-query";
 import styled from "styled-components/native";
 import { updateNote } from "../api/notes";
+import { useActiveNote } from "../utils/context";
 import { Note, NoteColors } from "../utils/types";
-
-interface UpdateColorProps {
-	setNoteColor: (color: string) => void;
-	noteId: string;
-}
 
 const Color = styled(View)`
 	border-width: 1px;
@@ -37,8 +33,9 @@ const Palette = styled(Layout)`
 	border-color: #dfe1e6;
 `;
 
-export const UpdateColor = ({ setNoteColor, noteId }: UpdateColorProps) => {
+export const UpdateColor = () => {
 	const [modalVisible, setModalVisible] = useState(false);
+	const { note, setNote } = useActiveNote();
 	const [updateColor] = useMutation(updateNote, {
 		onSuccess: (data) => {
 			queryCache.setQueryData<Note[]>(
@@ -52,12 +49,12 @@ export const UpdateColor = ({ setNoteColor, noteId }: UpdateColorProps) => {
 					return newNotes || [];
 				}
 			);
-			setNoteColor(data.color);
+			setNote(data);
 		}
 	});
 
 	const handleColorClick = (color: string) => () =>
-		updateColor({ color, noteId });
+		updateColor({ color, noteId: note.id });
 
 	const toggleMenu = () => setModalVisible(!modalVisible);
 
