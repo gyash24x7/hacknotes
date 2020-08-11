@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useQuery } from "react-query";
 import { getAllNotes } from "../api/notes";
@@ -7,6 +8,7 @@ import { AppLoader } from "../components/AppLoader";
 import { TopNav } from "../components/AppNav";
 import { ErrorText, HelperText } from "../components/AppTypography";
 import { NoteList } from "../components/NoteList";
+import { VerticalSpacer } from "../components/VerticalSpacer";
 
 export const TrashScreen = () => {
 	const { error, data, isLoading } = useQuery(
@@ -17,19 +19,22 @@ export const TrashScreen = () => {
 
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
-			<TopNav title="Trash" color="TRANSPARENT" screen="Trash" />
+			<TopNav title="Trash" screen="Trash" />
 			<AppContainer>
-				{data && (
-					<Fragment>
-						{data.length > 0 ? (
-							<NoteList notes={data} />
-						) : (
-							<HelperText>No Notes in Trash</HelperText>
-						)}
-					</Fragment>
-				)}
-				{error && <ErrorText status="danger">{error.message}</ErrorText>}
-				{isLoading && <AppLoader />}
+				<ScrollView>
+					{data && (
+						<Fragment>
+							{data.length > 0 ? (
+								<NoteList notes={data} />
+							) : (
+								<HelperText>No Notes in Trash</HelperText>
+							)}
+						</Fragment>
+					)}
+					{error && <ErrorText status="danger">{error.message}</ErrorText>}
+					{isLoading && <AppLoader />}
+					<VerticalSpacer />
+				</ScrollView>
 			</AppContainer>
 		</SafeAreaView>
 	);

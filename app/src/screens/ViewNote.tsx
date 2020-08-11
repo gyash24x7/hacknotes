@@ -73,7 +73,7 @@ export const ViewNoteScreen = ({
 
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
-			<TopNav title=" " screen="ViewNote" color={note.color} />
+			<TopNav title=" " screen="ViewNote" note={note} />
 			<AppContainer>
 				<ViewNoteCardContainer color={NoteColors[note.color]}>
 					<NoteTitleInput

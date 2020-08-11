@@ -24,10 +24,13 @@ import {
 } from "react-native";
 import styled from "styled-components/native";
 import { useAuth } from "../utils/context";
-import { NoteColors } from "../utils/types";
+import { Note, NoteColors } from "../utils/types";
 import { AppLogoSmall } from "./AppLogo";
 import { BoldText } from "./AppTypography";
 import { AppWordmark } from "./AppWordmark";
+import { ArchiveNote } from "./ArchiveNote";
+import { CreateNote } from "./CreateNote";
+import { PinNote } from "./PinNote";
 
 const StyledTopNavigation = styled(TopNavigation)<
 	TopNavigationProps & { color?: string }
@@ -46,11 +49,11 @@ export const NavTitle = styled(BoldText)`
 
 interface TopNavProps {
 	title?: string;
-	screen: "Home" | "ViewNote" | "NewNote" | "Profile" | "Trash";
-	color: string;
+	screen: "Home" | "ViewNote" | "NewNote" | "Profile" | "Trash" | "Archive";
+	note?: Note;
 }
 
-export const TopNav = ({ title, screen, color }: TopNavProps) => {
+export const TopNav = ({ title, screen, note }: TopNavProps) => {
 	const navigation = useNavigation();
 
 	const renderAccessoryLeft = (isBack: boolean = false) => () => {
@@ -71,34 +74,33 @@ export const TopNav = ({ title, screen, color }: TopNavProps) => {
 		);
 	};
 
-	const renderAccessoryRight = () => () => {
-		const handleOnPress = () => navigation.navigate("NewNote");
+	const renderAccessoryRight = () => {
+		if (screen === "ViewNote")
+			return () => (
+				<Fragment>
+					<ArchiveNote noteId={note!.id} archived={note!.archived} />
+					<PinNote noteId={note!.id} pinned={note!.pinned} />
+				</Fragment>
+			);
 
-		const renderNavigationActionIcon = () => (props?: Partial<ImageProps>) => (
-			<Icon name="edit-2" {...props} size="xlarge" />
-		);
+		if (screen === "Home") return CreateNote;
 
-		return (
-			<TopNavigationAction
-				icon={renderNavigationActionIcon()}
-				onPress={handleOnPress}
-			/>
-		);
+		return;
 	};
 
 	return (
 		<Fragment>
 			<FocusAwareStatusBar
-				backgroundColor={NoteColors[color]}
+				backgroundColor={NoteColors[note?.color || "TRANSPARENT"]}
 				barStyle="dark-content"
 			/>
 			<StyledTopNavigation
 				title={() => (title ? <NavTitle>{title}</NavTitle> : <AppWordmark />)}
-				color={color}
+				color={note?.color}
 				accessoryLeft={renderAccessoryLeft(
 					screen === "NewNote" || screen === "ViewNote"
 				)}
-				accessoryRight={screen === "Home" ? renderAccessoryRight() : undefined}
+				accessoryRight={renderAccessoryRight()}
 			/>
 		</Fragment>
 	);

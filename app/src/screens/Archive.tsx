@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useQuery } from "react-query";
 import { getAllNotes } from "../api/notes";
@@ -18,24 +19,22 @@ export const ArchiveScreen = () => {
 
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
-			<TopNav title="Archive" color="TRANSPARENT" />
+			<TopNav title="Archive" screen="Archive" />
 			<AppContainer>
-				{data && (
-					<Fragment>
-						{data.length > 0 ? (
-							<NoteList notes={data} />
-						) : (
-							<HelperText>No Notes in Archive</HelperText>
-						)}
-					</Fragment>
-				)}
-				{error && (
-					<Fragment>
-						<VerticalSpacer size={100} />
-						<ErrorText>{error.message}</ErrorText>
-					</Fragment>
-				)}
-				{isLoading && <AppLoader />}
+				<ScrollView>
+					{data && (
+						<Fragment>
+							{data.length > 0 ? (
+								<NoteList notes={data} />
+							) : (
+								<HelperText>No Notes in Archive</HelperText>
+							)}
+						</Fragment>
+					)}
+					{error && <ErrorText>{error.message}</ErrorText>}
+					{isLoading && <AppLoader />}
+					<VerticalSpacer />
+				</ScrollView>
 			</AppContainer>
 		</SafeAreaView>
 	);
