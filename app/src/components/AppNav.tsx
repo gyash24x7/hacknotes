@@ -12,10 +12,10 @@ import {
 	Layout,
 	TextProps,
 	TopNavigation,
-	TopNavigationAction,
-	TopNavigationProps
+	TopNavigationAction
 } from "@ui-kitten/components";
-import React, { Fragment } from "react";
+import { RenderProp } from "@ui-kitten/components/devsupport";
+import React from "react";
 import {
 	AsyncStorage,
 	ImageProps,
@@ -24,21 +24,14 @@ import {
 } from "react-native";
 import styled from "styled-components/native";
 import { useAuth } from "../utils/context";
-import { NoteColors } from "../utils/types";
 import { AppLogoSmall } from "./AppLogo";
 import { BoldText } from "./AppTypography";
 import { AppWordmark } from "./AppWordmark";
-import { ArchiveNote } from "./ArchiveNote";
-import { CreateNote } from "./CreateNote";
-import { PinNote } from "./PinNote";
-import { UpdateColor } from "./UpdateColor";
 
-const StyledTopNavigation = styled(TopNavigation)<
-	TopNavigationProps & { color?: string }
->`
+const StyledTopNavigation = styled(TopNavigation)`
 	height: 70px;
 	z-index: 100;
-	background-color: ${({ color }) => (!!color ? NoteColors[color] : "#fff")};
+	background-color: transparent;
 `;
 
 export const NavTitle = styled(BoldText)`
@@ -50,61 +43,47 @@ export const NavTitle = styled(BoldText)`
 
 interface TopNavProps {
 	title?: string;
-	screen: "Home" | "ViewNote" | "NewNote" | "Profile" | "Trash" | "Archive";
-	noteColor?: string;
+	accessoryRight?: RenderProp<{}>;
+	accessoryLeft?: RenderProp<{}>;
 }
 
-export const TopNav = ({ title, screen, noteColor }: TopNavProps) => {
+export const renderNavigationActionIcon = (name: string) => (
+	props?: Partial<ImageProps>
+) => <Icon name={name} {...props} size="xlarge" />;
+
+export const renderMenuButton = () => () => {
 	const navigation = useNavigation();
 
-	const renderAccessoryLeft = (isBack: boolean = false) => () => {
-		const handleOnPress = () => {
-			if (!isBack) navigation.dispatch(DrawerActions.toggleDrawer);
-			else navigation.goBack();
-		};
+	return (
+		<TopNavigationAction
+			icon={renderNavigationActionIcon("menu")}
+			onPress={() => navigation.dispatch(DrawerActions.toggleDrawer)}
+		/>
+	);
+};
 
-		const renderNavigationActionIcon = () => (props?: Partial<ImageProps>) => (
-			<Icon name={isBack ? "arrow-back" : "menu"} {...props} size="xlarge" />
-		);
-
-		return (
-			<TopNavigationAction
-				icon={renderNavigationActionIcon()}
-				onPress={handleOnPress}
-			/>
-		);
-	};
-
-	const renderAccessoryRight = () => {
-		if (screen === "ViewNote")
-			return () => (
-				<Fragment>
-					<ArchiveNote />
-					<PinNote />
-					<UpdateColor />
-				</Fragment>
-			);
-
-		if (screen === "Home") return CreateNote;
-
-		return;
-	};
+export const renderBackButton = () => () => {
+	const navigation = useNavigation();
 
 	return (
-		<Fragment>
-			<FocusAwareStatusBar
-				backgroundColor={NoteColors[noteColor || "TRANSPARENT"]}
-				barStyle="dark-content"
-			/>
-			<StyledTopNavigation
-				title={() => (title ? <NavTitle>{title}</NavTitle> : <AppWordmark />)}
-				color={noteColor}
-				accessoryLeft={renderAccessoryLeft(
-					screen === "NewNote" || screen === "ViewNote"
-				)}
-				accessoryRight={renderAccessoryRight()}
-			/>
-		</Fragment>
+		<TopNavigationAction
+			icon={renderNavigationActionIcon("arrow-back")}
+			onPress={() => navigation.goBack()}
+		/>
+	);
+};
+
+export const TopNav = ({
+	title,
+	accessoryRight,
+	accessoryLeft
+}: TopNavProps) => {
+	return (
+		<StyledTopNavigation
+			title={() => (title ? <NavTitle>{title}</NavTitle> : <AppWordmark />)}
+			accessoryLeft={accessoryLeft || renderMenuButton()}
+			accessoryRight={accessoryRight}
+		/>
 	);
 };
 

@@ -5,7 +5,7 @@ import { useQuery } from "react-query";
 import { getAllNotes } from "../api/notes";
 import { AppContainer } from "../components/AppContainer";
 import { AppLoader } from "../components/AppLoader";
-import { TopNav } from "../components/AppNav";
+import { FocusAwareStatusBar, TopNav } from "../components/AppNav";
 import { ErrorText, HelperText } from "../components/AppTypography";
 import { NoteList } from "../components/NoteList";
 import { VerticalSpacer } from "../components/VerticalSpacer";
@@ -18,17 +18,15 @@ export const ArchiveScreen = () => {
 	);
 
 	return (
-		<SafeAreaView style={{ flex: 1 }}>
-			<TopNav title="Archive" screen="Archive" />
+		<SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+			<FocusAwareStatusBar backgroundColor="#fff" barStyle="dark-content" />
+			<TopNav title="Archive" />
 			<AppContainer>
-				<ScrollView>
+				<ScrollView style={{ width: "100%" }}>
 					{data && (
 						<Fragment>
 							{data.length > 0 ? (
-								<NoteList
-									notes={data}
-									queryKey={["notes", { archived: true }]}
-								/>
+								<NoteList notes={data} />
 							) : (
 								<HelperText>No Notes in Archive</HelperText>
 							)}

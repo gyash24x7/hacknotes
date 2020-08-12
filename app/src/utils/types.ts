@@ -1,4 +1,4 @@
-import { QueryKeyOrPredicateFn } from "react-query";
+import { DrawerScreenProps } from "@react-navigation/drawer";
 
 export const NoteColors: Record<string, string> = {
 	TRANSPARENT: "#FFFFFF",
@@ -82,8 +82,7 @@ export type AppScreenParamList = {
 	Archive: undefined;
 	Trash: undefined;
 	Profile: undefined;
-	ViewNote: { noteId: string; queryKey: QueryKeyOrPredicateFn };
-	NewNote: undefined;
+	ViewNote: { note: Note };
 };
 
 export const defaultNote: Note = {
@@ -98,3 +97,10 @@ export const defaultNote: Note = {
 	createdAt: new Date().toISOString(),
 	updatedAt: new Date().toISOString()
 };
+
+export interface NoteActionProps {
+	note: Note;
+	setNote: (_note: Note) => void;
+}
+
+export type NoteScreenProps = DrawerScreenProps<AppScreenParamList, "ViewNote">;

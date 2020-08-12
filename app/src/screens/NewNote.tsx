@@ -7,7 +7,7 @@ import { queryCache, useMutation } from "react-query";
 import styled from "styled-components/native";
 import { createNote } from "../api/notes";
 import { AppContainer } from "../components/AppContainer";
-import { TopNav } from "../components/AppNav";
+import { FocusAwareStatusBar, TopNav } from "../components/AppNav";
 import { VerticalSpacer } from "../components/VerticalSpacer";
 import { AppScreenParamList, Note, NoteColors } from "../utils/types";
 
@@ -62,8 +62,9 @@ export const NewNoteScreen = ({
 	}, [navigation, title, content]);
 
 	return (
-		<SafeAreaView style={{ flex: 1 }}>
-			<TopNav title=" " screen="NewNote" />
+		<SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+			<FocusAwareStatusBar backgroundColor="#fff" barStyle="dark-content" />
+			<TopNav title=" " />
 			<AppContainer>
 				<ViewNoteCardContainer color={NoteColors["TRANSPARENT"]}>
 					<NoteTitleInput

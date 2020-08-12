@@ -1,16 +1,11 @@
-import {
-	Icon,
-	Layout,
-	Modal,
-	TopNavigationAction
-} from "@ui-kitten/components";
-import React, { Fragment, useState } from "react";
-import { ImageProps, View } from "react-native";
+import { Layout, Modal, TopNavigationAction } from "@ui-kitten/components";
+import React, { Fragment, useRef } from "react";
+import { View } from "react-native";
 import { queryCache, useMutation } from "react-query";
 import styled from "styled-components/native";
 import { updateNote } from "../api/notes";
-import { useActiveNote } from "../utils/context";
-import { Note, NoteColors } from "../utils/types";
+import { Note, NoteActionProps, NoteColors } from "../utils/types";
+import { renderNavigationActionIcon } from "./AppNav";
 
 const Color = styled(View)`
 	border-width: 1px;
@@ -33,9 +28,8 @@ const Palette = styled(Layout)`
 	border-color: #dfe1e6;
 `;
 
-export const UpdateColor = () => {
-	const [modalVisible, setModalVisible] = useState(false);
-	const { note, setNote } = useActiveNote();
+export const UpdateColor = ({ note, setNote }: NoteActionProps) => {
+	const modalRef = useRef<Modal>(null);
 	const [updateColor] = useMutation(updateNote, {
 		onSuccess: (data) => {
 			queryCache.setQueryData<Note[]>(
@@ -50,28 +44,24 @@ export const UpdateColor = () => {
 				}
 			);
 			setNote(data);
+			modalRef.current?.hide();
 		}
 	});
 
-	const handleColorClick = (color: string) => () =>
+	const handleColorClick = (color: string) => () => {
 		updateColor({ color, noteId: note.id });
-
-	const toggleMenu = () => setModalVisible(!modalVisible);
-
-	const renderNavigationActionIcon = () => (props?: Partial<ImageProps>) => (
-		<Icon name="color-palette-outline" {...props} size="xlarge" />
-	);
+	};
 
 	return (
 		<Fragment>
 			<TopNavigationAction
-				icon={renderNavigationActionIcon()}
-				onPress={toggleMenu}
+				icon={renderNavigationActionIcon("color-palette-outline")}
+				onPress={() => modalRef.current?.show()}
 			/>
 			<Modal
-				visible={modalVisible}
+				ref={modalRef}
 				backdropStyle={{ backgroundColor: "#14141466" }}
-				onBackdropPress={() => setModalVisible(false)}
+				onBackdropPress={() => modalRef.current?.hide()}
 			>
 				<Palette>
 					{Object.keys(NoteColors).map((color) => (

@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { defaultNote, FlagData, Note } from "./types";
+import { FlagData } from "./types";
 
 interface IAuthContext {
 	isAuthenticated: boolean;
@@ -24,19 +24,3 @@ export const FlagContext = createContext<IFlagContext>({
 });
 
 export const useFlag = () => useContext(FlagContext);
-
-interface INoteContext {
-	note: Note;
-	setNote: (note: Note) => void;
-}
-
-export const NoteContext = createContext<INoteContext>({
-	note: defaultNote,
-	setNote: (_note: Note) => {}
-});
-
-export const ActiveNoteProvider = NoteContext.Provider;
-
-export const useActiveNote = () => useContext(NoteContext);
-
-export const ActiveNoteConsumer = NoteContext.Consumer;

@@ -2,7 +2,6 @@ import { useNavigation } from "@react-navigation/native";
 import { Card, Layout, Text } from "@ui-kitten/components";
 import React, { Fragment } from "react";
 import { ViewProps } from "react-native";
-import { QueryKeyOrPredicateFn } from "react-query";
 import styled from "styled-components/native";
 import { Note, NoteColors } from "../utils/types";
 
@@ -36,10 +35,9 @@ export const NoteContent = ({ content }: NoteContentProps) => {
 
 interface NoteCardProps {
 	note: Note;
-	queryKey: QueryKeyOrPredicateFn;
 }
 
-export const NoteCard = ({ note, queryKey }: NoteCardProps) => {
+export const NoteCard = ({ note }: NoteCardProps) => {
 	const navigation = useNavigation();
 
 	const renderCardHeader = (title?: string) => {
@@ -56,9 +54,7 @@ export const NoteCard = ({ note, queryKey }: NoteCardProps) => {
 		<NoteCardContainer
 			appearance="filled"
 			key={note.id}
-			onPress={() =>
-				navigation.navigate("ViewNote", { noteId: note.id, queryKey })
-			}
+			onPress={() => navigation.navigate("ViewNote", { note })}
 			style={{ backgroundColor: NoteColors[note.color] }}
 			header={renderCardHeader(note.title)}
 		>

@@ -3,11 +3,9 @@ import React from "react";
 import { ImageProps } from "react-native";
 import { queryCache, useMutation } from "react-query";
 import { updateNote } from "../api/notes";
-import { useActiveNote } from "../utils/context";
-import { Note } from "../utils/types";
+import { Note, NoteActionProps } from "../utils/types";
 
-export const ArchiveNote = () => {
-	const { note, setNote } = useActiveNote();
+export const ArchiveNote = ({ note, setNote }: NoteActionProps) => {
 	const [toggleArchive] = useMutation(updateNote, {
 		onSuccess: (data) => {
 			queryCache.setQueryData<Note[]>(
@@ -18,6 +16,7 @@ export const ArchiveNote = () => {
 				data.archived ? "notes" : ["notes", { archived: true }],
 				(notes) => notes?.filter(({ id }) => id !== data.id) || []
 			);
+
 			setNote(data);
 		}
 	});
