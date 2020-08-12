@@ -15,13 +15,9 @@ import {
 	TopNavigationAction
 } from "@ui-kitten/components";
 import { RenderProp } from "@ui-kitten/components/devsupport";
-import React from "react";
-import {
-	AsyncStorage,
-	ImageProps,
-	StatusBar,
-	StatusBarProps
-} from "react-native";
+import { StatusBar, StatusBarProps } from "expo-status-bar";
+import React, { Fragment } from "react";
+import { AsyncStorage, ImageProps } from "react-native";
 import styled from "styled-components/native";
 import { useAuth } from "../utils/context";
 import { AppLogoSmall } from "./AppLogo";
@@ -79,11 +75,14 @@ export const TopNav = ({
 	accessoryLeft
 }: TopNavProps) => {
 	return (
-		<StyledTopNavigation
-			title={() => (title ? <NavTitle>{title}</NavTitle> : <AppWordmark />)}
-			accessoryLeft={accessoryLeft || renderMenuButton()}
-			accessoryRight={accessoryRight}
-		/>
+		<Fragment>
+			<FocusAwareStatusBar backgroundColor="transparent" style="auto" />
+			<StyledTopNavigation
+				title={() => (title ? <NavTitle>{title}</NavTitle> : <AppWordmark />)}
+				accessoryLeft={accessoryLeft || renderMenuButton()}
+				accessoryRight={accessoryRight}
+			/>
+		</Fragment>
 	);
 };
 

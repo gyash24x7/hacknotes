@@ -5,7 +5,7 @@ import { ImageProps } from "react-native";
 
 export const CreateNote = () => {
 	const navigation = useNavigation();
-	const handleOnPress = () => navigation.navigate("NewNote");
+	const handleOnPress = () => navigation.navigate("ViewNote", {});
 
 	const renderNavigationActionIcon = () => (props?: Partial<ImageProps>) => (
 		<Icon name="edit-2" {...props} size="xlarge" />

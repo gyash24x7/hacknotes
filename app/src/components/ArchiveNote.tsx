@@ -1,24 +1,12 @@
 import { Icon, TopNavigationAction } from "@ui-kitten/components";
 import React from "react";
 import { ImageProps } from "react-native";
-import { queryCache, useMutation } from "react-query";
-import { updateNote } from "../api/notes";
-import { Note, NoteActionProps } from "../utils/types";
+import { useUpdateNoteMutation } from "../utils/hooks";
+import { NoteActionProps } from "../utils/types";
 
 export const ArchiveNote = ({ note, setNote }: NoteActionProps) => {
-	const [toggleArchive] = useMutation(updateNote, {
-		onSuccess: (data) => {
-			queryCache.setQueryData<Note[]>(
-				data.archived ? ["notes", { archived: true }] : "notes",
-				(notes) => [data].concat(...(notes || []))
-			);
-			queryCache.setQueryData<Note[]>(
-				data.archived ? "notes" : ["notes", { archived: true }],
-				(notes) => notes?.filter(({ id }) => id !== data.id) || []
-			);
-
-			setNote(data);
-		}
+	const [toggleArchive] = useUpdateNoteMutation({
+		onSuccess: (data) => setNote(data)
 	});
 
 	const renderNavigationActionIcon = () => (props?: Partial<ImageProps>) => (

@@ -3,29 +3,30 @@ import formatDistance from "date-fns/formatDistance";
 import React, { Fragment, useEffect, useState } from "react";
 import { TextInput } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { queryCache, useMutation } from "react-query";
 import styled from "styled-components/native";
-import { updateNote } from "../api/notes";
 import { AppContainer } from "../components/AppContainer";
-import {
-	FocusAwareStatusBar,
-	renderBackButton,
-	TopNav
-} from "../components/AppNav";
+import { renderBackButton, TopNav } from "../components/AppNav";
 import { ArchiveNote } from "../components/ArchiveNote";
 import { PinNote } from "../components/PinNote";
 import { UpdateColor } from "../components/UpdateColor";
 import { VerticalSpacer } from "../components/VerticalSpacer";
-import { defaultNote, Note, NoteColors, NoteScreenProps } from "../utils/types";
+import { useCreateNoteMutation, useUpdateNoteMutation } from "../utils/hooks";
+import {
+	defaultNote,
+	Note,
+	NoteActionProps,
+	NoteColors,
+	NoteScreenProps
+} from "../utils/types";
 
-const ViewNoteContainer = styled(Layout)<LayoutProps & { color: string }>`
+const NoteContainer = styled(Layout)<LayoutProps & { color: string }>`
 	flex: 1;
 	background-color: ${({ color }) => color};
 	padding: 10px 20px;
 	width: 100%;
 `;
 
-const ViewNoteFooter = styled(Layout)`
+const NoteFooter = styled(Layout)`
 	width: 100%;
 	display: flex;
 	flex-direction: row;
@@ -52,26 +53,23 @@ const NoteContentInput = styled(TextInput)`
 	text-align-vertical: top;
 `;
 
-export const ViewNoteScreen = ({ route, navigation }: NoteScreenProps) => {
-	const [title, setTitle] = useState("");
+const renderNoteActions = ({ note, setNote }: NoteActionProps) => () => (
+	<Fragment>
+		<ArchiveNote note={note} setNote={setNote} />
+		<PinNote note={note} setNote={setNote} />
+		<UpdateColor note={note} setNote={setNote} />
+	</Fragment>
+);
+
+export const NoteScreen = ({ route, navigation }: NoteScreenProps) => {
 	const [note, setNote] = useState<Note>(defaultNote);
-	const [content, setContent] = useState("");
-	const [update] = useMutation(updateNote, {
-		onSuccess(data) {
-			queryCache.setQueryData<Note[]>(
-				note?.archived ? ["notes", { archived: true }] : "notes",
-				(notes) => notes?.map((note) => (note.id === data.id ? data : note))
-			);
-			setTitle("");
-			setContent("");
-		}
-	});
+	const [updateNote] = useUpdateNoteMutation();
+	const [createNote] = useCreateNoteMutation();
 
 	useEffect(() => {
 		const unsubscribe = navigation.addListener("focus", () => {
-			setNote(route.params.note);
-			setTitle(route.params.note.title);
-			setContent(JSON.parse(route.params.note.content).blocks.join("\n"));
+			if (route.params.note) setNote(route.params.note);
+			else setNote(defaultNote);
 		});
 
 		return () => unsubscribe();
@@ -79,58 +77,54 @@ export const ViewNoteScreen = ({ route, navigation }: NoteScreenProps) => {
 
 	useEffect(() => {
 		const unsubscribe = navigation.addListener("blur", () => {
-			const oldContent = JSON.parse(note!.content).blocks.join("\n");
-			if (title !== note!.title || content !== oldContent)
-				update({
-					title,
-					content: JSON.stringify({ blocks: content.split("\n") }),
-					noteId: note.id
-				});
+			const oldNote = route.params.note;
+			if (oldNote) {
+				if (note.title !== oldNote.title || note.content !== oldNote.content)
+					updateNote({
+						title: note.title,
+						content: note.content,
+						noteId: note.id
+					});
+			} else createNote({ title: note.title, content: note.content });
 		});
 
 		return () => unsubscribe();
-	}, [navigation, title, content]);
+	}, [navigation, note]);
 
 	return (
 		<SafeAreaView style={{ flex: 1, backgroundColor: NoteColors[note.color] }}>
-			<FocusAwareStatusBar
-				backgroundColor={NoteColors[note.color]}
-				barStyle="dark-content"
-			/>
 			<TopNav
 				title=" "
-				accessoryRight={() => (
-					<Fragment>
-						<ArchiveNote note={note} setNote={setNote} />
-						<PinNote note={note} setNote={setNote} />
-						<UpdateColor note={note} setNote={setNote} />
-					</Fragment>
-				)}
+				accessoryRight={
+					route.params.note ? renderNoteActions({ note, setNote }) : undefined
+				}
 				accessoryLeft={renderBackButton()}
 			/>
 			<AppContainer>
-				<ViewNoteContainer color={NoteColors[note.color]}>
+				<NoteContainer color={NoteColors[note.color]}>
 					<NoteTitleInput
-						value={title}
+						value={note.title}
 						placeholder="Title"
 						placeholderTextColor="#14141466"
-						onChangeText={setTitle}
+						onChangeText={(title) => setNote((note) => ({ ...note, title }))}
 						multiline
 					/>
 					<VerticalSpacer />
 					<NoteContentInput
-						value={content}
-						onChangeText={setContent}
+						value={note.content}
+						onChangeText={(content) =>
+							setNote((note) => ({ ...note, content }))
+						}
 						placeholder="Content"
 						placeholderTextColor="#14141466"
 						multiline
 					/>
-				</ViewNoteContainer>
-				<ViewNoteFooter>
+				</NoteContainer>
+				<NoteFooter>
 					<Text category="label">
 						Edited {formatDistance(new Date(note.updatedAt), new Date())} ago
 					</Text>
-				</ViewNoteFooter>
+				</NoteFooter>
 			</AppContainer>
 		</SafeAreaView>
 	);

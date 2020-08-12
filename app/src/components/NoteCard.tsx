@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { Card, Layout, Text } from "@ui-kitten/components";
-import React, { Fragment } from "react";
+import React from "react";
 import { ViewProps } from "react-native";
 import styled from "styled-components/native";
 import { Note, NoteColors } from "../utils/types";
@@ -16,22 +16,6 @@ export const NoteTitle = styled(Text)`
 	font-family: "montserrat-bold";
 	font-size: 16px;
 `;
-
-interface NoteContentProps {
-	content: string;
-}
-
-export const NoteContent = ({ content }: NoteContentProps) => {
-	const { blocks } = JSON.parse(content);
-
-	return (
-		<Fragment>
-			{blocks.map((text: string, i: number) => (
-				<Text key={i}>{text}</Text>
-			))}
-		</Fragment>
-	);
-};
 
 interface NoteCardProps {
 	note: Note;
@@ -58,7 +42,9 @@ export const NoteCard = ({ note }: NoteCardProps) => {
 			style={{ backgroundColor: NoteColors[note.color] }}
 			header={renderCardHeader(note.title)}
 		>
-			<NoteContent content={note.content} />
+			{note.content.split("\n").map((text, i) => (
+				<Text key={i}>{text}</Text>
+			))}
 		</NoteCardContainer>
 	);
 };

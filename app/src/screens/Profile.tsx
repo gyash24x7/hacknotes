@@ -7,7 +7,7 @@ import client from "superagent";
 import { updateAvatar } from "../api/user";
 import { AppButton, BtnGroup } from "../components/AppButton";
 import { AppContainer } from "../components/AppContainer";
-import { FocusAwareStatusBar, TopNav } from "../components/AppNav";
+import { TopNav } from "../components/AppNav";
 import { BoldText, ButtonText, LinkText } from "../components/AppTypography";
 import { VerticalSpacer } from "../components/VerticalSpacer";
 import { User } from "../utils/types";
@@ -41,7 +41,6 @@ export const ProfileScreen = () => {
 
 	return (
 		<SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-			<FocusAwareStatusBar backgroundColor="#fff" barStyle="dark-content" />
 			<TopNav title="Profile" />
 			<AppContainer>
 				{avatarLoading ? (

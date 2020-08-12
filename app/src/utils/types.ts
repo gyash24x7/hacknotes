@@ -82,13 +82,13 @@ export type AppScreenParamList = {
 	Archive: undefined;
 	Trash: undefined;
 	Profile: undefined;
-	ViewNote: { note: Note };
+	ViewNote: { note?: Note };
 };
 
 export const defaultNote: Note = {
 	id: "defaultNote",
 	title: "",
-	content: "{blocks:[]}",
+	content: "",
 	archived: false,
 	pinned: false,
 	deleted: false,

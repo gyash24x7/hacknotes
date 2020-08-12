@@ -5,7 +5,7 @@ import { useQuery } from "react-query";
 import { getAllNotes } from "../api/notes";
 import { AppContainer } from "../components/AppContainer";
 import { AppLoader } from "../components/AppLoader";
-import { FocusAwareStatusBar, TopNav } from "../components/AppNav";
+import { TopNav } from "../components/AppNav";
 import { ErrorText, HelperText } from "../components/AppTypography";
 import { CreateNote } from "../components/CreateNote";
 import { NoteList } from "../components/NoteList";
@@ -18,7 +18,6 @@ export const HomeScreen = () => {
 
 	return (
 		<SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-			<FocusAwareStatusBar backgroundColor="#fff" barStyle="dark-content" />
 			<TopNav accessoryRight={CreateNote} />
 			<AppContainer>
 				<ScrollView style={{ width: "100%" }}>

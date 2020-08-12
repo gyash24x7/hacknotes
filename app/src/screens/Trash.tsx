@@ -5,7 +5,7 @@ import { useQuery } from "react-query";
 import { getAllNotes } from "../api/notes";
 import { AppContainer } from "../components/AppContainer";
 import { AppLoader } from "../components/AppLoader";
-import { FocusAwareStatusBar, TopNav } from "../components/AppNav";
+import { TopNav } from "../components/AppNav";
 import { ErrorText, HelperText } from "../components/AppTypography";
 import { NoteList } from "../components/NoteList";
 import { VerticalSpacer } from "../components/VerticalSpacer";
@@ -19,7 +19,6 @@ export const TrashScreen = () => {
 
 	return (
 		<SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-			<FocusAwareStatusBar backgroundColor="#fff" barStyle="dark-content" />
 			<TopNav title="Trash" />
 			<AppContainer>
 				<ScrollView style={{ width: "100%" }}>

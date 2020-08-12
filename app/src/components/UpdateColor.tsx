@@ -1,10 +1,9 @@
 import { Layout, Modal, TopNavigationAction } from "@ui-kitten/components";
 import React, { Fragment, useRef } from "react";
 import { View } from "react-native";
-import { queryCache, useMutation } from "react-query";
 import styled from "styled-components/native";
-import { updateNote } from "../api/notes";
-import { Note, NoteActionProps, NoteColors } from "../utils/types";
+import { useUpdateNoteMutation } from "../utils/hooks";
+import { NoteActionProps, NoteColors } from "../utils/types";
 import { renderNavigationActionIcon } from "./AppNav";
 
 const Color = styled(View)`
@@ -30,19 +29,8 @@ const Palette = styled(Layout)`
 
 export const UpdateColor = ({ note, setNote }: NoteActionProps) => {
 	const modalRef = useRef<Modal>(null);
-	const [updateColor] = useMutation(updateNote, {
-		onSuccess: (data) => {
-			queryCache.setQueryData<Note[]>(
-				data.archived ? ["notes", { archived: true }] : "notes",
-				(oldNotes) => {
-					const newNotes = oldNotes?.map((note) => {
-						if (note.id === data.id) return data;
-						return note;
-					});
-
-					return newNotes || [];
-				}
-			);
+	const [updateColor] = useUpdateNoteMutation({
+		onSuccess(data) {
 			setNote(data);
 			modalRef.current?.hide();
 		}
