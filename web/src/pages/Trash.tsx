@@ -1,18 +1,13 @@
 import React, { Fragment } from "react";
-import { useQuery } from "react-query";
-import { getAllNotes } from "../api/notes";
 import { AppError } from "../components/AppError";
 import AppLoader from "../components/AppLoader";
 import { NoteList } from "../components/NoteList";
 import { VerticalSpacer } from "../components/VerticalSpacer";
+import { useDeletedNotesQuery } from "../utils/hooks";
 import { HelperText, HomeContainer } from "./Home";
 
 export const TrashPage = () => {
-	const { error, data, isLoading } = useQuery(
-		["notes", { deleted: true }],
-		(_key, filters) => getAllNotes(filters),
-		{ refetchOnWindowFocus: false }
-	);
+	const { error, data, isLoading } = useDeletedNotesQuery();
 
 	return (
 		<HomeContainer>

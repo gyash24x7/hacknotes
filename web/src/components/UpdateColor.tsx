@@ -2,11 +2,10 @@ import Popup from "@atlaskit/popup";
 import { colors } from "@atlaskit/theme";
 import Tooltip from "@atlaskit/tooltip";
 import React, { useState } from "react";
-import { queryCache, useMutation } from "react-query";
 import styled from "styled-components";
-import { updateNote } from "../api/notes";
 import { useFlag } from "../utils/context";
-import { Note, NoteColors } from "../utils/types";
+import { useUpdateNoteMutation } from "../utils/hooks";
+import { NoteColors } from "../utils/types";
 import { AppIconButton } from "./AppButton";
 import PaletteIcon from "./icons/PaletteIcon";
 
@@ -34,21 +33,9 @@ interface UpdateColorProps {
 export const UpdateColor = ({ noteId }: UpdateColorProps) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const { addFlag } = useFlag();
-	const [updateColor, { isLoading }] = useMutation(updateNote, {
-		onSuccess: (data) => {
-			queryCache.setQueryData<Note[]>(
-				data.archived ? ["notes", { archived: true }] : "notes",
-				(oldNotes) => {
-					const newNotes = oldNotes?.map((note) => {
-						if (note.id === data.id) return data;
-						return note;
-					});
-
-					return newNotes || [];
-				}
-			);
-			addFlag({ title: "Note Color Changed!", appearance: "success" });
-		}
+	const [updateColor, { isLoading }] = useUpdateNoteMutation({
+		onSuccess: () =>
+			addFlag({ title: "Note Color Changed!", appearance: "success" })
 	});
 
 	const handleColorClick = (color: string) => () =>

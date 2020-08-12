@@ -79,10 +79,7 @@ export const CreateNote = () => {
 
 	const saveNote = () => {
 		if (!!title || !!content) {
-			create({
-				title,
-				content: JSON.stringify({ blocks: content.split("\n") })
-			});
+			create({ title, content });
 		} else {
 			setErrorMsg("Both Title and Content cannot be Empty!");
 		}

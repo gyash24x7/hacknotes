@@ -3,10 +3,10 @@ import { ButtonGroup } from "@atlaskit/button";
 import Drawer from "@atlaskit/drawer";
 import { colors } from "@atlaskit/theme";
 import React, { Fragment, useState } from "react";
-import { queryCache, useMutation } from "react-query";
+import { queryCache } from "react-query";
 import styled from "styled-components";
 import client from "superagent";
-import { updateAvatar } from "../api/user";
+import { useUpdateAvatarMutation } from "../utils/hooks";
 import { User } from "../utils/types";
 import { AppButton } from "./AppButton";
 import { VerticalSpacer } from "./VerticalSpacer";
@@ -76,9 +76,7 @@ export const ProfileDrawer = () => {
 	const user = queryCache.getQueryData<User | undefined>("me");
 	const [randomAvatar, setRandomAvatar] = useState(user?.avatar);
 	const [isAvatarControlsOpen, setIsAvatarControlsOpen] = useState(false);
-	const [update, { isLoading }] = useMutation(updateAvatar, {
-		onSuccess: (data) => queryCache.setQueryData("me", data)
-	});
+	const [update, { isLoading }] = useUpdateAvatarMutation();
 
 	const toggleAvatarControls = () => setIsAvatarControlsOpen((val) => !val);
 

@@ -1,9 +1,7 @@
 import Tooltip from "@atlaskit/tooltip";
 import React from "react";
-import { queryCache, useMutation } from "react-query";
-import { updateNote } from "../api/notes";
 import { useFlag } from "../utils/context";
-import { Note } from "../utils/types";
+import { useUpdateNoteMutation } from "../utils/hooks";
 import { AppIconButton } from "./AppButton";
 import BookmarkIcon from "./icons/BookmarkIcon";
 
@@ -14,22 +12,14 @@ interface PinNoteProps {
 
 export const PinNote = ({ noteId, pinned }: PinNoteProps) => {
 	const { addFlag } = useFlag();
-	const [togglePin, { isLoading }] = useMutation(updateNote, {
-		onSuccess: (data) => {
-			queryCache.setQueryData<Note[]>("notes", (oldNotes) => {
-				const newNotes = oldNotes?.map((note) => {
-					if (note.id === data.id) return data;
-					return note;
-				});
-
-				return newNotes || [];
-			});
+	const [togglePin, { isLoading }] = useUpdateNoteMutation({
+		onSuccess: (data) =>
 			addFlag({
 				title: `Note ${data.pinned ? "Pinned" : "Unpinned"}!`,
 				appearance: "success"
-			});
-		}
+			})
 	});
+
 	const handleClick = () => togglePin({ noteId, pinned: !pinned });
 
 	return (

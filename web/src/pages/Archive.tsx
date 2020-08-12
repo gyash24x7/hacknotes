@@ -1,18 +1,13 @@
 import React, { Fragment } from "react";
-import { useQuery } from "react-query";
-import { getAllNotes } from "../api/notes";
 import { AppError } from "../components/AppError";
 import AppLoader from "../components/AppLoader";
 import { NoteList } from "../components/NoteList";
 import { VerticalSpacer } from "../components/VerticalSpacer";
+import { useArchivedNotesQuery } from "../utils/hooks";
 import { HelperText, HomeContainer } from "./Home";
 
 export const ArchivePage = () => {
-	const { error, data, isLoading } = useQuery(
-		["notes", { archived: true }],
-		(_key, filters) => getAllNotes(filters),
-		{ refetchOnWindowFocus: false }
-	);
+	const { error, data, isLoading } = useArchivedNotesQuery();
 
 	return (
 		<HomeContainer>

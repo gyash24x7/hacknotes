@@ -38,13 +38,13 @@ export const AppNav = () => {
 	const history = useHistory();
 	const { pathname } = useLocation();
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-	const { setIsAuthenticated } = useAuth();
+	const { setIsAuthenticated, isAuthenticated } = useAuth();
 	const { width } = useWindowSize();
 	let data: User | undefined = queryCache.getQueryData("me");
 
 	const handleLogout = () => {
 		localStorage.removeItem("authToken");
-		setIsAuthenticated(false);
+		setIsAuthenticated(!isAuthenticated);
 	};
 
 	return (

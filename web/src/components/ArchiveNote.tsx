@@ -1,9 +1,7 @@
 import Tooltip from "@atlaskit/tooltip";
 import React from "react";
-import { queryCache, useMutation } from "react-query";
-import { updateNote } from "../api/notes";
 import { useFlag } from "../utils/context";
-import { Note } from "../utils/types";
+import { useUpdateNoteMutation } from "../utils/hooks";
 import { AppIconButton } from "./AppButton";
 import ArchiveIcon from "./icons/ArchiveIcon";
 
@@ -14,21 +12,12 @@ interface ArchiveNoteProps {
 
 export const ArchiveNote = ({ noteId, archived }: ArchiveNoteProps) => {
 	const { addFlag } = useFlag();
-	const [toggleArchive, { isLoading }] = useMutation(updateNote, {
-		onSuccess: (data) => {
-			queryCache.setQueryData<Note[]>(
-				data.archived ? ["notes", { archived: true }] : "notes",
-				(notes) => [data].concat(...(notes || []))
-			);
-			queryCache.setQueryData<Note[]>(
-				data.archived ? "notes" : ["notes", { archived: true }],
-				(notes) => notes?.filter(({ id }) => id !== data.id) || []
-			);
+	const [toggleArchive, { isLoading }] = useUpdateNoteMutation({
+		onSuccess: (data) =>
 			addFlag({
 				title: `Note ${data.archived ? "Archived" : "Unarchived"}!`,
 				appearance: "success"
-			});
-		}
+			})
 	});
 
 	return (

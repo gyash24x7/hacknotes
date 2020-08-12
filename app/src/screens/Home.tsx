@@ -1,8 +1,6 @@
 import React, { Fragment } from "react";
 import { ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useQuery } from "react-query";
-import { getAllNotes } from "../api/notes";
 import { AppContainer } from "../components/AppContainer";
 import { AppLoader } from "../components/AppLoader";
 import { TopNav } from "../components/AppNav";
@@ -10,11 +8,10 @@ import { ErrorText, HelperText } from "../components/AppTypography";
 import { CreateNote } from "../components/CreateNote";
 import { NoteList } from "../components/NoteList";
 import { VerticalSpacer } from "../components/VerticalSpacer";
+import { useAllNotesQuery } from "../utils/hooks";
 
 export const HomeScreen = () => {
-	const { error, data, isLoading } = useQuery("notes", () => getAllNotes(), {
-		refetchOnWindowFocus: false
-	});
+	const { error, data, isLoading } = useAllNotesQuery();
 
 	return (
 		<SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>

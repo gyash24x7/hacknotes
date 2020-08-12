@@ -1,12 +1,11 @@
 import React, { Fragment } from "react";
-import { useQuery } from "react-query";
 import styled from "styled-components";
-import { getAllNotes } from "../api/notes";
 import { AppError } from "../components/AppError";
 import AppLoader from "../components/AppLoader";
 import { CreateNote } from "../components/CreateNote";
 import { NoteList } from "../components/NoteList";
 import { VerticalSpacer } from "../components/VerticalSpacer";
+import { useAllNotesQuery } from "../utils/hooks";
 
 export const HomeContainer = styled.div`
 	width: 100vw;
@@ -20,9 +19,7 @@ export const HelperText = styled.div`
 `;
 
 export const HomePage = () => {
-	const { error, data, isLoading } = useQuery("notes", () => getAllNotes(), {
-		refetchOnWindowFocus: false
-	});
+	const { error, data, isLoading } = useAllNotesQuery();
 
 	return (
 		<HomeContainer>

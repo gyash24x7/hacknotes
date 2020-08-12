@@ -45,8 +45,8 @@ export const NoteCard = ({ note, openView, onClickAway }: NoteProps) => {
 				{note.title && note.content && <VerticalSpacer />}
 				{note.content && (
 					<NoteBody>
-						{JSON.parse(note.content).blocks.map((text: string) => (
-							<p key={text}>{text}</p>
+						{note.content.split("\n").map((text, i) => (
+							<p key={i}>{text}</p>
 						))}
 					</NoteBody>
 				)}

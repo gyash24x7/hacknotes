@@ -1,9 +1,7 @@
 import Form, { ErrorMessage, Field, HelperMessage } from "@atlaskit/form";
 import TextField from "@atlaskit/textfield";
 import React, { Fragment, useState } from "react";
-import { queryCache, useMutation } from "react-query";
 import { Link } from "react-router-dom";
-import { userLogin } from "../api/user";
 import IntegratedLogo from "../assets/integrated-logo.svg";
 import { AppButton } from "../components/AppButton";
 import { AppError } from "../components/AppError";
@@ -12,6 +10,7 @@ import { FormCard } from "../components/FormCard";
 import { IntegratedLogoContainer } from "../components/IntegratedLogo";
 import { VerticalSpacer } from "../components/VerticalSpacer";
 import { useAuth } from "../utils/context";
+import { useLoginMutation } from "../utils/hooks";
 
 const usernameRegex = /^[a-zA-Z0-9]+$/;
 export interface FormField {
@@ -49,14 +48,9 @@ export const loginFields: FormField[] = [
 export const LoginPage = () => {
 	const { setIsAuthenticated } = useAuth();
 	const [errorMsg, setErrorMsg] = useState<string>();
-	const [login, { isLoading }] = useMutation(userLogin, {
-		onError: (err) => {
-			setErrorMsg(err.message);
-		},
-		onSuccess: (data) => {
-			queryCache.setQueryData("me", data);
-			setIsAuthenticated(true);
-		}
+	const [login, { isLoading }] = useLoginMutation({
+		onError: (err) => setErrorMsg(err.message),
+		onSuccess: () => setIsAuthenticated(true)
 	});
 
 	const handleSubmit = ({ username, password }: any) => {

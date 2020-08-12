@@ -53,9 +53,7 @@ export const ViewNote = ({ note, onClose }: ViewNoteProps) => {
 	});
 
 	const [title, setTitle] = useState(note.title);
-	const [content, setContent] = useState<string>(
-		JSON.parse(note.content).blocks.join("\n")
-	);
+	const [content, setContent] = useState(note.content);
 
 	const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
 		e.persist();
@@ -63,13 +61,8 @@ export const ViewNote = ({ note, onClose }: ViewNoteProps) => {
 		const rect = noteCardContainerRef.current!.getBoundingClientRect();
 		const { top, bottom, left, right } = rect;
 		if (!(top < pageY && bottom > pageY && left < pageX && right > pageX)) {
-			const oldContent = JSON.parse(note.content).blocks.join("\n");
-			if (title !== note.title || content !== oldContent)
-				update({
-					title,
-					content: JSON.stringify({ blocks: content.split("\n") }),
-					noteId: note.id
-				});
+			if (title !== note.title || content !== note.content)
+				update({ title, content, noteId: note.id });
 
 			onClose();
 		}
@@ -87,6 +80,7 @@ export const ViewNote = ({ note, onClose }: ViewNoteProps) => {
 						value={title}
 						onChange={(e) => setTitle(e.target.value)}
 					/>
+					<VerticalSpacer />
 					{note.title && note.content && <VerticalSpacer />}
 					{note.content && (
 						<ContentTextArea

@@ -22,8 +22,8 @@ export const NoteCardFooter = ({ isVisible, note }: NoteCardFooterProps) => (
 				{!note.deleted && (
 					<ButtonGroup>
 						<ArchiveNote noteId={note.id} archived={note.archived} />
-						<UpdateColor noteId={note.id} />
 						<PinNote noteId={note.id} pinned={note.pinned} />
+						<UpdateColor noteId={note.id} />
 					</ButtonGroup>
 				)}
 			</Fragment>
