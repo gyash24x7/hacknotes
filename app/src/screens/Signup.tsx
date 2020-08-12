@@ -1,8 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { Icon, Input, Spinner, Text } from "@ui-kitten/components";
 import React, { useState } from "react";
-import { queryCache, useMutation } from "react-query";
-import { userSignup } from "../api/user";
 import { AppButton } from "../components/AppButton";
 import { AppContainer, HelperContainer } from "../components/AppContainer";
 import { AppLogo } from "../components/AppLogo";
@@ -15,6 +13,7 @@ import {
 import { FormWrapper } from "../components/FormWrapper";
 import { VerticalSpacer } from "../components/VerticalSpacer";
 import { useAuth } from "../utils/context";
+import { useSignupMutation } from "../utils/hooks";
 
 const usernameRegex = /^[a-zA-Z0-9]+$/;
 const emailRegex = /^([a-zA-Z0-9_\-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
@@ -28,12 +27,9 @@ export const SignupScreen = () => {
 	const { setIsAuthenticated } = useAuth();
 	const navigation = useNavigation();
 	const [errorMsg, setErrorMsg] = useState<string>();
-	const [signup, { isLoading }] = useMutation(userSignup, {
+	const [signup, { isLoading }] = useSignupMutation({
 		onError: (err) => setErrorMsg(err.message),
-		onSuccess: (data) => {
-			queryCache.setQueryData("me", data);
-			setIsAuthenticated(true);
-		}
+		onSuccess: () => setIsAuthenticated(true)
 	});
 
 	const validateInput = () => {

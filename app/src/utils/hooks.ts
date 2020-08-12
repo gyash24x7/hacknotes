@@ -5,7 +5,40 @@ import {
 	useMutation
 } from "react-query";
 import { createNote, updateNote } from "../api/notes";
-import { CreateNoteInput, Note, UpdateNoteInput } from "./types";
+import { updateAvatar, userLogin, userSignup } from "../api/user";
+import {
+	CreateNoteInput,
+	CreateUserInput,
+	Note,
+	UpdateNoteInput,
+	User,
+	UserLoginInput
+} from "./types";
+
+export const useUpdateAvatarMutation = () =>
+	useMutation(updateAvatar, {
+		onSuccess: (data) => queryCache.setQueryData("me", data)
+	});
+
+export const useLoginMutation = (
+	options?: MutationOptions<User, UserLoginInput, Error, unknown>
+) =>
+	useMutation(userLogin, {
+		onSuccess: (data, variables) => {
+			queryCache.setQueryData("me", data);
+			options?.onSuccess && options.onSuccess(data, variables);
+		}
+	});
+
+export const useSignupMutation = (
+	options?: MutationOptions<User, CreateUserInput, Error, unknown>
+) =>
+	useMutation(userSignup, {
+		onSuccess: (data, variables) => {
+			queryCache.setQueryData("me", data);
+			options?.onSuccess && options.onSuccess(data, variables);
+		}
+	});
 
 export const useCreateNoteMutation = (
 	options?: MutationOptions<Note, CreateNoteInput, Error, unknown>

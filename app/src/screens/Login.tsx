@@ -1,8 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { Icon, Input, Spinner, Text } from "@ui-kitten/components";
 import React, { useState } from "react";
-import { queryCache, useMutation } from "react-query";
-import { userLogin } from "../api/user";
 import { AppButton } from "../components/AppButton";
 import { AppContainer, HelperContainer } from "../components/AppContainer";
 import { AppLogo } from "../components/AppLogo";
@@ -15,6 +13,7 @@ import {
 import { FormWrapper } from "../components/FormWrapper";
 import { VerticalSpacer } from "../components/VerticalSpacer";
 import { useAuth } from "../utils/context";
+import { useLoginMutation } from "../utils/hooks";
 
 const usernameRegex = /^[a-zA-Z0-9]+$/;
 
@@ -25,14 +24,9 @@ export const LoginScreen = () => {
 	const [errorMsg, setErrorMsg] = useState<string>();
 	const navigation = useNavigation();
 	const { setIsAuthenticated } = useAuth();
-	const [login, { isLoading }] = useMutation(userLogin, {
-		onError: (err) => {
-			setErrorMsg(err.message);
-		},
-		onSuccess: (data) => {
-			queryCache.setQueryData("me", data);
-			setIsAuthenticated(true);
-		}
+	const [login, { isLoading }] = useLoginMutation({
+		onError: (err) => setErrorMsg(err.message),
+		onSuccess: () => setIsAuthenticated(true)
 	});
 
 	const validateInput = () => {

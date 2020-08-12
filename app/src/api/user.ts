@@ -4,7 +4,7 @@ import { CreateUserInput, User, UserLoginInput } from "../utils/types";
 
 export const userLogin = async (data: UserLoginInput) => {
 	const response = await client
-		.post(`http://192.168.43.59:8000/user/login`)
+		.post(`http://192.168.43.59:8000/api/user/login`)
 		.send(data)
 		.catch((err) => {
 			throw new Error(err.response.body.message);

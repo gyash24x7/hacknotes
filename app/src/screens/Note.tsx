@@ -6,7 +6,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
 import { AppContainer } from "../components/AppContainer";
 import { renderBackButton, TopNav } from "../components/AppNav";
+import { ErrorText } from "../components/AppTypography";
 import { ArchiveNote } from "../components/ArchiveNote";
+import { DeleteNote } from "../components/DeleteNote";
 import { PinNote } from "../components/PinNote";
 import { UpdateColor } from "../components/UpdateColor";
 import { VerticalSpacer } from "../components/VerticalSpacer";
@@ -55,9 +57,14 @@ const NoteContentInput = styled(TextInput)`
 
 const renderNoteActions = ({ note, setNote }: NoteActionProps) => () => (
 	<Fragment>
-		<ArchiveNote note={note} setNote={setNote} />
-		<PinNote note={note} setNote={setNote} />
-		<UpdateColor note={note} setNote={setNote} />
+		{!note.deleted && (
+			<Fragment>
+				<ArchiveNote note={note} setNote={setNote} />
+				<PinNote note={note} setNote={setNote} />
+				<UpdateColor note={note} setNote={setNote} />
+			</Fragment>
+		)}
+		<DeleteNote note={note} setNote={setNote} />
 	</Fragment>
 );
 
@@ -102,12 +109,21 @@ export const NoteScreen = ({ route, navigation }: NoteScreenProps) => {
 			/>
 			<AppContainer>
 				<NoteContainer color={NoteColors[note.color]}>
+					{note.deleted && (
+						<Fragment>
+							<ErrorText category="label" status="danger">
+								Note is in Trash. Cannot be edited.
+							</ErrorText>
+							<VerticalSpacer />
+						</Fragment>
+					)}
 					<NoteTitleInput
 						value={note.title}
 						placeholder="Title"
 						placeholderTextColor="#14141466"
 						onChangeText={(title) => setNote((note) => ({ ...note, title }))}
 						multiline
+						editable={!note.deleted}
 					/>
 					<VerticalSpacer />
 					<NoteContentInput
@@ -118,6 +134,7 @@ export const NoteScreen = ({ route, navigation }: NoteScreenProps) => {
 						placeholder="Content"
 						placeholderTextColor="#14141466"
 						multiline
+						editable={!note.deleted}
 					/>
 				</NoteContainer>
 				<NoteFooter>

@@ -2,23 +2,21 @@ import { Icon, Spinner } from "@ui-kitten/components";
 import React, { Fragment, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { SvgUri } from "react-native-svg";
-import { queryCache, useMutation } from "react-query";
+import { queryCache } from "react-query";
 import client from "superagent";
-import { updateAvatar } from "../api/user";
 import { AppButton, BtnGroup } from "../components/AppButton";
 import { AppContainer } from "../components/AppContainer";
 import { TopNav } from "../components/AppNav";
 import { BoldText, ButtonText, LinkText } from "../components/AppTypography";
 import { VerticalSpacer } from "../components/VerticalSpacer";
+import { useUpdateAvatarMutation } from "../utils/hooks";
 import { User } from "../utils/types";
 
 export const ProfileScreen = () => {
 	const user = queryCache.getQueryData<User | undefined>("me");
 	const [randomAvatar, setRandomAvatar] = useState(user!.avatar);
 	const [isAvatarControlsOpen, setIsAvatarControlsOpen] = useState(false);
-	const [update, { isLoading }] = useMutation(updateAvatar, {
-		onSuccess: (data) => queryCache.setQueryData("me", data)
-	});
+	const [update, { isLoading }] = useUpdateAvatarMutation();
 	const [avatarLoading, setAvatarLoading] = useState(false);
 
 	const toggleAvatarControls = () => setIsAvatarControlsOpen((val) => !val);
