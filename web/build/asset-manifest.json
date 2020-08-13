@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.js": "/static/js/main.b3c93355.chunk.js",
+    "main.js.map": "/static/js/main.b3c93355.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.bfca2edd.js",
+    "runtime-main.js.map": "/static/js/runtime-main.bfca2edd.js.map",
+    "static/css/2.3107b260.chunk.css": "/static/css/2.3107b260.chunk.css",
+    "static/js/2.39cfaf31.chunk.js": "/static/js/2.39cfaf31.chunk.js",
+    "static/js/2.39cfaf31.chunk.js.map": "/static/js/2.39cfaf31.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.fa3f4482a6743895c70f8c5ca5836ee6.js": "/precache-manifest.fa3f4482a6743895c70f8c5ca5836ee6.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/2.3107b260.chunk.css.map": "/static/css/2.3107b260.chunk.css.map",
+    "static/js/2.39cfaf31.chunk.js.LICENSE.txt": "/static/js/2.39cfaf31.chunk.js.LICENSE.txt",
+    "static/media/absbg.png": "/static/media/absbg.ff17e284.png",
+    "static/media/icon.svg": "/static/media/icon.07376b7e.svg",
+    "static/media/integrated-logo.svg": "/static/media/integrated-logo.aa43db23.svg",
+    "static/media/wordmark.svg": "/static/media/wordmark.f69685ed.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.bfca2edd.js",
+    "static/css/2.3107b260.chunk.css",
+    "static/js/2.39cfaf31.chunk.js",
+    "static/js/main.b3c93355.chunk.js"
+  ]
+}
