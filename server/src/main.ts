@@ -17,10 +17,14 @@ async function bootstrap() {
 
 	app.use(helmet());
 	app.enableCors({
-		origin: ["http://192.168.43.59:3000", "http://localhost:3000"],
+		origin: [
+			"http://192.168.43.59:3000",
+			"http://localhost:3000",
+			"https://hacknotes.yashgupta.dev"
+		],
 		credentials: true
 	});
 
-	await app.listen(8000, host);
+	await app.listen(9000, host);
 }
 bootstrap();
