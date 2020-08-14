@@ -1,5 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
-import { Icon, Input, Spinner, Text } from "@ui-kitten/components";
+import { Icon, Input, Spinner } from "@ui-kitten/components";
+import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import { AppButton } from "../components/AppButton";
 import { AppContainer, HelperContainer } from "../components/AppContainer";
@@ -61,6 +62,7 @@ export const SignupScreen = () => {
 
 	return (
 		<AppContainer>
+			<StatusBar backgroundColor="transparent" style="dark" />
 			<AppLogo />
 			<VerticalSpacer size={20} />
 			<Heading>Sign up</Heading>
@@ -72,6 +74,7 @@ export const SignupScreen = () => {
 					value={name}
 					onChangeText={setName}
 					accessoryLeft={(props) => <Icon name="person-outline" {...props} />}
+					textStyle={{ fontFamily: "montserrat-regular" }}
 				/>
 				<VerticalSpacer size={5} />
 				<Input
@@ -80,6 +83,7 @@ export const SignupScreen = () => {
 					value={email}
 					onChangeText={setEmail}
 					accessoryLeft={(props) => <Icon name="email-outline" {...props} />}
+					textStyle={{ fontFamily: "montserrat-regular" }}
 				/>
 				<VerticalSpacer size={5} />
 				<Input
@@ -88,6 +92,7 @@ export const SignupScreen = () => {
 					value={username}
 					onChangeText={setUsername}
 					accessoryLeft={(props) => <Icon name="at-outline" {...props} />}
+					textStyle={{ fontFamily: "montserrat-regular" }}
 				/>
 				<VerticalSpacer size={5} />
 				<Input
@@ -97,6 +102,7 @@ export const SignupScreen = () => {
 					onChangeText={setPassword}
 					secureTextEntry={securePasswordEntry}
 					accessoryLeft={(props) => <Icon name="lock-outline" {...props} />}
+					textStyle={{ fontFamily: "montserrat-regular" }}
 					accessoryRight={(props) => (
 						<Icon
 							{...props}
@@ -117,7 +123,7 @@ export const SignupScreen = () => {
 				/>
 				<VerticalSpacer />
 				<HelperContainer>
-					<Text>Already have an account?</Text>
+					<ErrorText category="label">Already have an account?</ErrorText>
 					<LinkText onPress={() => navigation.navigate("Login")}>
 						Login
 					</LinkText>

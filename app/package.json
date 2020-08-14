@@ -1,16 +1,15 @@
 {
 	"name": "app",
-	"version": "1.0.0",
-	"main": "src/index.tsx",
+	"version": "0.0.1",
+	"private": true,
 	"scripts": {
-		"start": "expo start",
-		"android": "expo start --android",
-		"ios": "expo start --ios",
-		"web": "expo start --web",
-		"eject": "expo eject"
+		"android": "react-native run-android",
+		"ios": "react-native run-ios",
+		"start": "react-native start"
 	},
 	"dependencies": {
 		"@eva-design/eva": "^2.0.0",
+		"@react-native-community/async-storage": "^1.11.0",
 		"@react-native-community/masked-view": "0.1.10",
 		"@react-navigation/drawer": "^5.9.0",
 		"@react-navigation/native": "^5.7.3",
@@ -18,31 +17,30 @@
 		"@ui-kitten/components": "^5.0.0",
 		"@ui-kitten/eva-icons": "^5.0.0",
 		"date-fns": "^2.15.0",
-		"expo": "~38.0.9",
-		"expo-font": "~8.2.2",
 		"expo-status-bar": "^1.0.2",
-		"react": "16.11.0",
-		"react-dom": "16.11.0",
+		"react": "16.13.1",
+		"react-dom": "^16.13.1",
 		"react-is": "^16.13.1",
-		"react-native": "0.62.2",
-		"react-native-gesture-handler": "~1.6.0",
-		"react-native-reanimated": "~1.9.0",
-		"react-native-safe-area-context": "~3.0.7",
-		"react-native-screens": "~2.9.0",
+		"react-native": "0.63.2",
+		"react-native-gesture-handler": "~1.7.0",
+		"react-native-reanimated": "~1.13.0",
+		"react-native-safe-area-context": "~3.1.4",
+		"react-native-screens": "~2.10.1",
+		"react-native-splash-screen": "^3.2.0",
 		"react-native-svg": "9.13.6",
-		"react-native-web": "~0.11.7",
-		"react-query": "^2.5.13",
+		"react-query": "^2.5.14",
 		"react-use": "^15.3.3",
-		"redux": "^4.0.5",
 		"styled-components": "^5.1.1",
 		"superagent": "^6.0.0"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.11.1",
-		"@types/react": "~16.9.46",
-		"@types/react-native": "~0.63.7",
+		"@babel/runtime": "^7.11.2",
+		"@types/react-native": "^0.63.8",
+		"@types/styled-components": "^5.1.2",
 		"@types/superagent": "^4.1.9",
-		"typescript": "~3.9.7"
-	},
-	"private": true
+		"jetifier": "^1.6.6",
+		"metro-react-native-babel-preset": "^0.62.0",
+		"typescript": "^3.9.7"
+	}
 }

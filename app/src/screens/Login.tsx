@@ -1,5 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
-import { Icon, Input, Spinner, Text } from "@ui-kitten/components";
+import { Icon, Input, Spinner } from "@ui-kitten/components";
+import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import { AppButton } from "../components/AppButton";
 import { AppContainer, HelperContainer } from "../components/AppContainer";
@@ -52,6 +53,7 @@ export const LoginScreen = () => {
 
 	return (
 		<AppContainer>
+			<StatusBar backgroundColor="transparent" style="dark" />
 			<AppLogo />
 			<VerticalSpacer size={20} />
 			<Heading>Login</Heading>
@@ -63,6 +65,7 @@ export const LoginScreen = () => {
 					value={username}
 					onChangeText={setUsername}
 					accessoryLeft={(props) => <Icon name="at-outline" {...props} />}
+					textStyle={{ fontFamily: "montserrat-regular" }}
 				/>
 				<VerticalSpacer />
 				<Input
@@ -72,6 +75,7 @@ export const LoginScreen = () => {
 					onChangeText={setPassword}
 					secureTextEntry={securePasswordEntry}
 					accessoryLeft={(props) => <Icon name="lock-outline" {...props} />}
+					textStyle={{ fontFamily: "montserrat-regular" }}
 					accessoryRight={(props) => (
 						<Icon
 							{...props}
@@ -92,7 +96,7 @@ export const LoginScreen = () => {
 				/>
 				<VerticalSpacer />
 				<HelperContainer>
-					<Text>Don't have an account?</Text>
+					<ErrorText category="label">Don't have an account?</ErrorText>
 					<LinkText onPress={() => navigation.navigate("Signup")}>
 						SignUp
 					</LinkText>

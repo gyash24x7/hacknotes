@@ -24,7 +24,7 @@ export const ProfileScreen = () => {
 	const getRandomAvatar = () => {
 		setAvatarLoading(true);
 		client
-			.get(`http://192.168.43.59:8000/api/avatar/random`)
+			.get(`https://hacknotes-server.yashgupta.dev/api/avatar/random`)
 			.then(({ body: { url } }) => {
 				setRandomAvatar(url);
 				setAvatarLoading(false);

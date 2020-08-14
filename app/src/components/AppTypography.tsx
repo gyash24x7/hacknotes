@@ -38,4 +38,5 @@ export const HelperText = styled(Text)`
 	text-transform: uppercase;
 	font-size: 13px;
 	font-family: "montserrat-bold";
+	text-align: center;
 `;

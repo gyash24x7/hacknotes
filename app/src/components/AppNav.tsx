@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-community/async-storage";
 import { DrawerContentComponentProps } from "@react-navigation/drawer";
 import {
 	DrawerActions,
@@ -17,7 +18,7 @@ import {
 import { RenderProp } from "@ui-kitten/components/devsupport";
 import { StatusBar, StatusBarProps } from "expo-status-bar";
 import React, { Fragment } from "react";
-import { AsyncStorage, ImageProps } from "react-native";
+import { ImageProps } from "react-native";
 import styled from "styled-components/native";
 import { useAuth } from "../utils/context";
 import { AppLogoSmall } from "./AppLogo";
@@ -76,7 +77,7 @@ export const TopNav = ({
 }: TopNavProps) => {
 	return (
 		<Fragment>
-			<FocusAwareStatusBar backgroundColor="transparent" style="auto" />
+			<FocusAwareStatusBar backgroundColor="transparent" style="dark" />
 			<StyledTopNavigation
 				title={() => (title ? <NavTitle>{title}</NavTitle> : <AppWordmark />)}
 				accessoryLeft={accessoryLeft || renderMenuButton()}

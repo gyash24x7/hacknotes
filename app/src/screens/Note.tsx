@@ -92,7 +92,10 @@ export const NoteScreen = ({ route, navigation }: NoteScreenProps) => {
 						content: note.content,
 						noteId: note.id
 					});
-			} else createNote({ title: note.title, content: note.content });
+			} else {
+				if (!!note.title || !!note.content)
+					createNote({ title: note.title, content: note.content });
+			}
 		});
 
 		return () => unsubscribe();
@@ -125,7 +128,6 @@ export const NoteScreen = ({ route, navigation }: NoteScreenProps) => {
 						multiline
 						editable={!note.deleted}
 					/>
-					<VerticalSpacer />
 					<NoteContentInput
 						value={note.content}
 						onChangeText={(content) =>

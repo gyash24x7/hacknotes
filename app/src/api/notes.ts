@@ -1,4 +1,4 @@
-import { AsyncStorage } from "react-native";
+import AsyncStorage from "@react-native-community/async-storage";
 import client from "superagent";
 import {
 	CreateNoteInput,
@@ -12,7 +12,7 @@ const defaultFilters = { archived: false, deleted: false };
 export const getAllNotes = async (filters: GetNotesFilter = defaultFilters) => {
 	const token = await AsyncStorage.getItem("authToken");
 	const response = await client
-		.get(`http://192.168.43.59:8000/api/notes`)
+		.get(`https://hacknotes-server.yashgupta.dev/api/notes`)
 		.query(filters)
 		.set("Authorization" as any, token ? `Bearer ${token}` : "");
 	return response.body as Note[];
@@ -21,7 +21,7 @@ export const getAllNotes = async (filters: GetNotesFilter = defaultFilters) => {
 export const createNote = async (data: CreateNoteInput) => {
 	const token = await AsyncStorage.getItem("authToken");
 	const response = await client
-		.post(`http://192.168.43.59:8000/api/notes/create`)
+		.post(`https://hacknotes-server.yashgupta.dev/api/notes/create`)
 		.set("Authorization" as any, token ? `Bearer ${token}` : "")
 		.send(data);
 
@@ -31,7 +31,7 @@ export const createNote = async (data: CreateNoteInput) => {
 export const updateNote = async ({ noteId, ...data }: UpdateNoteInput) => {
 	const token = await AsyncStorage.getItem("authToken");
 	const response = await client
-		.put(`http://192.168.43.59:8000/api/notes/update/${noteId}`)
+		.put(`https://hacknotes-server.yashgupta.dev/api/notes/update/${noteId}`)
 		.set("Authorization" as any, token ? `Bearer ${token}` : "")
 		.send(data);
 

@@ -17,6 +17,11 @@ export const NoteTitle = styled(Text)`
 	font-size: 16px;
 `;
 
+export const NoteBody = styled(Text)`
+	font-family: "montserrat-regular";
+	font-size: 13px;
+`;
+
 interface NoteCardProps {
 	note: Note;
 }
@@ -43,7 +48,7 @@ export const NoteCard = ({ note }: NoteCardProps) => {
 			header={renderCardHeader(note.title)}
 		>
 			{note.content.split("\n").map((text, i) => (
-				<Text key={i}>{text}</Text>
+				<NoteBody key={i}>{text}</NoteBody>
 			))}
 		</NoteCardContainer>
 	);

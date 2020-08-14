@@ -1,8 +1,8 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { AppLoading } from "expo";
 import React, { useState } from "react";
 import { enableScreens } from "react-native-screens";
+import { AppLoader } from "../components/AppLoader";
 import { AuthProvider } from "../utils/context";
 import { useMeQuery } from "../utils/hooks";
 import { PrivateScreen } from "./PrivateScreen";
@@ -34,5 +34,5 @@ export const AppNavigation = () => {
 		);
 	}
 
-	return <AppLoading />;
+	return <AppLoader />;
 };
