@@ -22,3 +22,12 @@ target 'Hacknotes' do
     flipper_post_install(installer)
   end
 end
+
+target 'Hacknotes-tvOS' do
+  # Pods for Hacknotes-tvOS
+
+  target 'Hacknotes-tvOSTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+end

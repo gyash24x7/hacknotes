@@ -1,6 +1,6 @@
 import { Layout, Modal, TopNavigationAction } from "@ui-kitten/components";
 import React, { Fragment, useRef } from "react";
-import { View } from "react-native";
+import { Platform, ToastAndroid, View } from "react-native";
 import styled from "styled-components/native";
 import { useUpdateNoteMutation } from "../utils/hooks";
 import { NoteActionProps, NoteColors } from "../utils/types";
@@ -33,6 +33,8 @@ export const UpdateColor = ({ note, setNote }: NoteActionProps) => {
 		onSuccess(data) {
 			setNote(data);
 			modalRef.current?.hide();
+			if (Platform.OS === "android")
+				ToastAndroid.show("Color Updated!", ToastAndroid.LONG);
 		}
 	});
 

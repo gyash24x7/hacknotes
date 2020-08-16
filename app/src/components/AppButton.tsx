@@ -2,7 +2,7 @@ import { Button, Layout } from "@ui-kitten/components";
 import styled from "styled-components/native";
 
 export const AppButton = styled(Button)`
-	font-family: "montserrat-bold";
+	font-family: "Montserrat-Bold";
 	text-transform: uppercase;
 `;
 

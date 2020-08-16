@@ -71,28 +71,31 @@ export const SignupScreen = () => {
 				<Input
 					placeholder="Name"
 					size="large"
+					autoCapitalize="none"
 					value={name}
 					onChangeText={setName}
 					accessoryLeft={(props) => <Icon name="person-outline" {...props} />}
-					textStyle={{ fontFamily: "montserrat-regular" }}
+					textStyle={{ fontFamily: "Montserrat-Medium" }}
 				/>
 				<VerticalSpacer size={5} />
 				<Input
 					placeholder="Email"
+					autoCapitalize="none"
 					size="large"
 					value={email}
 					onChangeText={setEmail}
 					accessoryLeft={(props) => <Icon name="email-outline" {...props} />}
-					textStyle={{ fontFamily: "montserrat-regular" }}
+					textStyle={{ fontFamily: "Montserrat-Medium" }}
 				/>
 				<VerticalSpacer size={5} />
 				<Input
 					placeholder="Username"
+					autoCapitalize="none"
 					size="large"
 					value={username}
 					onChangeText={setUsername}
 					accessoryLeft={(props) => <Icon name="at-outline" {...props} />}
-					textStyle={{ fontFamily: "montserrat-regular" }}
+					textStyle={{ fontFamily: "Montserrat-Medium" }}
 				/>
 				<VerticalSpacer size={5} />
 				<Input
@@ -102,7 +105,8 @@ export const SignupScreen = () => {
 					onChangeText={setPassword}
 					secureTextEntry={securePasswordEntry}
 					accessoryLeft={(props) => <Icon name="lock-outline" {...props} />}
-					textStyle={{ fontFamily: "montserrat-regular" }}
+					textStyle={{ fontFamily: "Montserrat-Medium" }}
+					autoCapitalize="none"
 					accessoryRight={(props) => (
 						<Icon
 							{...props}

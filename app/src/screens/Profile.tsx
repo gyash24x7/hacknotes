@@ -1,8 +1,10 @@
-import { Icon, Spinner } from "@ui-kitten/components";
+import { Icon, Layout, Spinner } from "@ui-kitten/components";
 import React, { Fragment, useState } from "react";
+import { Platform, ToastAndroid } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { SvgUri } from "react-native-svg";
 import { queryCache } from "react-query";
+import styled from "styled-components/native";
 import client from "superagent";
 import { AppButton, BtnGroup } from "../components/AppButton";
 import { AppContainer } from "../components/AppContainer";
@@ -12,11 +14,27 @@ import { VerticalSpacer } from "../components/VerticalSpacer";
 import { useUpdateAvatarMutation } from "../utils/hooks";
 import { User } from "../utils/types";
 
+const AvatarSpinnerContainer = styled(Layout)`
+	position: absolute;
+	width: 150px;
+	height: 150px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: #ffffff80;
+	z-index: 2;
+`;
+
 export const ProfileScreen = () => {
 	const user = queryCache.getQueryData<User | undefined>("me");
 	const [randomAvatar, setRandomAvatar] = useState(user!.avatar);
 	const [isAvatarControlsOpen, setIsAvatarControlsOpen] = useState(false);
-	const [update, { isLoading }] = useUpdateAvatarMutation();
+	const [update, { isLoading }] = useUpdateAvatarMutation({
+		onSuccess: () => {
+			if (Platform.OS === "android")
+				ToastAndroid.show("Avatar Updated!", ToastAndroid.LONG);
+		}
+	});
 	const [avatarLoading, setAvatarLoading] = useState(false);
 
 	const toggleAvatarControls = () => setIsAvatarControlsOpen((val) => !val);
@@ -41,16 +59,19 @@ export const ProfileScreen = () => {
 		<SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
 			<TopNav title="Profile" />
 			<AppContainer>
-				{avatarLoading ? (
-					<Spinner size="giant" />
-				) : (
+				<Layout>
+					{avatarLoading && (
+						<AvatarSpinnerContainer>
+							<Spinner size="giant" />
+						</AvatarSpinnerContainer>
+					)}
 					<SvgUri
 						uri={randomAvatar}
 						width={150}
 						height={150}
 						onPress={toggleAvatarControls}
 					/>
-				)}
+				</Layout>
 				<VerticalSpacer />
 				{isAvatarControlsOpen ? (
 					<Fragment>

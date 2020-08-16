@@ -1,7 +1,7 @@
 import { Layout, LayoutProps, Text } from "@ui-kitten/components";
 import formatDistance from "date-fns/formatDistance";
 import React, { Fragment, useEffect, useState } from "react";
-import { TextInput } from "react-native";
+import { Platform, TextInput, ToastAndroid } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
 import { AppContainer } from "../components/AppContainer";
@@ -43,14 +43,14 @@ const NoteFooter = styled(Layout)`
 const NoteTitleInput = styled(TextInput)`
 	color: #141414;
 	font-size: 18px;
-	font-family: "montserrat-bold";
+	font-family: "Montserrat-Bold";
 	font-weight: normal;
 `;
 
 const NoteContentInput = styled(TextInput)`
 	color: #141414;
 	font-size: 14px;
-	font-family: "montserrat-regular";
+	font-family: "Montserrat-Medium";
 	flex: 1;
 	text-align-vertical: top;
 `;
@@ -70,8 +70,18 @@ const renderNoteActions = ({ note, setNote }: NoteActionProps) => () => (
 
 export const NoteScreen = ({ route, navigation }: NoteScreenProps) => {
 	const [note, setNote] = useState<Note>(defaultNote);
-	const [updateNote] = useUpdateNoteMutation();
-	const [createNote] = useCreateNoteMutation();
+	const [updateNote] = useUpdateNoteMutation({
+		onSuccess: () => {
+			if (Platform.OS === "android")
+				ToastAndroid.show("Note Updated!", ToastAndroid.LONG);
+		}
+	});
+	const [createNote] = useCreateNoteMutation({
+		onSuccess: () => {
+			if (Platform.OS === "android")
+				ToastAndroid.show("Note Created!", ToastAndroid.LONG);
+		}
+	});
 
 	useEffect(() => {
 		const unsubscribe = navigation.addListener("focus", () => {

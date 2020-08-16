@@ -13,12 +13,12 @@ const NoteCardContainer = styled(Card)`
 `;
 
 export const NoteTitle = styled(Text)`
-	font-family: "montserrat-bold";
+	font-family: "Montserrat-Bold";
 	font-size: 16px;
 `;
 
 export const NoteBody = styled(Text)`
-	font-family: "montserrat-regular";
+	font-family: "Montserrat-Medium";
 	font-size: 13px;
 `;
 

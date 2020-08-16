@@ -62,10 +62,11 @@ export const LoginScreen = () => {
 				<Input
 					placeholder="Username"
 					size="large"
+					autoCapitalize="none"
 					value={username}
 					onChangeText={setUsername}
 					accessoryLeft={(props) => <Icon name="at-outline" {...props} />}
-					textStyle={{ fontFamily: "montserrat-regular" }}
+					textStyle={{ fontFamily: "Montserrat-Medium" }}
 				/>
 				<VerticalSpacer />
 				<Input
@@ -75,7 +76,7 @@ export const LoginScreen = () => {
 					onChangeText={setPassword}
 					secureTextEntry={securePasswordEntry}
 					accessoryLeft={(props) => <Icon name="lock-outline" {...props} />}
-					textStyle={{ fontFamily: "montserrat-regular" }}
+					textStyle={{ fontFamily: "Montserrat-Medium" }}
 					accessoryRight={(props) => (
 						<Icon
 							{...props}

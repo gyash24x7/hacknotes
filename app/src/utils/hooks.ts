@@ -43,9 +43,14 @@ export const useMeQuery = (options?: QueryOptions<User, Error>) =>
 		...options
 	});
 
-export const useUpdateAvatarMutation = () =>
+export const useUpdateAvatarMutation = (
+	options?: MutationOptions<User, { avatar: string }, Error, unknown>
+) =>
 	useMutation(updateAvatar, {
-		onSuccess: (data) => queryCache.setQueryData("me", data)
+		onSuccess: (data, variables) => {
+			queryCache.setQueryData("me", data);
+			options?.onSuccess && options.onSuccess(data, variables);
+		}
 	});
 
 export const useLoginMutation = (
