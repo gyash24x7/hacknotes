@@ -15,6 +15,7 @@ const NoteCardContainer = styled(Card)`
 export const NoteTitle = styled(Text)`
 	font-family: "Montserrat-Bold";
 	font-size: 16px;
+	font-weight: bold;
 `;
 
 export const NoteBody = styled(Text)`

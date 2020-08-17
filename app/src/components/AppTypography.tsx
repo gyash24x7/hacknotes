@@ -3,6 +3,7 @@ import styled from "styled-components/native";
 
 export const BoldText = styled(Text)`
 	font-family: "Montserrat-Bold";
+	font-weight: bold;
 `;
 
 export const Heading = styled(Text)`
@@ -21,11 +22,13 @@ export const ErrorText = styled(Text)`
 	font-family: "Montserrat-Bold";
 	text-transform: uppercase;
 	text-align: center;
+	font-weight: bold;
 `;
 
 export const LinkText = styled(Text)`
 	color: #0052cc;
 	font-family: "Montserrat-Bold";
+	font-weight: bold;
 `;
 
 export const AppTitle = styled(Text)`

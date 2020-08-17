@@ -93,7 +93,8 @@ export const DrawerHeader = styled(Layout)`
 	flex-direction: row;
 	align-items: center;
 	width: 100%;
-	height: 150px;
+	height: 200px;
+	padding-top: 50px;
 `;
 
 export const AppDrawerItem = styled(DrawerItem)<any>`

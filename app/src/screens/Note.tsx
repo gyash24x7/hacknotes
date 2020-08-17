@@ -44,7 +44,7 @@ const NoteTitleInput = styled(TextInput)`
 	color: #141414;
 	font-size: 18px;
 	font-family: "Montserrat-Bold";
-	font-weight: normal;
+	font-weight: bold;
 `;
 
 const NoteContentInput = styled(TextInput)`
@@ -138,6 +138,7 @@ export const NoteScreen = ({ route, navigation }: NoteScreenProps) => {
 						multiline
 						editable={!note.deleted}
 					/>
+					{Platform.OS === "ios" && <VerticalSpacer />}
 					<NoteContentInput
 						value={note.content}
 						onChangeText={(content) =>
