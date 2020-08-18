@@ -44,7 +44,7 @@ const NoteTitleInput = styled(TextInput)`
 	color: #141414;
 	font-size: 18px;
 	font-family: "Montserrat-Bold";
-	font-weight: bold;
+	font-weight: ${() => (Platform.OS === "android" ? "normal" : "bold")};
 `;
 
 const NoteContentInput = styled(TextInput)`

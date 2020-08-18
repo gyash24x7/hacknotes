@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { Card, Layout, Text } from "@ui-kitten/components";
 import React from "react";
-import { ViewProps } from "react-native";
+import { Platform, ViewProps } from "react-native";
 import styled from "styled-components/native";
 import { Note, NoteColors } from "../utils/types";
 
@@ -15,7 +15,7 @@ const NoteCardContainer = styled(Card)`
 export const NoteTitle = styled(Text)`
 	font-family: "Montserrat-Bold";
 	font-size: 16px;
-	font-weight: bold;
+	font-weight: ${() => (Platform.OS === "android" ? "normal" : "bold")};
 `;
 
 export const NoteBody = styled(Text)`
