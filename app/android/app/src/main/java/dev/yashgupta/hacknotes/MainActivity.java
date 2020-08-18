@@ -1,4 +1,4 @@
-package com.hacknotes;
+package dev.yashgupta.hacknotes;
 
 import android.os.Bundle;
 
